@@ -3,7 +3,7 @@ import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
-  $w('#investContainer').html = `
+  $w('#investBox').html = `
     <div class="centered-flex flex-column section-spacing" style="max-width:1200px;padding:48px;width:100%;box-sizing:border-box;">
       <h1 class="page-heading">Support Future Systems Thinking</h1>
       <p class="card">

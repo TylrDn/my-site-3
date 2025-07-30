@@ -3,7 +3,7 @@ import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
-  $w('#projectsContainer').html = `
+  $w('#projectsBox').html = `
     <div class="centered-flex flex-column section-spacing" style="max-width:1200px;padding:48px;width:100%;box-sizing:border-box;">
       <h1 class="page-heading">Selected Projects</h1>
       <div class="flex-column">
