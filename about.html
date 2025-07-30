@@ -1,0 +1,30 @@
+<!-- Netlify root static file for Wix Velo HTML Component fetch -->
+<!-- This file is a symlink/copy of wix-injections/about.html for static hosting -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About – MacroSight</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { opacity: 0; animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1) forwards; }
+    @keyframes fadeIn { to { opacity: 1; } }
+    .tagline { background: linear-gradient(90deg, var(--color-accent), var(--color-emerald)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .tagline::after { content: ""; display: block; margin: 0 auto; width: 60%; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--color-accent), var(--color-emerald)); margin-top: 8px; opacity: 0.7; transition: width 0.3s; }
+    .section:hover .tagline::after { width: 80%; }
+  </style>
+</head>
+<body>
+  <section class="section" style="margin-top: 48px;">
+    <div class="tagline">Strategy + Systems + Impact</div>
+    <div class="card" style="margin-top: 18px;">
+      Taylor Dean is a cross-disciplinary strategist, systems designer, and product leader working at the intersection of infrastructure, innovation, and human-centered technology. With a background spanning cloud architecture, sustainable energy, and digital transformation, Taylor brings a systems approach to problem-solving and measurable impact to every engagement.
+    </div>
+    <div style="margin-top: 32px;">
+      <a class="cta-button" href="/resume">View Resume</a>
+      <a class="cta-button" href="/projects">Explore Projects</a>
+    </div>
+  </section>
+</body>
+</html>

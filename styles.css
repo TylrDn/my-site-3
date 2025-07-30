@@ -1,0 +1,70 @@
+/* Symlink/copy of wix-injections/css/styles.css for Netlify static serving */
+:root {
+  --color-bg: #fafbfc;
+  --color-fg: #23272f;
+  --color-accent: #0070f3;
+  --color-emerald: #10b981;
+  --color-card: #fff;
+  --color-border: #e5e7eb;
+  --color-muted: #6b7280;
+  --font-main: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --radius: 12px;
+  --shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+}
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-main);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+.section {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 48px 24px 64px 24px;
+  background: none;
+}
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px 32px;
+  margin: 0 auto;
+  border: 1px solid var(--color-border);
+  font-size: 1.08rem;
+  color: var(--color-fg);
+}
+.cta-button {
+  display: inline-block;
+  margin: 0 8px 0 0;
+  padding: 10px 22px;
+  border-radius: 6px;
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.cta-button:hover {
+  background: var(--color-emerald);
+  color: #fff;
+  border-color: var(--color-emerald);
+}
+.centered-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-column {
+  flex-direction: column;
+}
+.section-spacing {
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
