@@ -6,9 +6,10 @@
   for = "/*"
   [headers.values]
     # CORS and security headers (managed here, not in _headers)
-    Access-Control-Allow-Origin = "https://www.macrosight.net"
+    Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type"
+    Access-Control-Allow-Credentials = true
     X-Content-Type-Options = "nosniff"
     Content-Security-Policy = "default-src 'self' https://www.macrosight.net"
 

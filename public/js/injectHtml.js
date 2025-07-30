@@ -1,6 +1,9 @@
+
 import { fetch } from 'wix-fetch';
 
+// Set this to your Netlify production domain for production, or Netlify preview for dev
 const base = "https://effervescent-salamander-34f5c7.netlify.app";
+// const base = "https://www.macrosight.net";
 
 /**
  * Injects HTML from Netlify into a Wix HTML Component with loader and error fallback.
@@ -16,12 +19,15 @@ export function injectHtml(componentId, fileSlug, loadingMsg = "Loading...") {
   }
   // Show loader
   $comp.postMessage(`<div style=\"padding:2em;text-align:center;color:#888;\">${loadingMsg}</div>`);
-  fetch(`${base}/${fileSlug}.html`)
+  const url = `${base}/${fileSlug}.html`;
+  console.log("Injecting:", url);
+  fetch(url)
     .then(res => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.text();
     })
     .then(html => {
+      console.log("HTML Loaded Successfully");
       $comp.postMessage(html);
     })
     .catch(err => {
