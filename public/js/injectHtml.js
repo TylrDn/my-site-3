@@ -2,8 +2,8 @@
 
 import { fetch } from 'wix-fetch';
 
-// Set to your Netlify production domain
-const base = "https://www.macrosight.net";
+// Set to your Netlify deploy domain for CORS-safe fetches
+const base = "https://macrosight.netlify.app";
 
 /**
  * Injects HTML from Netlify into a Wix HTML Component with loader and error fallback.
