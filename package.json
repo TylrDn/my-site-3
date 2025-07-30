@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@wix/eslint-plugin-cli": "^1.0.2",
     "eslint": "^8.25.0"
   },
   "scripts": {
