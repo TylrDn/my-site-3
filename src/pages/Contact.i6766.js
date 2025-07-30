@@ -1,4 +1,4 @@
-import { injectGlobalStyles } from 'public/globalStyles';
+import { injectGlobalStyles } from 'public/globalStyles.js';
 
 
 $w.onReady(function () {

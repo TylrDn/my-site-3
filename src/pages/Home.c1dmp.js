@@ -1,9 +1,9 @@
-import { injectGlobalStyles } from 'public/globalStyles';
+import { injectGlobalStyles } from 'public/globalStyles.js';
 
 
 $w.onReady(function () {
   injectGlobalStyles();
-  $w('#homeBox').html = `
+  $w('#homeContainer').html = `
     <div class="centered-flex flex-column section-spacing" style="max-width:1200px;padding:48px;width:100%;box-sizing:border-box;">
       <h1 class="tagline">Strategic Foresight Meets Creative Execution</h1>
       <p class="card">
