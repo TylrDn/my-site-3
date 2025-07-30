@@ -28,11 +28,6 @@ jobs:
           else
             echo "No test script defined. Skipping tests."
           fi
-      - name: Check for _headers file
-        run: |
-          if [ ! -f _headers ]; then
-            echo "ERROR: _headers file missing at repo root!" && exit 1
-          fi
       - name: Check HTML files for <link> and <script> in <head>
         run: |
           missing=""

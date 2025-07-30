@@ -5,6 +5,8 @@ import { fetch } from 'wix-fetch';
 const base = "https://effervescent-salamander-34f5c7.netlify.app";
 // const base = "https://www.macrosight.net";
 
+// If fileSlug is 'home', map to '/' for the homepage
+
 /**
  * Injects HTML from Netlify into a Wix HTML Component with loader and error fallback.
  * @param {string} componentId - The Wix HTML Component ID (without #)
@@ -19,7 +21,7 @@ export function injectHtml(componentId, fileSlug, loadingMsg = "Loading...") {
   }
   // Show loader
   $comp.postMessage(`<div style=\"padding:2em;text-align:center;color:#888;\">${loadingMsg}</div>`);
-  const url = `${base}/${fileSlug}.html`;
+  const url = fileSlug === 'home' ? `${base}/` : `${base}/${fileSlug}.html`;
   console.log("Injecting:", url);
   fetch(url)
     .then(res => {
