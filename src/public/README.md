@@ -1,11 +1,91 @@
-# The Public Code Folder
+# Public Directory — Global Styling for MacroSight.net
 
-This folder contains the public code files for your site. These files correspond to the ones found in the [**Public**](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#public) section of the  **Public & Backend** ![image](https://user-images.githubusercontent.com/89579857/184873215-d6042ace-4d20-40f2-ad37-1b1911302f96.png) tab in the Velo sidebar. You can import code from these files into any other file on your site.
+This `/public` directory contains globally scoped utility logic that can be reused across the entire MacroSight site.
 
-Use the following syntax to import code from public files:
+---
+
+## 📦 Contents
+
+### `globalStyles.js`
+Injects all global CSS styles into the DOM using Velo JavaScript, because Wix does **not** support `global.css` uploads.
+
+This file defines:
+- Global color variables (`:root`)
+- Typography rules
+- Layout utilities (flex/grid helpers)
+- Reusable UI classes (buttons, cards, section spacing)
+- Hover/transition effects
+- Mobile-responsive overrides
+
+---
+
+## ✅ Usage
+
+### Import this file on every page:
+
 ```js
-import { myFunctionName } from 'public/myFileName';
-```   
-Trying to import from the relative path in your site's repo doesn't work.
+import { injectGlobalStyles } from 'public/globalStyles';
 
-Learn more about [this repo's file structure](https://support.wix.com/en/article/velo-understanding-your-sites-github-repository-beta).
+$w.onReady(function () {
+  injectGlobalStyles();
+  // Additional page logic here...
+});
+````
+
+### Use HTML like real frontend developers:
+
+```html
+<div class="card">
+  <h3>Project Title</h3>
+  <p>Solution details here</p>
+</div>
+
+<div class="centered-flex">
+  <button class="cta-button btn-blue">Call to Action</button>
+</div>
+```
+
+---
+
+## 🧠 Why This Pattern?
+
+Wix does not support native CSS files across pages. This file uses a JavaScript-based injection pattern to apply consistent styles site-wide.
+
+**Benefits:**
+
+* Define once, use everywhere
+* Maintain a true design system across injected `.html`
+* Eliminate inline style clutter
+* Enable semantic, responsive development within Wix constraints
+
+---
+
+## 🛠 Maintenance Notes
+
+* Extend with new utility classes as needed (e.g., `.badge`, `.tag`, `.grid-lg`)
+* Stick to mobile-first and semantic naming conventions
+* Avoid inline styles — update here and reuse
+
+---
+
+## 🌱 Optional V2 Enhancements (Not Required for V1)
+
+These are additional style patterns or utilities you may want to include in `globalStyles.js` for future growth:
+
+| Feature                  | Suggested Class or Pattern         |
+| ------------------------ | ---------------------------------- |
+| Badge / Tag UI           | `.badge`, `.tag`                   |
+| Grid layout helpers      | `.grid-lg`, `.grid-2`, `.grid-3`   |
+| Scroll fade/hover motion | `.reveal`, `.fade-in`, `.slide-up` |
+| Dark mode support        | `data-theme`, dark color vars      |
+| Visual filters or chips  | `.filter-chip`, `.pill`            |
+| Icon layout blocks       | `.icon-set`, `.icon-label`         |
+| Nav / footer animations  | `.sticky`, `.fade-footer`          |
+| Global typography tokens | `.heading-sm`, `.body-md`          |
+
+These additions should only be added as needed — the current setup is already V1-complete and fully functional.
+
+---
+
+© 2025 MacroSight. Built with Velo + Class-Driven Styling.
+

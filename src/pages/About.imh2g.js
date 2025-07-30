@@ -1,10 +1,24 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
-    // Write your JavaScript here
+  injectGlobalStyles();
 
-    // To select an element by ID use: $w('#elementID')
+  $w("#aboutBox").html = `
+    <h1 class="page-heading">Strategy + Systems + Impact</h1>
 
-    // Click 'Preview' to run your code
+    <div class="flex-column section-spacing">
+      <p class="card">
+        Taylor Dean is a cross-disciplinary strategist, systems designer, and product leader
+        working at the intersection of infrastructure, innovation, and human-centered technology.
+        With a background spanning cloud architecture, sustainable energy, and digital transformation,
+        Taylor brings a systems approach to problem-solving and measurable impact to every engagement.
+      </p>
+
+      <div class="centered-flex">
+        <button class="cta-button btn-blue" onclick="window.location.href='/resume'">View Resume</button>
+        <button class="cta-button btn-dark" onclick="window.location.href='/projects'">Explore Projects</button>
+      </div>
+    </div>
+  `;
 });
+

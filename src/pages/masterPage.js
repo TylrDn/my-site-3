@@ -1,10 +1,22 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
-    // Write your JavaScript here
+  injectGlobalStyles();
 
-    // To select an element by ID use: $w('#elementID')
+  // 🔁 Sticky Header (optional behavior — uncomment if desired)
+  // $w("#siteHeader").onViewportLeave(() => {
+  //   $w("#siteHeader").collapse();
+  // });
+  // $w("#siteHeader").onViewportEnter(() => {
+  //   $w("#siteHeader").expand();
+  // });
 
-    // Click 'Preview' to run your code
+  // 🕒 Auto-update footer year
+  const currentYear = new Date().getFullYear();
+  if ($w("#footerYear")) {
+    $w("#footerYear").text = `${currentYear}`;
+  }
+
+  // 💡 Shared scroll behavior / page-level interactions can be added here
 });
+

@@ -1,10 +1,27 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
-    // Write your JavaScript here
+  injectGlobalStyles();
 
-    // To select an element by ID use: $w('#elementID')
+  $w("#resumeBox").html = `
+    <section class="section-spacing">
+      <h1 class="page-heading">Résumé & Core Capabilities</h1>
 
-    // Click 'Preview' to run your code
+      <div class="flex-column">
+        <p class="card">
+          A snapshot of cross-functional expertise — systems strategy, product leadership,
+          and infrastructure design.
+        </p>
+
+        <a
+          href="https://static.wixstatic.com/media/your-resume.pdf"
+          target="_blank"
+          class="cta-button btn-dark"
+        >
+          Download Resume
+        </a>
+      </div>
+    </section>
+  `;
 });
+

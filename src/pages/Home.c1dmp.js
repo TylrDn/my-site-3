@@ -1,10 +1,23 @@
-// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
-// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
-    // Write your JavaScript here
+  injectGlobalStyles();
 
-    // To select an element by ID use: $w('#elementID')
+  $w("#homeBox").html = `
+    <h1 class="tagline">Strategic Foresight Meets Creative Execution</h1>
 
-    // Click 'Preview' to run your code
+    <div class="flex-column section-spacing">
+      <p class="card">
+        Solving complex problems with a systems approach to innovation, growth,
+        and real-world implementation.
+      </p>
+
+      <div class="centered-flex">
+        <button class="cta-button btn-blue" onclick="window.location.href='/resume'">View Resume</button>
+        <button class="cta-button btn-emerald" onclick="window.location.href='/projects'">Explore Projects</button>
+        <button class="cta-button btn-dark" onclick="window.location.href='/contact'">Contact</button>
+      </div>
+    </div>
+  `;
 });
+
