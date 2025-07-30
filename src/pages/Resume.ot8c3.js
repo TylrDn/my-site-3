@@ -1,9 +1,9 @@
-import { injectGlobalStyles } from "public/globalStyles";
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
 
-  $w("#resumeBox").html = `
+  $w('#resumeBox').html = `
     <section class="section-spacing">
       <h1 class="page-heading">Résumé & Core Capabilities</h1>
 

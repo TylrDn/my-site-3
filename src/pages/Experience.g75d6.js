@@ -1,9 +1,9 @@
-import { injectGlobalStyles } from "public/globalStyles";
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
 
-  $w("#experienceBox").html = `
+  $w('#experienceBox').html = `
     <h1 class="page-heading">A Timeline of Systems Thinking in Action</h1>
     
     <div class="card">

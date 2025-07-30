@@ -1,10 +1,16 @@
 export function injectGlobalStyles() {
-  if (typeof document === "undefined") {
-    // Skip if document isn't available (e.g. during SSR or backend)
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    // Skip if not in a browser environment
     return;
   }
 
-  const style = document.createElement("style");
+  // Prevent multiple injections
+  if (document.getElementById('global-styles-injected')) {
+    return;
+  }
+
+  const style = document.createElement('style');
+  style.id = 'global-styles-injected';
   style.innerHTML = `
     :root {
       --charcoal: #1C1C1C;

@@ -1,4 +1,4 @@
-import { injectGlobalStyles } from "public/globalStyles";
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
@@ -13,8 +13,8 @@ $w.onReady(function () {
 
   // 🕒 Auto-update footer year
   const currentYear = new Date().getFullYear();
-  if ($w("#footerYear")) {
-    $w("#footerYear").text = `${currentYear}`;
+  if ($w('#footerYear')) {
+    $w('#footerYear').text = `${currentYear}`;
   }
 
   // 💡 Shared scroll behavior / page-level interactions can be added here

@@ -1,9 +1,9 @@
-import { injectGlobalStyles } from "public/globalStyles";
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
 
-  $w("#investBox").html = `
+  $w('#investBox').html = `
     <h1 class="page-heading">Support Future Systems Thinking</h1>
 
     <div class="flex-column section-spacing">

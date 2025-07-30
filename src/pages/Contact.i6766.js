@@ -1,9 +1,9 @@
-import { injectGlobalStyles } from "public/globalStyles";
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
 
-  $w("#contactBox").html = `
+  $w('#contactBox').html = `
     <h1 class="page-heading">Let’s Build Something Resilient</h1>
 
     <div class="flex-column">

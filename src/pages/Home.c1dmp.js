@@ -1,9 +1,9 @@
-import { injectGlobalStyles } from "public/globalStyles";
+import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
 
-  $w("#homeBox").html = `
+  $w('#homeBox').html = `
     <h1 class="tagline">Strategic Foresight Meets Creative Execution</h1>
 
     <div class="flex-column section-spacing">
