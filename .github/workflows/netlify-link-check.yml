@@ -1,0 +1,26 @@
+name: Netlify HTML Link Check
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Netlify HTML endpoints
+        run: |
+          set -e
+          base="https://effervescent-salamander-34f5c7.netlify.app"
+          for page in home about resume projects contact experience invest; do
+            url="$base/$page.html"
+            echo "Checking $url ..."
+            status=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            if [ "$status" != "200" ]; then
+              echo "::error ::$url returned $status"
+              exit 1
+            fi
+          done
+        shell: bash
