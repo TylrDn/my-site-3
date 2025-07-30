@@ -6,8 +6,9 @@
     "react": "16.14.0"
   },
   "scripts": {
-    
     "dev": "wix dev",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "html:lint": "npx htmlhint 'public/*.html'",
+    "html:format": "npx prettier --write 'public/*.html'"
   }
 }
