@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css?family=Inter:400,600&display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  color: #222;
+}
+.container {
+  max-width: 520px;
+  margin: 40px auto;
+  padding: 32px 20px;
+  background: #f9fbfd;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.06);
+  text-align: center;
+}
+.cta-button {
+  padding: 12px 18px;
+  background: #0073ff;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  margin: 0 8px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px 0 rgba(0,132,255,0.08);
+}
+.cta-button:hover, .cta-button:focus {
+  background: #005fcc;
+  color: #fff;
+  outline: none;
+  transform: translateY(-2px) scale(1.03);
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 18px 4vw;
+  }
+}
