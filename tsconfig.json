@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM"],
+    "types": []
+  },
+  "exclude": [".wix/**/*", "src/pages/*.xyz.js"]
+}
