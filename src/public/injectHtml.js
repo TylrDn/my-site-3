@@ -22,7 +22,11 @@ export function injectHtml(componentId, fileSlug, loadingMsg = "Loading...") {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.text();
     })
-    .then(html => $comp.postMessage(html))
+    .then(html => {
+      // Always inject styles.css via <style>@import</style> before the HTML content
+      const styleBlock = `<style>@import url('https://effervescent-salamander-34f5c7.netlify.app/styles.css');</style>`;
+      $comp.postMessage(styleBlock + html);
+    })
     .catch(err => {
       console.error(`Failed to inject ${fileSlug}.html into #${componentId}`, err);
       $comp.postMessage(`<div style=\"padding:2em;text-align:center;color:#c00;\">Sorry, content failed to load. Please try again later.</div>`);
