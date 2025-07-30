@@ -3,7 +3,7 @@ import { injectGlobalStyles } from 'public/globalStyles';
 
 $w.onReady(function () {
   injectGlobalStyles();
-  $w('#investBox').html = `
+  $w('#investHtml').postMessage(`
     <div class="centered-flex flex-column section-spacing" style="max-width:1200px;padding:48px;width:100%;box-sizing:border-box;">
       <h1 class="page-heading">Support Future Systems Thinking</h1>
       <p class="card">
@@ -15,5 +15,5 @@ $w.onReady(function () {
         <button class="cta-button btn-dark" onclick="window.location.href='/contact'">Contact for Collaboration</button>
       </div>
     </div>
-  `;
+  `);
 });
