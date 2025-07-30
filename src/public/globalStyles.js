@@ -1,4 +1,6 @@
 export function injectGlobalStyles() {
+  if (typeof document === "undefined" || !document.head) return; // Prevents crash in SSR/Preview
+
   const style = document.createElement("style");
   style.innerHTML = `
     :root {
@@ -8,15 +10,28 @@ export function injectGlobalStyles() {
       --emerald: #2ECC71;
       --gray: #F5F5F5;
       --font: 'Inter', sans-serif;
+      --border-radius: 8px;
+      --shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      --transition: transform 0.2s ease;
     }
 
     body {
       font-family: var(--font);
       color: var(--charcoal);
       background-color: #fdfdfd;
+      transition: background 0.2s, color 0.2s;
     }
 
-    /* Typography */
+    body.theme-dark {
+      --charcoal: #F5F5F5;
+      --white: #23272F;
+      --blue: #3399FF;
+      --emerald: #27AE60;
+      --gray: #23272F;
+      color: var(--charcoal);
+      background-color: #181A20;
+    }
+
     .tagline {
       font-size: 32px;
       color: var(--charcoal);
@@ -31,14 +46,13 @@ export function injectGlobalStyles() {
       margin: 48px 0 24px;
     }
 
-    /* Buttons */
     .cta-button {
       padding: 12px 24px;
       font-size: 16px;
       border-radius: 6px;
       border: none;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: var(--transition);
     }
 
     .cta-button:hover {
@@ -60,7 +74,6 @@ export function injectGlobalStyles() {
       color: var(--white);
     }
 
-    /* Layout */
     .centered-flex {
       display: flex;
       justify-content: center;
@@ -81,15 +94,15 @@ export function injectGlobalStyles() {
       margin: 64px 0;
     }
 
-    /* Cards */
     .card {
       background: var(--white);
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       padding: 24px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow);
       max-width: 800px;
       margin: 0 auto;
+      transition: background 0.2s, color 0.2s;
     }
 
     .card h3 {
@@ -104,7 +117,6 @@ export function injectGlobalStyles() {
       margin: 0;
     }
 
-    /* Tags & Badges */
     .tag {
       background-color: var(--gray);
       color: var(--charcoal);
@@ -116,7 +128,7 @@ export function injectGlobalStyles() {
 
     .badge {
       background-color: var(--blue);
-      color: white;
+      color: var(--white);
       font-size: 12px;
       font-weight: 600;
       padding: 4px 8px;
@@ -125,13 +137,17 @@ export function injectGlobalStyles() {
       text-transform: uppercase;
     }
 
-    /* Highlights */
     .highlight {
       color: var(--blue);
       font-weight: 600;
     }
 
-    /* Responsive Helpers */
+    @media (max-width: 1024px) {
+      .card {
+        max-width: 95vw;
+      }
+    }
+
     @media (max-width: 768px) {
       .tagline {
         font-size: 24px;
@@ -142,13 +158,28 @@ export function injectGlobalStyles() {
       }
       .card {
         padding: 16px;
+        max-width: 100vw;
       }
       .cta-button {
         font-size: 15px;
         padding: 10px 20px;
       }
+      .flex-column {
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tagline {
+        font-size: 18px;
+      }
+      .page-heading {
+        font-size: 16px;
+      }
+      .card {
+        padding: 8px;
+      }
     }
   `;
   document.head.appendChild(style);
 }
-

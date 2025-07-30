@@ -1,4 +1,4 @@
-import { injectGlobalStyles } from 'public/globalStyles';
+import { injectGlobalStyles } from "public/globalStyles";
 
 $w.onReady(function () {
   injectGlobalStyles();
@@ -19,4 +19,3 @@ $w.onReady(function () {
 
   // 💡 Shared scroll behavior / page-level interactions can be added here
 });
-

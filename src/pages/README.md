@@ -1,3 +1,13 @@
+# Usage with Wix Velo
+
+All page scripts should import global styles like this for Wix/Velo compatibility:
+
+```js
+import { injectGlobalStyles } from "public/globalStyles";
+```
+
+Call `injectGlobalStyles()` at the top of your `$w.onReady()` function in each page script.
+
 # MacroSight.net — Codebase Overview
 
 This repo powers the **MacroSight** digital portfolio: a systems-driven personal brand built on **Wix Velo**, tailored for strategic consulting, systems design, and cross-domain product leadership.

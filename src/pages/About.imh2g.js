@@ -1,4 +1,4 @@
-import { injectGlobalStyles } from 'public/globalStyles';
+import { injectGlobalStyles } from "public/globalStyles";
 
 $w.onReady(function () {
   injectGlobalStyles();
@@ -21,4 +21,3 @@ $w.onReady(function () {
     </div>
   `;
 });
-

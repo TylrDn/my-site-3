@@ -21,16 +21,19 @@ This file defines:
 
 ## ✅ Usage
 
-### Import this file on every page:
+
+## Usage with Wix Velo
+
+All page scripts should import global styles like this for Wix/Velo compatibility:
 
 ```js
-import { injectGlobalStyles } from 'public/globalStyles';
+import { injectGlobalStyles } from "public/globalStyles";
 
 $w.onReady(function () {
   injectGlobalStyles();
   // Additional page logic here...
 });
-````
+```
 
 ### Use HTML like real frontend developers:
 
