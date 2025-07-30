@@ -1,5 +1,8 @@
 export function injectGlobalStyles() {
-  if (typeof document === "undefined" || !document.head) return; // Prevents crash in SSR/Preview
+  if (typeof document === "undefined") {
+    // Skip if document isn't available (e.g. during SSR or backend)
+    return;
+  }
 
   const style = document.createElement("style");
   style.innerHTML = `
