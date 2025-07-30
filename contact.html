@@ -2,26 +2,81 @@
 <!-- This file is a symlink/copy of wix-injections/contact.html for static hosting -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Contact – MacroSight</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    body { opacity: 0; animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1) forwards; }
-    @keyframes fadeIn { to { opacity: 1; } }
-    .tagline { background: linear-gradient(90deg, var(--color-accent), var(--color-emerald)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .tagline::after { content: ""; display: block; margin: 0 auto; width: 60%; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--color-accent), var(--color-emerald)); margin-top: 8px; opacity: 0.7; transition: width 0.3s; }
-    .section:hover .tagline::after { width: 80%; }
-  </style>
-</head>
-<body>
-  <section class="section" style="margin-top: 48px;">
-    <div class="tagline">Let’s Build Something Resilient</div>
-    <div class="card" style="margin-top: 18px;">
-      Interested in collaborating, consulting, or hiring? Reach out using the form below, and I’ll be in touch promptly.
-    </div>
-    <a class="cta-button" href="mailto:hello@macrosight.net">Email Me</a>
-  </section>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Contact – MacroSight</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        color: #222;
+      }
+      .section-wrapper {
+        max-width: 520px;
+        margin: 40px auto;
+        padding: 32px 20px;
+        background: #f9fbfd;
+        border-radius: 14px;
+        box-shadow: 0 2px 16px 0 rgba(0,0,0,0.06);
+        text-align: center;
+      }
+      .tagline {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 18px;
+        background: linear-gradient(90deg, #0073ff, #00c48c);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .card {
+        margin: 0 0 24px 0;
+        font-size: 1.08rem;
+        color: #444;
+      }
+      .cta-button {
+        padding: 12px 18px;
+        background: #0073ff;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 6px;
+        border: none;
+        margin: 0 8px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.2s, transform 0.1s;
+        box-shadow: 0 2px 8px 0 rgba(0,132,255,0.08);
+      }
+      .cta-button:hover, .cta-button:focus {
+        background: #005fcc;
+        color: #fff;
+        outline: none;
+        transform: translateY(-2px) scale(1.03);
+      }
+      @media (max-width: 600px) {
+        .section-wrapper {
+          padding: 18px 4vw;
+        }
+      }
+    </style>
+    <script>
+      // Loader fallback
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.innerHTML = '<div style="text-align:center;padding:2em;color:gray;">Loading…</div>';
+      });
+      // Injected content
+      window.addEventListener("message", (event) => {
+        if (typeof event.data === "string") {
+          document.body.innerHTML = event.data;
+        }
+      }, false);
+    </script>
+  </head>
+  <body>
+    <!-- Content will be injected by Wix Velo -->
+  </body>
 </html>
