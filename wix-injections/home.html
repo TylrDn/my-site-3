@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MacroSight – Home</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { opacity: 0; animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1) forwards; }
+    @keyframes fadeIn { to { opacity: 1; } }
+    .tagline { position: relative; display: inline-block; background: linear-gradient(90deg, var(--color-accent), var(--color-emerald)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-fill-color: transparent; }
+    .tagline::after { content: ""; display: block; margin: 0 auto; width: 60%; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--color-accent), var(--color-emerald)); margin-top: 8px; opacity: 0.7; transition: width 0.3s; }
+    .section:hover .tagline::after { width: 80%; }
+    .cta-button { box-shadow: 0 2px 8px 0 rgba(0,132,255,0.08); letter-spacing: 0.02em; }
+    .cta-button:active { transform: scale(0.98); background: var(--color-accent); filter: brightness(0.95); }
+    .social-row { margin-top: 32px; display: flex; gap: 18px; justify-content: center; }
+    .social-link { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #f1f3f7; color: var(--color-accent); font-size: 1.3rem; transition: background 0.2s, color 0.2s; text-decoration: none; }
+    .social-link:hover { background: var(--color-accent); color: #fff; }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <section class="section" style="margin-top: 48px;">
+    <div class="tagline">Strategic Foresight Meets Creative Execution</div>
+    <div class="card" style="margin-top: 18px;">
+      Solving complex problems with a systems approach to innovation, growth, and real-world implementation.
+    </div>
+    <div style="margin-top: 32px;">
+      <a class="cta-button" href="/resume">View Resume</a>
+      <a class="cta-button" href="/projects">Explore Projects</a>
+      <a class="cta-button" href="/contact">Contact</a>
+    </div>
+    <div class="social-row">
+      <a class="social-link" href="https://twitter.com/" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+      <a class="social-link" href="https://linkedin.com/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a class="social-link" href="https://github.com/" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Résumé – MacroSight</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { opacity: 0; animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1) forwards; }
+    @keyframes fadeIn { to { opacity: 1; } }
+    .tagline { background: linear-gradient(90deg, var(--color-accent), var(--color-emerald)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .tagline::after { content: ""; display: block; margin: 0 auto; width: 60%; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--color-accent), var(--color-emerald)); margin-top: 8px; opacity: 0.7; transition: width 0.3s; }
+    .section:hover .tagline::after { width: 80%; }
+    .resume-link { display: inline-block; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <section class="section" style="margin-top: 48px;">
+    <div class="tagline">Résumé & Core Capabilities</div>
+    <div class="card" style="margin-top: 18px;">
+      A snapshot of cross-functional expertise — systems strategy, product leadership, and infrastructure design.
+    </div>
+    <a class="cta-button resume-link" href="https://static.wixstatic.com/media/your-resume.pdf" target="_blank">Download Resume</a>
+  </section>
+</body>
+</html>
