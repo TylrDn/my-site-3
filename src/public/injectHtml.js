@@ -1,3 +1,5 @@
+
+// @ts-nocheck
 import { fetch } from 'wix-fetch';
 
 const base = "https://effervescent-salamander-34f5c7.netlify.app";
@@ -23,6 +25,11 @@ export function injectHtml(componentId, fileSlug, loadingMsg = "Loading...") {
       return res.text();
     })
     .then(html => {
+      // Block <script> and <style> injection for security
+      if (/<(script|style)[\s>]/i.test(html)) {
+        $comp.postMessage('<div style="padding:2em;text-align:center;color:#c00;">Invalid content.</div>');
+        return;
+      }
       $comp.postMessage(html);
     })
     .catch(err => {
