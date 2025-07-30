@@ -1,14 +1,9 @@
 [build]
-publish = "/"
+publish = "public"
 command = ""
 
-[[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
-
 [[headers]]
-  for = "/*.html"
+  for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "https://www.macrosight.net"
     Access-Control-Allow-Methods = "GET, OPTIONS"

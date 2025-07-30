@@ -1,0 +1,20 @@
+<!-- Contact section for Wix Velo HTML injection -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Contact – MacroSight</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script>
+      window.addEventListener("message", (event) => {
+        if (typeof event.data === "string") {
+          document.body.innerHTML = event.data;
+        }
+      }, false);
+    </script>
+  </head>
+  <body>
+    <!-- Content will be injected by Wix Velo -->
+  </body>
+</html>
