@@ -1,14 +1,12 @@
 import { injectGlobalStyles } from 'public/globalStyles';
 
+
 $w.onReady(function () {
   injectGlobalStyles();
-
-  $w('#projectsBox').html = `
-    <section class="section-spacing">
+  $w('#projectsContainer').html = `
+    <div class="centered-flex flex-column section-spacing" style="max-width:1200px;padding:48px;width:100%;box-sizing:border-box;">
       <h1 class="page-heading">Selected Projects</h1>
-
       <div class="flex-column">
-
         <div class="card">
           <h3>AI Integration Strategy</h3>
           <p>
@@ -17,7 +15,6 @@ $w.onReady(function () {
             <strong>Outcome:</strong> Reduced model delivery cycle by 60%.
           </p>
         </div>
-
         <div class="card">
           <h3>Enterprise UX Redesign</h3>
           <p>
@@ -26,7 +23,6 @@ $w.onReady(function () {
             <strong>Outcome:</strong> Increased retention by 25%, NPS +18pts.
           </p>
         </div>
-
         <div class="card">
           <h3>B2B SaaS Optimization Platform</h3>
           <p>
@@ -35,8 +31,7 @@ $w.onReady(function () {
             <strong>Outcome:</strong> 40% infra cost savings, 3× faster load times.
           </p>
         </div>
-
       </div>
-    </section>
+    </div>
   `;
 });
