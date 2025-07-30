@@ -1,5 +1,5 @@
 [build]
-publish = "/"
+publish = "public"
 command = ""
 
 [[redirects]]
