@@ -1,4 +1,4 @@
-import { injectGlobalStyles } from 'public/globalStyles.js';
+import { injectGlobalStyles } from 'public/globalStyles';
 $w.onReady(function () {
   injectGlobalStyles();
   // All site-wide elements (e.g., sticky header, footer, overlays) should be placed inside #siteFrameContainer
