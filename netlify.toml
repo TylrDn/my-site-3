@@ -1,0 +1,70 @@
+[build]
+  publish = "public"
+  command = ""
+
+# 🔒 Secure and CORS-Compatible Headers
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "https://www.macrosight.net"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self' https://www.macrosight.net"
+
+# 🚦 Clean Routing Rules
+[[redirects]]
+  from = "/"
+  to = "/home.html"
+  status = 200
+
+[[redirects]]
+  from = "/home"
+  to = "/home.html"
+  status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/resume"
+  to = "/resume.html"
+  status = 200
+
+[[redirects]]
+  from = "/projects"
+  to = "/projects.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/invest"
+  to = "/invest.html"
+  status = 200
+
+[[redirects]]
+  from = "/experience"
+  to = "/experience.html"
+  status = 200
+
+[[redirects]]
+  from = "/404"
+  to = "/404.html"
+  status = 404

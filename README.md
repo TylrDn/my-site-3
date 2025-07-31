@@ -1,3 +1,105 @@
+# MacroSight.net v2 Architecture
+
+## Overview
+
+This static site implements a hybrid architecture that supports both standalone HTML pages and Wix-Velo iframe integration through postMessage communication.
+
+## File Structure
+
+### Static HTML Pages
+- `home.html` - Pure static home page
+- `about.html` - Pure static about page  
+- `contact.html` - Pure static contact page
+- `experience.html` - Pure static experience page
+- `projects.html` - Pure static projects page
+- `404.html` - Pure static 404 error page
+
+### Wix Integration Pages
+- `embed.html` - Dedicated postMessage listener for iframe embedding
+- `resume.html` - Wix-embedded resume page with postMessage handling
+- `invest.html` - Wix-embedded investment page with postMessage handling
+
+### Assets
+- `styles.css` - Global stylesheet with loader styles
+- `robots.txt` - SEO crawler instructions
+- `sitemap.xml` - Site structure for search engines
+
+## CORS & Security Configuration
+
+### HTML Files (`/*.html`)
+- `Access-Control-Allow-Origin: *` - Allows cross-origin fetching for Wix integration
+
+### All Other Files (`/*`)
+- `Access-Control-Allow-Origin: https://www.macrosight.net` - Restrictive CORS
+- Security headers: HSTS, X-Frame-Options, CSP, etc.
+
+## postMessage Architecture
+
+### Allowed Origins
+- `https://www.macrosight.net`
+- `https://macrosight.netlify.app`
+
+### Safety Features
+- Rejects HTML containing `<head>` tags
+- Only injects into `document.body`
+- Hides loader on successful injection
+- Shows error message on failed injection
+
+## Wix-Velo Integration
+
+1. **Setup iframe**: Point to `embed.html` or use specific embed pages
+2. **Fetch content**: Use `wix-fetch` to get HTML from Netlify
+3. **Post message**: Send HTML content to iframe via postMessage
+4. **Display**: Content replaces loader in iframe
+
+Example:
+```javascript
+// In Wix Velo page code
+const response = await fetch('https://www.macrosight.net/home.html');
+const html = await response.text();
+iframe.postMessage(html, 'https://www.macrosight.net');
+```
+
+## Testing Commands
+
+```bash
+# Test CORS headers for HTML files
+curl -I https://www.macrosight.net/embed.html
+
+# Test static page rendering  
+curl https://www.macrosight.net/home.html
+
+# Test redirects
+curl -I https://www.macrosight.net/
+```
+
+## Security Notes
+
+- Only `embed.html`, `resume.html`, and `invest.html` listen for postMessages
+- All other pages are pure static HTML
+- CORS is open for HTML files to enable Wix fetching
+- Security headers protect against common attacks
+
+---
+
+# Usage with Wix Velo
+
+## SEO & Launch Files
+
+This site includes:
+- `/robots.txt` (allows all, points to sitemap)
+- `/sitemap.xml` (lists all public pages)
+
+Both are in `/public` and will be live at the root of your deployed site for search engines and best practice.
+
+All page scripts should import global styles like this for Wix/Velo compatibility:
+
+```js
+import { injectGlobalStyles } from "public/globalStyles";
+```
+
+Call `injectGlobalStyles()` at the top of your `$w.onReady()` function in each page script.
+
 # Git Integration & Wix CLI <img align="left" src="https://user-images.githubusercontent.com/89579857/185785022-cab37bf5-26be-4f11-85f0-1fac63c07d3b.png">
 
 This repo is part of Git Integration & Wix CLI, a set of tools that allows you to write, test, and publish code for your Wix site locally on your computer. 
