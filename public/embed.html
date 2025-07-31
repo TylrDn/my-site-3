@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>MacroSight Embed</title>
+    <link rel="stylesheet" href="/styles.css">
+
+    <script>
+      // 1) Only accept messages from your known origins:
+      const ALLOWED_ORIGINS = [
+        "https://www.macrosight.net",
+        "https://macrosight.netlify.app"
+      ];
+
+      // 2) A basic sanitizer that blocks any <head> tags:
+      function safeInject(html) {
+        if (typeof html !== "string" || /<head[\s>]/i.test(html)) return false;
+        document.body.innerHTML = html;
+        return true;
+      }
+
+      window.addEventListener("message", (event) => {
+        if (!ALLOWED_ORIGINS.includes(event.origin)) return;
+        if (safeInject(event.data)) {
+          const loader = document.querySelector(".loader");
+          if (loader) loader.style.display = "none";
+        }
+      }, false);
+    </script>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Inter, sans-serif;
+      }
+      .loader {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loader">Loading…</div>
+    <noscript>
+      This page is meant to be embedded.  
+      <a href="https://www.macrosight.net/home.html">Go to Home</a>
+    </noscript>
+  </body>
+</html>
