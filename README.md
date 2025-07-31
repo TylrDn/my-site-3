@@ -4,25 +4,37 @@
 
 This static site implements a hybrid architecture that supports both standalone HTML pages and Wix-Velo iframe integration through postMessage communication.
 
+## 🏗 **DEPLOYMENT STATUS**
+- **Static Site**: ✅ Deployed on Netlify (`public/` folder)
+- **Wix Integration**: ✅ Velo code in `src/` folder  
+- **CORS Headers**: ✅ Configured for cross-origin embedding
+- **Security**: ✅ HSTS, CSP, and other security headers active
+
 ## File Structure
 
-### Static HTML Pages
+### Static HTML Pages (`public/`)
 - `home.html` - Pure static home page
 - `about.html` - Pure static about page  
 - `contact.html` - Pure static contact page
 - `experience.html` - Pure static experience page
 - `projects.html` - Pure static projects page
+- `resume.html` - Resume page
+- `invest.html` - Investment page
 - `404.html` - Pure static 404 error page
 
 ### Wix Integration Pages
-- `embed.html` - Dedicated postMessage listener for iframe embedding
-- `resume.html` - Wix-embedded resume page with postMessage handling
-- `invest.html` - Wix-embedded investment page with postMessage handling
+- `embed.html` - **CRITICAL**: Dedicated postMessage listener for iframe embedding
+- Has loading spinner, content validation, and whitelisted origins
 
 ### Assets
 - `styles.css` - Global stylesheet with loader styles
-- `robots.txt` - SEO crawler instructions
+- `robots.txt` - SEO crawler instructions  
 - `sitemap.xml` - Site structure for search engines
+
+### Wix Velo Code (`src/`)
+- `backend/wix-velo-integration.js` - Core integration helper
+- `pages/*.js` - Page-specific Velo code calling integration
+- `public/globalStyles.js` - Shared styling utilities
 
 ## CORS & Security Configuration
 

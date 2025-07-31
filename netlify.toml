@@ -4,15 +4,30 @@
 
 # 🔒 Secure and CORS-Compatible Headers
 
-# More specific rule for HTML files - must come first
+# Specific CORS rules for embedding (highest priority)
+[[headers]]
+  for = "/embed.html"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+    X-Content-Type-Options = "nosniff"
+
+# CORS rules for all other HTML files (medium priority)
 [[headers]]
   for = "/*.html"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self' https://www.macrosight.net https://macrosight.netlify.app"
 
-# General security headers for all other files
+# General security headers for all other files (lowest priority)
 [[headers]]
   for = "/*"
   [headers.values]

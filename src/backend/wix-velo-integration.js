@@ -1,5 +1,13 @@
 // Wix Velo integration for MacroSight.net
 // This module provides the injectHtml function for embedding static content
+// 
+// DEPLOYMENT NOTE: This file works with the postMessage architecture in embed.html
+// - Step 1: Points iframe to embed.html (shows loading spinner)
+// - Step 2: Fetches the target static HTML page from Netlify
+// - Step 3: Posts content via postMessage to embed.html iframe
+// - Step 4: embed.html safeInject() validates and displays content
+//
+// SECURITY: Only whitelisted origins can receive postMessages (see embed.html)
 // Note: $w is a Wix Velo global variable available in the Wix environment
 
 import { fetch } from 'wix-fetch';

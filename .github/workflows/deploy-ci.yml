@@ -56,8 +56,8 @@ jobs:
         run: |
           echo "🌐 Testing CORS headers and generating summary"
           
-          # Base URL for testing
-          BASE_URL="https://macrosight.netlify.app"
+          # Base URL for testing - use production for accurate results
+          BASE_URL="https://www.macrosight.net"
           
           # Create markdown summary
           echo "# MacroSight Deployment Summary" >> $GITHUB_STEP_SUMMARY
@@ -95,9 +95,18 @@ jobs:
                 
                 # Special check for embed.html - should have CORS: *
                 if [[ "$page" == "embed" && "$cors_header" != "*" ]]; then
-                  cors_status="❌ Wrong"
+                  cors_status="❌ Wrong (should be *)"
                   failed=1
                 fi
+              else
+                cors_status="❌ Missing"
+                cors_header="Missing"
+                failed=1
+              fi
+            fi
+            
+            echo "| ${page}.html | $status | $cors_status | $cors_header |" >> $GITHUB_STEP_SUMMARY
+          done
               else
                 cors_status="❌ Missing"
                 cors_header="Missing"
