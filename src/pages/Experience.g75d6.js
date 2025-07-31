@@ -1,5 +1,5 @@
 import { injectGlobalStyles } from 'public/globalStyles';
-import { injectHtml } from 'backend/wix-velo-integration';
+import { injectHtml } from 'public/wix-velo-integration';
 
 
 $w.onReady(function () {

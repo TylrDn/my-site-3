@@ -3,7 +3,15 @@
 **Date**: July 31, 2025  
 **Repository**: TylrDn/my-site-3  
 **Branch**: main  
-**Commit**: 36602fc
+**Commit**: 36602fc (+ Wix module structure fix)
+
+## 🚨 **CRITICAL UPDATE - Wix Deployment Fix**
+
+### ❌ **NEW ISSUE DISCOVERED**: Wix Module Import Error
+- **Problem**: Page code was importing from `backend/` which is not allowed in Wix Velo
+- **Error**: "Access to backend script denied! Client-side scripts can only import web-modules"
+- **Fix**: Moved `wix-velo-integration.js` from `src/backend/` to `src/public/` (web module)
+- **Impact**: All page imports updated to use `public/wix-velo-integration`
 
 ## 🔍 **AUDIT RESULTS**
 

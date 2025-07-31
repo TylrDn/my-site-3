@@ -15,8 +15,8 @@
 - [ ] Redirects configured for clean URLs
 
 ### ✅ Wix Integration Files
-- [ ] `src/backend/wix-velo-integration.js` exists and exports `injectHtml` function
-- [ ] All page files in `src/pages/` import and call the integration properly
+- [ ] `src/public/wix-velo-integration.js` exists and exports `injectHtml` function (WEB MODULE)
+- [ ] All page files in `src/pages/` import from `public/wix-velo-integration` (not backend)
 - [ ] `embed.html` has proper postMessage handling with whitelisted origins
 
 ## Post-Deployment Testing
@@ -65,7 +65,7 @@ curl -I https://www.macrosight.net/home.html | grep -i "strict-transport-securit
 4. Update CI workflow to test the new page
 
 ### Updating integration logic:
-1. Modify `src/backend/wix-velo-integration.js`
+1. Modify `src/public/wix-velo-integration.js` (WEB MODULE)
 2. Test in Wix Preview
 3. No changes needed to static files
 

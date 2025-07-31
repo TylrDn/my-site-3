@@ -1,4 +1,4 @@
-// Wix Velo integration for MacroSight.net
+// Wix Velo integration for MacroSight.net - WEB MODULE
 // This module provides the injectHtml function for embedding static content
 // 
 // DEPLOYMENT NOTE: This file works with the postMessage architecture in embed.html
@@ -9,6 +9,7 @@
 //
 // SECURITY: Only whitelisted origins can receive postMessages (see embed.html)
 // Note: $w is a Wix Velo global variable available in the Wix environment
+// Note: This is a WEB MODULE - can be imported by both backend and frontend code
 
 import { fetch } from 'wix-fetch';
 

@@ -32,9 +32,11 @@ This static site implements a hybrid architecture that supports both standalone 
 - `sitemap.xml` - Site structure for search engines
 
 ### Wix Velo Code (`src/`)
-- `backend/wix-velo-integration.js` - Core integration helper
+- `public/wix-velo-integration.js` - **WEB MODULE**: Core integration helper (accessible by all Velo code)
+- `public/globalStyles.js` - **WEB MODULE**: Shared styling utilities
+- `public/injectHtml.js` - **WEB MODULE**: HTML injection utilities
 - `pages/*.js` - Page-specific Velo code calling integration
-- `public/globalStyles.js` - Shared styling utilities
+- `backend/` - Backend-only code (permissions, server-side logic)
 
 ## CORS & Security Configuration
 
@@ -108,9 +110,10 @@ All page scripts should import global styles like this for Wix/Velo compatibilit
 
 ```js
 import { injectGlobalStyles } from "public/globalStyles";
+import { injectHtml } from "public/wix-velo-integration";
 ```
 
-Call `injectGlobalStyles()` at the top of your `$w.onReady()` function in each page script.
+Call `injectGlobalStyles()` at the top of your `$w.onReady()` function, then call `injectHtml('componentId', 'pageName')` to load content.
 
 # Git Integration & Wix CLI <img align="left" src="https://user-images.githubusercontent.com/89579857/185785022-cab37bf5-26be-4f11-85f0-1fac63c07d3b.png">
 
