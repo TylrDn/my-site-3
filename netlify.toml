@@ -2,6 +2,7 @@
   publish = "public"
   command = ""
 
+# 🔒 Secure and CORS-Compatible Headers
 [[headers]]
   for = "/*.html"
   [headers.values]
@@ -22,6 +23,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Content-Security-Policy = "default-src 'self' https://www.macrosight.net"
 
+# 🚦 Clean Routing Rules
 [[redirects]]
   from = "/"
   to = "/home.html"
@@ -61,3 +63,8 @@
   from = "/experience"
   to = "/experience.html"
   status = 200
+
+[[redirects]]
+  from = "/404"
+  to = "/404.html"
+  status = 404

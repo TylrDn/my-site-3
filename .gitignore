@@ -1,6 +1,13 @@
-# dependencies
+# Node dependencies
 node_modules/
+
+# Editor configs
 .vscode/
 .idea/
-.wix/
 jsconfig.json
+
+# Wix-generated files
+.wix/
+
+# Netlify CLI output/state
+.netlify/
