@@ -1,5 +1,3 @@
-<!-- Netlify root static file for Wix Velo HTML Component fetch -->
-<!-- This file is a symlink/copy of wix-injections/projects.html for static hosting -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,37 +5,42 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Projects – MacroSight</title>
     <link rel="stylesheet" href="/styles.css">
-    <script>
-      // Hardened postMessage injection for Wix Velo
-      const ALLOWED_ORIGINS = [
-        "https://www.macrosight.net",
-        "https://macrosight.netlify.app"
-      ];
-      function safeInject(html) {
-        if (typeof html !== "string" || /<head[\s>]/i.test(html)) return false;
-        document.body.innerHTML = html;
-        return true;
-      }
-      window.addEventListener("message", (event) => {
-        if (!ALLOWED_ORIGINS.includes(event.origin)) return;
-        if (!safeInject(event.data)) {
-          document.body.innerHTML = '<div style="padding:2em;text-align:center;color:#c00;">Sorry, content failed to load. Please try again later.</div>';
-        }
-      }, false);
-      if (window.top === window.self) {
-        document.body.innerHTML = "<p style='text-align:center;padding:2em;'>This page is meant to be embedded in a Wix iframe. Visit <a href='https://www.macrosight.net'>macrosight.net</a> to view.</p>";
-      }
-    </script>
   </head>
   <body>
-    <div class="loader"></div>
-    <div class="card">
-      <h3>B2B SaaS Optimization Platform</h3>
-      <p>
-        <strong>Problem:</strong> Legacy backend failing at scale.<br>
-        <strong>Solution:</strong> Re-architected for microservices + added FinOps controls.<br>
-        <strong>Outcome:</strong> 40% infra cost savings, 3× faster load times.
-      </p>
-    </div>
+    <header>
+      <div class="section">
+        <h1>MacroSight</h1>
+        <nav>
+          <a href="/home.html">Home</a>
+          <a href="/about.html">About</a>
+          <a href="/experience.html">Experience</a>
+          <a href="/resume.html">Resume</a>
+          <a href="/contact.html">Contact</a>
+          <a href="/invest.html">Invest</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="section">
+        <div class="card">
+          <h2>Featured Projects</h2>
+          <div class="card">
+            <h3>B2B SaaS Optimization Platform</h3>
+            <p>
+              <strong>Problem:</strong> Legacy backend failing at scale.<br>
+              <strong>Solution:</strong> Re-architected for microservices + added FinOps controls.<br>
+              <strong>Outcome:</strong> 40% infra cost savings, 3× faster load times.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="section">
+        <p>&copy; 2025 MacroSight. All rights reserved.</p>
+      </div>
+    </footer>
   </body>
 </html>

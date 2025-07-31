@@ -20,7 +20,10 @@
       }
       window.addEventListener("message", (event) => {
         if (!ALLOWED_ORIGINS.includes(event.origin)) return;
-        if (!safeInject(event.data)) {
+        if (safeInject(event.data)) {
+          const loader = document.querySelector(".loader");
+          if (loader) loader.style.display = "none";
+        } else {
           document.body.innerHTML = '<div style="padding:2em;text-align:center;color:#c00;">Sorry, content failed to load. Please try again later.</div>';
         }
       }, false);
@@ -30,6 +33,6 @@
     </script>
   </head>
   <body>
-    <div class="loader"></div>
+    <div class="loader">Loading…</div>
   </body>
 </html>
