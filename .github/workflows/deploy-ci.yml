@@ -1,4 +1,4 @@
-name: Deploy & CI Checks
+name: Deploy CI - MacroSight Static Site
 
 on:
   push:
@@ -15,79 +15,165 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Lint source code
-        run: npx eslint src/pages/ src/public/ --fix
-
-      - name: Format source code
-        run: npx prettier --write src/pages/ src/public/
-
-      - name: HTMLHint checks
-        run: npx htmlhint "public/*.html"
-
-      - name: Check HTML structure (<link>/<script>)
         run: |
-          echo "🔎 Checking HTML for <link> and <script> tags..."
-          for f in $(find public -type f -name '*.html'); do
-            if ! grep -q '<link rel="stylesheet"' "$f" || ! grep -q 'window.addEventListener' "$f"; then
-              echo "❌ $f missing <link> or <script>"
-              exit 1
-            fi
-          done
-          echo "✅ HTML structure passed."
-
-      - name: Check Netlify CORS headers and HTTP status
+          npm install -g prettier html-validate eslint
+          
+      - name: Lint and prettify HTML in public/
         run: |
-          set -e
-          base="https://www.macrosight.net"
-          echo "| Page | Status | CORS Header | Notes |" > summary.md
-          echo "|------|--------|--------------|-------|" >> summary.md
+          echo "🎨 Prettifying HTML files in public/"
+          prettier --write "public/*.html"
+          echo "✅ HTML files prettified"
 
-          fail=0
-          for page in $(find public -name '*.html' -exec basename {} \;); do
-            url="$base/$page"
-            status=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-            cors=$(curl -sI "$url" | grep -i 'access-control-allow-origin:')
+      - name: Validate HTML files
+        run: |
+          echo "🔍 Validating HTML files"
+          html-validate public/*.html
+          echo "✅ HTML validation complete"
 
-            if [ "$status" != "200" ]; then
-              cors_status="❌"
-              notes="HTTP $status"
-              fail=1
-            elif ! echo "$cors" | grep -q 'https://www.macrosight.net'; then
-              cors_status="❌"
-              notes="Missing or wrong CORS"
-              fail=1
-            else
-              cors_status="✅"
-              notes="OK"
-            fi
-
-            printf "| %s | %s | %s | %s |\n" "$page" "$status" "$cors_status" "$notes" >> summary.md
-          done
-
-          cat summary.md
-
-          echo "### Page Validation Report" >> $GITHUB_STEP_SUMMARY
-          cat summary.md >> $GITHUB_STEP_SUMMARY
-
-          if [ "$fail" = "1" ]; then
-            echo "❌ One or more checks failed."
+      - name: Check for postMessage listeners in static HTML
+        run: |
+          echo "� Checking for postMessage listeners (should only be in embed.html)"
+          files_with_listeners=$(grep -l "postMessage\|addEventListener" public/*.html | grep -v embed.html || true)
+          
+          if [[ -n "$files_with_listeners" ]]; then
+            echo "❌ Found postMessage listeners in static HTML files:"
+            echo "$files_with_listeners"
+            for file in $files_with_listeners; do
+              echo "- $file contains:"
+              grep -n "postMessage\|addEventListener" "$file" || true
+            done
             exit 1
+          else
+            echo "✅ No postMessage listeners found in static HTML files"
           fi
 
-      # Optional Netlify deployment (uncomment if using CI deploys)
-      # - name: Deploy to Netlify
-      #   uses: nwtgck/actions-netlify@v2.0
-      #   with:
-      #     publish-dir: ./public
-      #     production-deploy: true
-      #     deploy-message: "CI deployment from GitHub Actions"
-      #   env:
-      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      - name: Validate CORS headers via HTTP requests
+        run: |
+          echo "🌐 Testing CORS headers and generating summary"
+          
+          # Base URL for testing
+          BASE_URL="https://macrosight.netlify.app"
+          
+          # Create markdown summary
+          echo "# MacroSight Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Page | Status | CORS Header | Access-Control-Allow-Origin |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|-------------|------------------------------|" >> $GITHUB_STEP_SUMMARY
+          
+          # Test all pages
+          pages=("home" "about" "projects" "resume" "contact" "invest" "experience" "embed")
+          failed=0
+          
+          for page in "${pages[@]}"; do
+            echo "Testing ${page}.html..."
+            
+            response=$(curl -s -I "${BASE_URL}/${page}.html" 2>/dev/null || echo "FAILED")
+            
+            if [[ "$response" == "FAILED" ]]; then
+              status="❌ FAILED"
+              cors_status="❌ N/A"
+              cors_header="N/A"
+              failed=1
+            else
+              status_code=$(echo "$response" | head -n 1 | awk '{print $2}')
+              if [[ "$status_code" == "200" ]]; then
+                status="✅ 200 OK"
+              else
+                status="❌ $status_code"
+                failed=1
+              fi
+              
+              cors_header=$(echo "$response" | grep -i "access-control-allow-origin" | cut -d' ' -f2- | tr -d '\r\n' || echo "Not found")
+              
+              if [[ "$cors_header" != "Not found" ]]; then
+                cors_status="✅ Present"
+                
+                # Special check for embed.html - should have CORS: *
+                if [[ "$page" == "embed" && "$cors_header" != "*" ]]; then
+                  cors_status="❌ Wrong"
+                  failed=1
+                fi
+              else
+                cors_status="❌ Missing"
+                cors_header="Missing"
+                failed=1
+              fi
+            fi
+            
+            echo "| ${page}.html | $status | $cors_status | $cors_header |" >> $GITHUB_STEP_SUMMARY
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Security Headers Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Test security headers on main pages
+          main_response=$(curl -s -I "${BASE_URL}/home.html" 2>/dev/null || echo "FAILED")
+          
+          if [[ "$main_response" != "FAILED" ]]; then
+            hsts=$(echo "$main_response" | grep -i "strict-transport-security" || echo "")
+            csp=$(echo "$main_response" | grep -i "content-security-policy" || echo "")
+            xframe=$(echo "$main_response" | grep -i "x-frame-options" || echo "")
+            
+            echo "- HSTS: $([ -n "$hsts" ] && echo "✅ Present" || echo "❌ Missing")" >> $GITHUB_STEP_SUMMARY
+            echo "- CSP: $([ -n "$csp" ] && echo "✅ Present" || echo "❌ Missing")" >> $GITHUB_STEP_SUMMARY
+            echo "- X-Frame-Options: $([ -n "$xframe" ] && echo "✅ Present" || echo "❌ Missing")" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ Could not test security headers" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Generated on $(date)_" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ $failed -eq 1 ]]; then
+            echo "❌ Some CORS/HTTP checks failed"
+            exit 1
+          else
+            echo "✅ All CORS and HTTP checks passed"
+          fi
+
+      - name: Verify Netlify configuration
+        run: |
+          echo "🔧 Verifying netlify.toml configuration"
+          
+          if [[ ! -f "netlify.toml" ]]; then
+            echo "❌ netlify.toml not found"
+            exit 1
+          fi
+          
+          # Check required sections
+          if grep -q "\[build\]" netlify.toml && grep -q "publish.*public" netlify.toml; then
+            echo "✅ Build configuration correct (publish = public)"
+          else
+            echo "❌ Build configuration missing or incorrect"
+            exit 1
+          fi
+          
+          if grep -q "\[\[headers\]\]" netlify.toml; then
+            echo "✅ Headers configuration found"
+          else
+            echo "❌ Headers configuration missing"
+            exit 1
+          fi
+          
+          if grep -q "\[\[redirects\]\]" netlify.toml; then
+            echo "✅ Redirects configuration found"
+          else
+            echo "❌ Redirects configuration missing"
+            exit 1
+          fi
+          
+          # Verify specific CORS rules
+          if grep -A5 'for = "/\*\.html"' netlify.toml | grep -q 'Access-Control-Allow-Origin = "\*"'; then
+            echo "✅ HTML files CORS rule correct (Access-Control-Allow-Origin = *)"
+          else
+            echo "❌ HTML files CORS rule missing or incorrect"
+            exit 1
+          fi
+          
+          echo "✅ Netlify configuration validation complete"

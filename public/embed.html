@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>MacroSight Embed</title>
     <link rel="stylesheet" href="/styles.css">
+    <style>
+      .loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-size: 1.2rem;
+        color: var(--color-muted);
+      }
+      
+      .loader::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        border: 2px solid var(--color-border);
+        border-top: 2px solid var(--color-accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
     <script>
       // Hardened postMessage injection for Wix Velo
       const ALLOWED_ORIGINS = [
@@ -13,14 +39,23 @@
       ];
       
       function safeInject(html) {
-        // Never replace <head>, only <body> content
-        if (typeof html !== "string" || /<head[\s>]/i.test(html)) return false;
-        document.body.innerHTML = html;
+        // Strip <head> content and inject only <body> content
+        if (typeof html !== "string") return false;
+        
+        // Extract body content, removing <head> entirely
+        const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+        const bodyContent = bodyMatch ? bodyMatch[1] : html;
+        
+        // Additional safety check - don't allow script or style tags
+        if (/<(script|style)[\s>]/i.test(bodyContent)) return false;
+        
+        document.body.innerHTML = bodyContent;
         return true;
       }
       
       window.addEventListener("message", (event) => {
         if (!ALLOWED_ORIGINS.includes(event.origin)) return;
+        
         if (safeInject(event.data)) {
           const loader = document.querySelector(".loader");
           if (loader) loader.style.display = "none";
@@ -31,7 +66,7 @@
     </script>
   </head>
   <body>
-    <div class="loader">Loading…</div>
+    <div class="loader">Loading</div>
     <noscript>
       This page is meant to be embedded.  
       <a href="https://www.macrosight.net/home.html">Go to Home</a>
