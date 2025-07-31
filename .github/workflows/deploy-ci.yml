@@ -28,13 +28,8 @@ jobs:
       - name: Format source code
         run: npx prettier --write src/pages/ src/public/
 
-      - name: Run tests (if defined)
-        run: |
-          if [ -f package.json ] && grep -q '"test"' package.json; then
-            npm run test
-          else
-            echo "No test script defined. Skipping tests."
-          fi
+      - name: HTMLHint checks
+        run: npx htmlhint "public/*.html"
 
       - name: Check HTML structure (<link>/<script>)
         run: |
@@ -85,3 +80,14 @@ jobs:
             echo "❌ One or more checks failed."
             exit 1
           fi
+
+      # Optional Netlify deployment (uncomment if using CI deploys)
+      # - name: Deploy to Netlify
+      #   uses: nwtgck/actions-netlify@v2.0
+      #   with:
+      #     publish-dir: ./public
+      #     production-deploy: true
+      #     deploy-message: "CI deployment from GitHub Actions"
+      #   env:
+      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
