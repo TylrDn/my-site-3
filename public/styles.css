@@ -280,16 +280,21 @@ nav a.active {
 .expertise-icon {
   width: 60px;
   height: 60px;
-  margin: 0 auto 1rem;
-  background: var(--color-gradient-primary);
-  border-radius: var(--radius);
+  background: var(--color-gradient-surface);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--color-bg);
-  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.expertise-icon svg {
+  width: 48px;
+  height: 48px;
+  stroke: currentColor;
 }
 
 /* Current Role Card */
@@ -459,10 +464,15 @@ nav a.active {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
   color: var(--color-bg);
-  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cert-badge svg {
+  width: 32px;
+  height: 32px;
+  stroke: currentColor;
+  stroke-width: 2;
 }
 
 .cert-card h4 {
