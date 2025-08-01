@@ -13,16 +13,32 @@
   <body>
     <header>
       <div class="section">
-        <h1>MacroSight</h1>
-        <nav>
-          <a href="/home.html" class="active">Home</a>
-          <a href="/about.html">About</a>
-          <a href="/experience.html">Experience</a>
-          <a href="/projects.html">Projects</a>
-          <a href="/resume.html">Resume</a>
-          <a href="/contact.html">Contact</a>
-          <a href="/invest.html">Invest</a>
-        </nav>
+        <div class="header-content">
+          <h1>MacroSight</h1>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <span id="menu-icon">☰</span>
+          </button>
+          <nav class="desktop-nav">
+            <a href="/home.html" class="active">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/experience.html">Experience</a>
+            <a href="/projects.html">Projects</a>
+            <a href="/resume.html">Resume</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/invest.html">Invest</a>
+          </nav>
+        </div>
+        <div class="mobile-nav" id="mobile-nav">
+          <nav>
+            <a href="/home.html" class="active">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/experience.html">Experience</a>
+            <a href="/projects.html">Projects</a>
+            <a href="/resume.html">Resume</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/invest.html">Invest</a>
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -197,5 +213,95 @@
         <p class="footer-location">Denver, Colorado | Available for Remote & Hybrid Opportunities</p>
       </div>
     </footer>
+
+    <script>
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobile-nav');
+        const menuIcon = document.getElementById('menu-icon');
+        
+        mobileNav.classList.toggle('active');
+        menuIcon.textContent = mobileNav.classList.contains('active') ? '✕' : '☰';
+      }
+
+      // Close mobile menu when clicking on a link
+      document.querySelectorAll('.mobile-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          toggleMobileMenu();
+        });
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const mobileNav = document.getElementById('mobile-nav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        
+        if (!toggle.contains(e.target) && !mobileNav.contains(e.target)) {
+          mobileNav.classList.remove('active');
+          document.getElementById('menu-icon').textContent = '☰';
+        }
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Add scroll-based header styling
+      let lastScrollTop = 0;
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const header = document.querySelector('header');
+        
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+          header.style.transform = 'translateY(-100%)';
+        } else {
+          header.style.transform = 'translateY(0)';
+        }
+        
+        lastScrollTop = scrollTop;
+      });
+
+      // Performance optimization for mobile
+      if ('ontouchstart' in window) {
+        document.body.classList.add('touch-device');
+      }
+
+      // Intersection Observer for fade-in animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // Animate sections on load
+      document.addEventListener('DOMContentLoaded', () => {
+        const animatedElements = document.querySelectorAll('.section > *');
+        animatedElements.forEach((el, index) => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(20px)';
+          el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+          el.style.transitionDelay = `${index * 0.1}s`;
+          observer.observe(el);
+        });
+      });
+    </script>
   </body>
 </html>
