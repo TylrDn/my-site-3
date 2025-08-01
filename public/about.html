@@ -13,16 +13,32 @@
   <body>
     <header>
       <div class="section">
-        <h1>MacroSight</h1>
-        <nav>
-          <a href="/home.html">Home</a>
-          <a href="/about.html" class="active">About</a>
-          <a href="/experience.html">Experience</a>
-          <a href="/projects.html">Projects</a>
-          <a href="/resume.html">Resume</a>
-          <a href="/contact.html">Contact</a>
-          <a href="/invest.html">Invest</a>
-        </nav>
+        <div class="header-content">
+          <h1>MacroSight</h1>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <span id="menu-icon">☰</span>
+          </button>
+          <nav class="desktop-nav">
+            <a href="/home.html">Home</a>
+            <a href="/about.html" class="active">About</a>
+            <a href="/experience.html">Experience</a>
+            <a href="/projects.html">Projects</a>
+            <a href="/resume.html">Resume</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/invest.html">Invest</a>
+          </nav>
+        </div>
+        <div class="mobile-nav" id="mobile-nav">
+          <nav>
+            <a href="/home.html">Home</a>
+            <a href="/about.html" class="active">About</a>
+            <a href="/experience.html">Experience</a>
+            <a href="/projects.html">Projects</a>
+            <a href="/resume.html">Resume</a>
+            <a href="/contact.html">Contact</a>
+            <a href="/invest.html">Invest</a>
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -318,5 +334,44 @@
         <p>&copy; 2025 MacroSight. Empowering technology leadership.</p>
       </div>
     </footer>
+
+    <script>
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobile-nav');
+        const menuIcon = document.getElementById('menu-icon');
+        
+        if (mobileNav && menuIcon) {
+          mobileNav.classList.toggle('active');
+          const isActive = mobileNav.classList.contains('active');
+          menuIcon.textContent = isActive ? '✕' : '☰';
+        }
+      }
+
+      // Close mobile menu when clicking on a link
+      document.querySelectorAll('.mobile-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          setTimeout(() => {
+            const mobileNav = document.getElementById('mobile-nav');
+            const menuIcon = document.getElementById('menu-icon');
+            mobileNav.classList.remove('active');
+            menuIcon.textContent = '☰';
+          }, 100);
+        });
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const mobileNav = document.getElementById('mobile-nav');
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        const header = document.querySelector('header');
+        
+        if (mobileNav.classList.contains('active') && 
+            !header.contains(e.target)) {
+          mobileNav.classList.remove('active');
+          document.getElementById('menu-icon').textContent = '☰';
+        }
+      });
+    </script>
   </body>
 </html>

@@ -657,6 +657,10 @@ footer {
     display: block;
   }
   
+  .mobile-nav {
+    display: block;
+  }
+  
   .hero-section {
     padding: 3rem 1rem;
     text-align: center;
@@ -828,6 +832,10 @@ footer {
   }
   
   .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .mobile-nav {
     display: block;
   }
   
