@@ -340,7 +340,14 @@
             page: e.target.textContent.trim(),
             context: 'mobile_menu'
           });
-          toggleMobileMenu();
+          
+          // Close menu after a short delay to allow navigation
+          setTimeout(() => {
+            const mobileNav = document.getElementById('mobile-nav');
+            const menuIcon = document.getElementById('menu-icon');
+            mobileNav.classList.remove('active');
+            menuIcon.textContent = '☰';
+          }, 100);
         });
       });
 
@@ -358,8 +365,11 @@
       document.addEventListener('click', (e) => {
         const mobileNav = document.getElementById('mobile-nav');
         const toggle = document.querySelector('.mobile-menu-toggle');
+        const header = document.querySelector('header');
         
-        if (!toggle.contains(e.target) && !mobileNav.contains(e.target)) {
+        // Only close if clicking outside the header area and menu is active
+        if (mobileNav.classList.contains('active') && 
+            !header.contains(e.target)) {
           mobileNav.classList.remove('active');
           document.getElementById('menu-icon').textContent = '☰';
         }
@@ -398,6 +408,21 @@
       if ('ontouchstart' in window) {
         document.body.classList.add('touch-device');
         analytics.track('device_type', { type: 'touch' });
+        
+        // Add touch event handling for mobile nav
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+          link.addEventListener('touchstart', function() {
+            this.style.backgroundColor = 'var(--color-accent)';
+            this.style.color = 'var(--color-bg)';
+          });
+          
+          link.addEventListener('touchend', function() {
+            setTimeout(() => {
+              this.style.backgroundColor = '';
+              this.style.color = '';
+            }, 100);
+          });
+        });
       }
 
       // Intersection Observer for fade-in animations
