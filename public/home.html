@@ -298,15 +298,27 @@
 
       // Mobile menu toggle
       function toggleMobileMenu() {
+        console.log('Toggle mobile menu called');
         const mobileNav = document.getElementById('mobile-nav');
         const menuIcon = document.getElementById('menu-icon');
         
-        mobileNav.classList.toggle('active');
-        menuIcon.textContent = mobileNav.classList.contains('active') ? '✕' : '☰';
+        console.log('Mobile nav element:', mobileNav);
+        console.log('Menu icon element:', menuIcon);
         
-        analytics.track('mobile_menu_toggle', { 
-          action: mobileNav.classList.contains('active') ? 'open' : 'close' 
-        });
+        if (mobileNav && menuIcon) {
+          mobileNav.classList.toggle('active');
+          const isActive = mobileNav.classList.contains('active');
+          menuIcon.textContent = isActive ? '✕' : '☰';
+          
+          console.log('Menu is now:', isActive ? 'open' : 'closed');
+          console.log('Mobile nav classes:', mobileNav.className);
+          
+          analytics.track('mobile_menu_toggle', { 
+            action: isActive ? 'open' : 'close' 
+          });
+        } else {
+          console.error('Mobile nav elements not found');
+        }
       }
 
       // Track CTA clicks

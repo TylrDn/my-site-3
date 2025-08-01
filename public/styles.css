@@ -136,6 +136,8 @@ nav {
 /* Mobile menu styles */
 .mobile-nav {
   display: none;
+  visibility: hidden;
+  opacity: 0;
   position: absolute;
   top: 100%;
   left: 0;
@@ -146,11 +148,14 @@ nav {
   padding: 1rem;
   box-shadow: var(--shadow-lg);
   z-index: 200;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .mobile-nav.active {
-  display: block;
+  display: block !important;
   animation: slideDown 0.3s ease;
+  visibility: visible;
+  opacity: 1;
 }
 
 @keyframes slideDown {
