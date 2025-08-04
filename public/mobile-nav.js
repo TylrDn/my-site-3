@@ -14,7 +14,9 @@ function toggleMobileMenu() {
 
 function initMobileNav() {
   document.querySelectorAll(".mobile-nav a").forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (e) => {
+      const target = link.getAttribute("href");
+      e.preventDefault();
       setTimeout(() => {
         const mobileNav = document.getElementById("mobile-nav");
         const menuIcon = document.getElementById("menu-icon");
@@ -26,6 +28,9 @@ function initMobileNav() {
               detail: { isActive: false },
             }),
           );
+        }
+        if (target) {
+          window.location.href = target;
         }
       }, 100);
     });
