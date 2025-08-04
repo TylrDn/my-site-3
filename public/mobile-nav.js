@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 function toggleMobileMenu() {
   const mobileNav = document.getElementById("mobile-nav");
   const menuIcon = document.getElementById("menu-icon");
@@ -11,7 +12,7 @@ function toggleMobileMenu() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initMobileNav() {
   document.querySelectorAll(".mobile-nav a").forEach((link) => {
     link.addEventListener("click", () => {
       setTimeout(() => {
@@ -45,4 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
   });
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initMobileNav);
+} else {
+  initMobileNav();
+}
