@@ -1,14 +1,6 @@
 # The Backend Code Folder
 
-## SEO & Launch Files
-
-This site includes:
-- `/robots.txt` (allows all, points to sitemap)
-- `/sitemap.xml` (lists all public pages)
-
-Both are in `/public` and will be live at the root of your deployed site for search engines and best practice.
-
-This folder contains the backend code files for your site. These files correspond to the ones found in the [**Backend**](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#backend) section of the **Public & Backend** 
+This folder contains the backend code files for your site. For details about site-wide SEO assets, refer to the repository [README](../../README.md). These files correspond to the ones found in the [**Backend**](https://support.wix.com/en/article/velo-working-with-the-velo-sidebar#backend) section of the **Public & Backend**
 ![image](https://user-images.githubusercontent.com/89579857/184862813-e55cdd98-b723-4d64-b73c-593eb9af21c7.png) tab in the Velo sidebar. Add the following files to this folder to include them in your site:
 + [**Web Modules:**](https://support.wix.com/en/article/velo-web-modules-calling-backend-code-from-the-frontend)  
   These are files that allow you to expose functions in your site's backend that you can run in your frontend code. These files require a `.jsw` file extension.

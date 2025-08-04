@@ -69,6 +69,11 @@ curl -I https://www.macrosight.net/home.html | grep -i "strict-transport-securit
 2. Test in Wix Preview
 3. No changes needed to static files
 
+## Related Documentation
+- [TESTING-GUIDE.md](TESTING-GUIDE.md) – step-by-step commands to verify headers and pages
+- [DNS-FIX-GUIDE.md](DNS-FIX-GUIDE.md) – instructions for pointing the domain to Netlify
+- [WIX-FIX-SUMMARY.md](WIX-FIX-SUMMARY.md) – background on the Wix module relocation
+
 ---
-**Generated**: $(date)  
+**Generated**: $(date)
 **Next Review**: Every major deployment
