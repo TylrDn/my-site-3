@@ -173,10 +173,11 @@ nav {
 }
 
 .mobile-nav nav {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   margin: 0;
+  width: 100%;
 }
 
 .mobile-nav nav a {
