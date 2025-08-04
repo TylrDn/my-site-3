@@ -150,6 +150,7 @@ nav {
   box-shadow: var(--shadow-lg);
   z-index: 200;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
 }
 
 .mobile-nav.active {
@@ -157,6 +158,7 @@ nav {
   animation: slideDown 0.3s ease;
   visibility: visible;
   opacity: 1;
+  pointer-events: auto;
 }
 
 @keyframes slideDown {
