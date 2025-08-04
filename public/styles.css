@@ -550,7 +550,9 @@ nav a.active {
 }
 
 .cta-button {
-  display: inline-block;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   margin: 0.5rem;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
@@ -567,6 +569,7 @@ nav a.active {
   letter-spacing: 0.05em;
   min-width: var(--touch-target);
   min-height: var(--touch-target);
+  text-align: center;
 }
 
 .cta-button:hover {
@@ -722,12 +725,21 @@ footer {
     gap: 0.75rem;
     align-items: stretch;
   }
-  
+
   .cta-button {
+    display: flex;
+    width: 100%;
+    margin: 0;
     padding: 0.875rem 1.5rem;
     font-size: 0.9rem;
-    width: 100%;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+    box-sizing: border-box;
+  }
+
+  .cta-button.secondary {
+    width: 100%;
   }
   
   .expertise-grid {
