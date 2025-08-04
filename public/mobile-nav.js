@@ -23,7 +23,9 @@ function initMobileNav() {
   }
 
   document.querySelectorAll(".mobile-nav a").forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (e) => {
+      const target = link.getAttribute("href");
+      e.preventDefault();
       setTimeout(() => {
         const mobileNav = document.getElementById("mobile-nav");
         if (mobileNav && mobileNav.classList.contains("active")) {
