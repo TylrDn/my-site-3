@@ -11,3 +11,6 @@ jsconfig.json
 
 # Netlify CLI output/state
 .netlify/
+
+# Local rebuild triggers
+.netlify-rebuild-trigger
