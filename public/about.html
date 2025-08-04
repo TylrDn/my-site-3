@@ -430,45 +430,6 @@
       </div>
     </footer>
 
-    <script>
-      // Mobile menu toggle
-      function toggleMobileMenu() {
-        const mobileNav = document.getElementById("mobile-nav");
-        const menuIcon = document.getElementById("menu-icon");
-
-        if (mobileNav && menuIcon) {
-          mobileNav.classList.toggle("active");
-          const isActive = mobileNav.classList.contains("active");
-          menuIcon.textContent = isActive ? "✕" : "☰";
-        }
-      }
-
-      // Close mobile menu when clicking on a link
-      document.querySelectorAll(".mobile-nav a").forEach((link) => {
-        link.addEventListener("click", () => {
-          setTimeout(() => {
-            const mobileNav = document.getElementById("mobile-nav");
-            const menuIcon = document.getElementById("menu-icon");
-            mobileNav.classList.remove("active");
-            menuIcon.textContent = "☰";
-          }, 100);
-        });
-      });
-
-      // Close mobile menu when clicking outside
-      document.addEventListener("click", (e) => {
-        const mobileNav = document.getElementById("mobile-nav");
-        const toggle = document.querySelector(".mobile-menu-toggle");
-        const header = document.querySelector("header");
-
-        if (
-          mobileNav.classList.contains("active") &&
-          !header.contains(e.target)
-        ) {
-          mobileNav.classList.remove("active");
-          document.getElementById("menu-icon").textContent = "☰";
-        }
-      });
-    </script>
+    <script src="/mobile-nav.js"></script>
   </body>
 </html>

@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Invest – MacroSight</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <header>
@@ -42,8 +42,13 @@
       <div class="section">
         <div class="card">
           <h2>Investment Opportunities</h2>
-          <p>Interested in strategic technology investments and partnerships?</p>
-          <p>MacroSight offers consulting and advisory services for technology companies looking to scale their infrastructure and teams.</p>
+          <p>
+            Interested in strategic technology investments and partnerships?
+          </p>
+          <p>
+            MacroSight offers consulting and advisory services for technology
+            companies looking to scale their infrastructure and teams.
+          </p>
           <div class="investment-section">
             <h3>Advisory Services</h3>
             <ul>
@@ -58,49 +63,12 @@
       </div>
     </main>
 
-    <script>
-      // Mobile menu toggle
-      function toggleMobileMenu() {
-        const mobileNav = document.getElementById('mobile-nav');
-        const menuIcon = document.getElementById('menu-icon');
-        
-        if (mobileNav && menuIcon) {
-          mobileNav.classList.toggle('active');
-          const isActive = mobileNav.classList.contains('active');
-          menuIcon.textContent = isActive ? '✕' : '☰';
-        }
-      }
-
-      // Close mobile menu when clicking on a link
-      document.querySelectorAll('.mobile-nav a').forEach(link => {
-        link.addEventListener('click', () => {
-          setTimeout(() => {
-            const mobileNav = document.getElementById('mobile-nav');
-            const menuIcon = document.getElementById('menu-icon');
-            mobileNav.classList.remove('active');
-            menuIcon.textContent = '☰';
-          }, 100);
-        });
-      });
-
-      // Close mobile menu when clicking outside
-      document.addEventListener('click', (e) => {
-        const mobileNav = document.getElementById('mobile-nav');
-        const toggle = document.querySelector('.mobile-menu-toggle');
-        const header = document.querySelector('header');
-        
-        if (mobileNav.classList.contains('active') && 
-            !header.contains(e.target)) {
-          mobileNav.classList.remove('active');
-          document.getElementById('menu-icon').textContent = '☰';
-        }
-      });
-    </script>
-
     <footer>
       <div class="section">
         <p>&copy; 2025 MacroSight. All rights reserved.</p>
       </div>
     </footer>
+
+    <script src="/mobile-nav.js"></script>
   </body>
 </html>
