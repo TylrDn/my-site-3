@@ -96,7 +96,7 @@ jobs:
                 failed=1
               fi
 
-              cors_header=$(echo "$response" | grep -i "access-control-allow-origin" | cut -d' ' -f2- | tr -d '\r\n' || echo "Not found")
+              cors_header=$(echo "$response" | grep -i "access-control-allow-origin" | cut -d':' -f2- | xargs || echo "Not found")
 
               if [[ "$cors_header" != "Not found" ]]; then
                 # All HTML files should return "*" to allow embedding
@@ -126,6 +126,7 @@ jobs:
 
           if [[ -z "$status_code" || "$status_code" != "200" ]]; then
             main_response=$(curl -s -I "${FALLBACK_URL}/home.html" 2>/dev/null || echo "FAILED")
+            status_code=$(echo "$main_response" | head -n 1 | awk '{print $2}')
           fi
 
           if [[ "$main_response" != "FAILED" ]]; then
@@ -137,7 +138,7 @@ jobs:
             echo "- CSP: $([ -n "$csp" ] && echo "✅ Present" || echo "❌ Missing")" >> $GITHUB_STEP_SUMMARY
             echo "- X-Frame-Options: $([ -n "$xframe" ] && echo "✅ Present" || echo "❌ Missing")" >> $GITHUB_STEP_SUMMARY
           else
-          echo "- ❌ Could not test security headers" >> $GITHUB_STEP_SUMMARY
+            echo "- ❌ Could not test security headers" >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
