@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install -g prettier html-validate eslint
+          npm install -g prettier htmlhint eslint
           
       - name: Lint and prettify HTML in public/
         run: |
@@ -32,7 +32,7 @@ jobs:
       - name: Validate HTML files
         run: |
           echo "🔍 Validating HTML files"
-          html-validate public/*.html
+          htmlhint "public/*.html"
           echo "✅ HTML validation complete"
 
       - name: Check for postMessage listeners in static HTML
