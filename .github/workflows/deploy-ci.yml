@@ -107,15 +107,6 @@ jobs:
             
             echo "| ${page}.html | $status | $cors_status | $cors_header |" >> $GITHUB_STEP_SUMMARY
           done
-              else
-                cors_status="❌ Missing"
-                cors_header="Missing"
-                failed=1
-              fi
-            fi
-            
-            echo "| ${page}.html | $status | $cors_status | $cors_header |" >> $GITHUB_STEP_SUMMARY
-          done
           
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Security Headers Check" >> $GITHUB_STEP_SUMMARY
