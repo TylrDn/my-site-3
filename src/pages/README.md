@@ -1,12 +1,6 @@
 # Usage with Wix Velo
 
-## SEO & Launch Files
-
-This site includes:
-- `/robots.txt` (allows all, points to sitemap)
-- `/sitemap.xml` (lists all public pages)
-
-Both are in `/public` and will be live at the root of your deployed site for search engines and best practice.
+For site-wide SEO files like `robots.txt` and `sitemap.xml`, see the repository [README](../../README.md).
 
 All page scripts should import global styles like this for Wix/Velo compatibility:
 

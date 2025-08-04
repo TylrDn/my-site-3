@@ -1,14 +1,6 @@
 # Public Directory — Global Styling for MacroSight.net
 
-## SEO & Launch Files
-
-This site includes:
-- `/robots.txt` (allows all, points to sitemap)
-- `/sitemap.xml` (lists all public pages)
-
-Both are in `/public` and will be live at the root of your deployed site for search engines and best practice.
-
-This `/public` directory contains globally scoped utility logic that can be reused across the entire MacroSight site.
+This directory contains globally scoped web modules that can be reused across the entire MacroSight site. For site-wide SEO files such as `robots.txt` or `sitemap.xml`, see the repository [README](../../README.md).
 
 ---
 

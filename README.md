@@ -4,6 +4,16 @@
 
 This static site implements a hybrid architecture that supports both standalone HTML pages and Wix-Velo iframe integration through postMessage communication.
 
+## Documentation
+
+- [AUDIT-REPORT.md](AUDIT-REPORT.md) – deployment audit and fix history
+- [CURRENT-STATUS.md](CURRENT-STATUS.md) – current deployment snapshot
+- [DNS-FIX-GUIDE.md](DNS-FIX-GUIDE.md) – steps to route the domain to Netlify
+- [DEPLOY-CHECKLIST.md](DEPLOY-CHECKLIST.md) – pre- and post-deployment tasks
+- [TESTING-GUIDE.md](TESTING-GUIDE.md) – commands for verifying headers and pages
+- [WIX-FIX-SUMMARY.md](WIX-FIX-SUMMARY.md) – details of the Wix module migration
+- Directory guides: [src/pages/README.md](src/pages/README.md), [src/public/README.md](src/public/README.md), [src/backend/README.md](src/backend/README.md)
+
 ## 🏗 **DEPLOYMENT STATUS**
 - **Static Site**: ✅ Deployed on Netlify (`public/` folder)
 - **Wix Integration**: ✅ Velo code in `src/` folder  
