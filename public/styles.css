@@ -634,6 +634,22 @@ footer {
 }
 
 /* Responsive Design */
+
+/* Tablet and smaller navigation */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .mobile-nav {
+    display: block;
+  }
+}
+
 /* Mobile-First Responsive Design */
 @media (max-width: 480px) {
   body {
