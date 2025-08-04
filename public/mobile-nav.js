@@ -2,10 +2,13 @@
 function toggleMobileMenu() {
   const mobileNav = document.getElementById("mobile-nav");
   const menuIcon = document.getElementById("menu-icon");
-  if (mobileNav && menuIcon) {
+  const toggleBtn = document.querySelector(".mobile-menu-toggle");
+  if (mobileNav && menuIcon && toggleBtn) {
     mobileNav.classList.toggle("active");
     const isActive = mobileNav.classList.contains("active");
     menuIcon.textContent = isActive ? "✕" : "☰";
+    toggleBtn.setAttribute("aria-expanded", isActive);
+    document.body.style.overflow = isActive ? "hidden" : "";
     document.dispatchEvent(
       new CustomEvent("mobile-menu-toggle", { detail: { isActive } }),
     );
@@ -13,19 +16,18 @@ function toggleMobileMenu() {
 }
 
 function initMobileNav() {
+  const toggleBtn = document.querySelector(".mobile-menu-toggle");
+  if (toggleBtn) {
+    toggleBtn.setAttribute("aria-controls", "mobile-nav");
+    toggleBtn.setAttribute("aria-expanded", "false");
+  }
+
   document.querySelectorAll(".mobile-nav a").forEach((link) => {
     link.addEventListener("click", () => {
       setTimeout(() => {
         const mobileNav = document.getElementById("mobile-nav");
-        const menuIcon = document.getElementById("menu-icon");
-        if (mobileNav && menuIcon) {
-          mobileNav.classList.remove("active");
-          menuIcon.textContent = "☰";
-          document.dispatchEvent(
-            new CustomEvent("mobile-menu-toggle", {
-              detail: { isActive: false },
-            }),
-          );
+        if (mobileNav && mobileNav.classList.contains("active")) {
+          toggleMobileMenu();
         }
       }, 100);
     });
@@ -39,11 +41,18 @@ function initMobileNav() {
       mobileNav.classList.contains("active") &&
       !header.contains(e.target)
     ) {
-      mobileNav.classList.remove("active");
-      document.getElementById("menu-icon").textContent = "☰";
-      document.dispatchEvent(
-        new CustomEvent("mobile-menu-toggle", { detail: { isActive: false } }),
-      );
+      toggleMobileMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    const mobileNav = document.getElementById("mobile-nav");
+    if (
+      e.key === "Escape" &&
+      mobileNav &&
+      mobileNav.classList.contains("active")
+    ) {
+      toggleMobileMenu();
     }
   });
 }
