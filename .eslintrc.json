@@ -8,5 +8,8 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "globals": {
+    "$w": "readonly"
+  },
   "rules": {}
 }

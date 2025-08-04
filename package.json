@@ -5,9 +5,10 @@
     "dev": "vite preview --port 3000 --open",
     "build": "echo \"✅ Static site – no build needed\"",
     "preview": "vite preview",
-    "lint": "eslint public/**/*.js public/**/*.html || echo \"✅ No files to lint\"",
-    "format": "prettier --write public/**/*.html || echo \"✅ Nothing to format\"",
-    "html:lint": "htmlhint \"public/*.html\"",
+    "lint": "npm run lint:js && npm run html:lint",
+    "lint:js": "eslint \"src/**/*.js\" || echo \"✅ No JS files to lint\"",
+    "format": "prettier --write \"public/*.html\" \"src/**/*.js\" || echo \"✅ Nothing to format\"",
+    "html:lint": "htmlhint \"public/*.html\" || echo \"✅ No HTML files to lint\"",
     "html:format": "prettier --write \"public/*.html\"",
     "ci": "npm run lint && npm run format && npm run build"
   },
