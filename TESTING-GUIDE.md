@@ -13,6 +13,11 @@
    - Changes need time to propagate through Netlify's CDN
    - Check [Netlify Dashboard](https://app.netlify.com) for deployment status
 
+3. **Run lint checks locally**
+   ```bash
+   npm test
+   ```
+
 ## 🌐 **1. Testing CORS Headers**
 
 ### **Test embed.html (Should have CORS: *)**

@@ -87,10 +87,13 @@ iframe.postMessage(html, 'https://www.macrosight.net');
 ## Testing Commands
 
 ```bash
+# Run lint checks
+npm test
+
 # Test CORS headers for HTML files
 curl -I https://www.macrosight.net/embed.html
 
-# Test static page rendering  
+# Test static page rendering
 curl https://www.macrosight.net/home.html
 
 # Test redirects
