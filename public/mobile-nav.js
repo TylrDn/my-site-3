@@ -31,9 +31,6 @@ function initMobileNav() {
         if (mobileNav && mobileNav.classList.contains("active")) {
           toggleMobileMenu();
         }
-        if (target) {
-          window.location.href = target;
-        }
       }, 100);
     });
   });
