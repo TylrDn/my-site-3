@@ -1,80 +1,71 @@
-# 🎯 CURRENT DEPLOYMENT STATUS
+# Deployment Status
 
-## ✅ **GOOD NEWS - Most Things Working!**
+## Summary
+Most infrastructure is working as expected. The remaining issue is CORS header
+propagation for HTML files.
 
-### 🏗️ **Infrastructure Status**
-- ✅ **Static Files**: All pages loading correctly (200 OK)
-- ✅ **Security Headers**: HSTS, CSP, X-Frame-Options all present
-- ✅ **Wix Module Fix**: Integration moved to web module (fixes deployment errors)
-- ✅ **Page Code**: All content pages have correct imports
+### Infrastructure checks
+- Static files return 200 responses
+- Security headers (HSTS, CSP, X-Frame-Options) are present
+- Wix integration moved to a web module
+- Page code imports are correct
 
-### ⏳ **WAITING FOR PROPAGATION**
-- ❌ **CORS Headers**: Still showing old values (need `*` for HTML files)
-- **Current**: `access-control-allow-origin: https://www.macrosight.net`
-- **Needed**: `access-control-allow-origin: *`
+### Pending propagation
+- CORS header still shows `access-control-allow-origin: https://www.macrosight.net`
+- Expected header: `access-control-allow-origin: *`
 
-## 🕐 **TIMELINE & NEXT STEPS**
+## Timeline
+- 11:26 PM – Updated CORS header configuration in `netlify.toml`
+- 11:33 PM – Moved Wix integration to a web module
+- 11:33 PM – Triggered rebuild to force propagation
 
-### **What We Fixed Today**:
-1. **11:26 PM**: Fixed netlify.toml CORS header configuration
-2. **11:33 PM**: Moved Wix integration to web module (fixes deployment errors)
-3. **11:33 PM**: Triggered rebuild to force propagation
+## Current status
+- Netlify build: successful
+- CDN propagation: in progress (15–30 minutes)
+- Wix deployment: expected to succeed after propagation
 
-### **Current Status**: 
-- **Netlify Build**: ✅ Successful  
-- **CDN Propagation**: ⏳ In Progress (can take 15-30 minutes)
-- **Wix Deployment**: ✅ Should now succeed with web module fix
+## How to test
 
-## 🧪 **HOW TO TEST**
-
-### **Option 1: Quick Check** 
+### Option 1: quick check
 ```bash
 ./quick-test.sh
 ```
 
-### **Option 2: Comprehensive Test**
+### Option 2: comprehensive test
 ```bash
 ./comprehensive-test.sh
 ```
 
-### **Option 3: Manual Check**
+### Option 3: manual curl
 ```bash
 curl -I https://macrosight.netlify.app/embed.html | grep access-control-allow-origin
-# Should eventually show: access-control-allow-origin: *
+# Expected result: access-control-allow-origin: *
 ```
 
-## 🎯 **EXPECTED TIMELINE**
+## Expected timeline
 
-| Time | Status | Action |
-|------|--------|--------|
-| Now | ⏳ | Netlify CDN propagating |
-| +10 mins | 🔄 | Test CORS headers again |
-| +15 mins | ✅ | CORS should be fixed |
-| +20 mins | 🎉 | Test Wix integration |
+| Time    | Status                 | Action               |
+|---------|------------------------|----------------------|
+| Now     | CDN propagating        | —                    |
+| +10 min | Re-test CORS headers   | curl command         |
+| +15 min | CORS headers updated   | quick check          |
+| +20 min | Verify Wix integration | full test            |
 
-## 🚀 **WHEN PROPAGATION COMPLETES**
+## After propagation
+Once the header returns `*`, verify:
+1. Wix Editor preview loads without CORS errors
+2. HTML component content loads
+3. Loading spinner transitions to injected content
 
-You should see:
-```bash
-# This command should return: *
-curl -I https://macrosight.netlify.app/embed.html | grep access-control-allow-origin
-```
+## Confidence
+We are 95% confident the configuration is correct:
+- netlify.toml rules are in place
+- Wix module structure is fixed
+- Security headers are working
+- Static files serve correctly
 
-Then you can:
-1. ✅ Test Wix Editor Preview (should work without CORS errors)
-2. ✅ Check HTML Component content loading
-3. ✅ Verify loading spinner → content injection
-
-## 🎉 **CONFIDENCE LEVEL**
-
-**95% Confident** - All infrastructure is correctly configured:
-- ✅ netlify.toml has proper header rules
-- ✅ Wix module structure is fixed  
-- ✅ Security headers working
-- ✅ Static files serving correctly
-
-**Only waiting for**: Netlify CDN cache refresh
+Only waiting for Netlify CDN cache refresh.
 
 ---
-**Last Updated**: July 31, 2025 @ 5:35 PM  
-**Next Check**: 5:50 PM (15 minutes)
+Last updated: July 31, 2025 @ 5:35 PM  
+Next check: 5:50 PM (15 minutes)
