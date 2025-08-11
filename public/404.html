@@ -2,23 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <title>Page Not Found – MacroSight</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
     <header>
       <div class="section">
-        <h1>MacroSight</h1>
-        <nav>
-          <a href="/home">Home</a>
-          <a href="/about">About</a>
-          <a href="/experience">Experience</a>
-          <a href="/projects">Projects</a>
-          <a href="/resume">Resume</a>
-          <a href="/contact">Contact</a>
-          <a href="/invest">Invest</a>
-        </nav>
+        <div class="header-content">
+          <h1>MacroSight</h1>
+          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <span id="menu-icon">☰</span>
+          </button>
+          <nav class="desktop-nav">
+            <a href="/home">Home</a>
+            <a href="/about">About</a>
+            <a href="/experience">Experience</a>
+            <a href="/projects">Projects</a>
+            <a href="/resume">Resume</a>
+            <a href="/contact">Contact</a>
+            <a href="/invest">Invest</a>
+          </nav>
+        </div>
+        <div class="mobile-nav" id="mobile-nav">
+          <nav>
+            <a href="/home">Home</a>
+            <a href="/about">About</a>
+            <a href="/experience">Experience</a>
+            <a href="/projects">Projects</a>
+            <a href="/resume">Resume</a>
+            <a href="/contact">Contact</a>
+            <a href="/invest">Invest</a>
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -37,5 +53,6 @@
         <p>&copy; 2025 MacroSight. All rights reserved.</p>
       </div>
     </footer>
+    <script src="/mobile-nav.js" defer></script>
   </body>
 </html>
