@@ -76,6 +76,11 @@ p {
   margin: 1rem 0;
 }
 
+.card-subtitle {
+  font-style: italic;
+  color: var(--color-muted);
+}
+
 .hero-location {
   font-size: 1rem;
   color: var(--color-accent);
@@ -266,6 +271,10 @@ nav a.active {
   margin: 0 auto 2rem;
   box-shadow: var(--border-glow);
   display: block;
+  object-fit: contain;
+}
+
+.hero-image--cover {
   object-fit: cover;
 }
 
