@@ -21,7 +21,39 @@
   --shadow-hover: 0 12px 40px rgba(0, 212, 255, 0.2);
   --border-glow: 0 0 20px rgba(0, 212, 255, 0.3);
   --touch-target: 44px;
+  --header-height: 64px;
 }
+
+/* === Responsive Hardening Layer === */
+
+/* Fluid media: prevent overflow on small screens */
+img, video, canvas, svg, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Prevent horizontal scroll with wide code/tables */
+pre, code { white-space: pre-wrap; word-break: break-word; }
+table { width: 100%; display: block; overflow-x: auto; }
+
+/* Respect user font scaling and keep consistent sizing */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* Make in-page anchor jumps clear the sticky header */
+h1, h2, h3, h4, h5, h6,
+[id] { scroll-margin-top: calc(var(--header-height) + 16px); }
+
+/* Visible keyboard focus, also useful on touch+keyboard hybrids */
+:focus-visible {
+  outline: 2px dashed var(--color-accent, #0b5);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Safe area support for phones with notches */
+body { padding-top: env(safe-area-inset-top, 0); }
+header { padding-top: env(safe-area-inset-top, 0); }
 
 body {
   background: var(--color-bg);
