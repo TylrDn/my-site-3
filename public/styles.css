@@ -258,14 +258,15 @@ nav a.active {
   background: var(--color-gradient-primary);
 }
 
-
-  width: 120px;
-  height: 120px;
+.hero-image {
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   border: 2px solid var(--color-accent);
   margin: 0 auto 2rem;
   box-shadow: var(--border-glow);
-
+  display: block;
+  object-fit: cover;
 }
 
 .cta-group {
