@@ -258,15 +258,14 @@ nav a.active {
   background: var(--color-gradient-primary);
 }
 
-.hero-image {
+
   width: 120px;
   height: 120px;
   border-radius: 50%;
   border: 2px solid var(--color-accent);
   margin: 0 auto 2rem;
   box-shadow: var(--border-glow);
-  display: block;
-  object-fit: cover;
+
 }
 
 .cta-group {
@@ -687,10 +686,7 @@ footer {
     text-align: center;
   }
   
-  .hero-image {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 1.5rem;
+
   }
   
   h1 {
@@ -975,6 +971,7 @@ footer {
 /* High DPI displays */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .hero-image,
+
   .expertise-icon,
   .cert-badge {
     image-rendering: -webkit-optimize-contrast;
