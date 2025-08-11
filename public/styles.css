@@ -258,20 +258,15 @@ nav a.active {
   background: var(--color-gradient-primary);
 }
 
-.hero-image-placeholder {
+.hero-image {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: var(--color-gradient-surface);
   border: 2px solid var(--color-accent);
   margin: 0 auto 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--color-muted);
   box-shadow: var(--border-glow);
+  display: block;
+  object-fit: cover;
 }
 
 .cta-group {
@@ -692,11 +687,10 @@ footer {
     text-align: center;
   }
   
-  .hero-image-placeholder {
+  .hero-image {
     width: 100px;
     height: 100px;
     margin: 0 auto 1.5rem;
-    font-size: 0.8rem;
   }
   
   h1 {
@@ -980,7 +974,7 @@ footer {
 
 /* High DPI displays */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .hero-image-placeholder,
+  .hero-image,
   .expertise-icon,
   .cert-badge {
     image-rendering: -webkit-optimize-contrast;
