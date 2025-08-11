@@ -34,8 +34,18 @@ img, video, canvas, svg, iframe {
 }
 
 /* Prevent horizontal scroll with wide code/tables */
-pre, code { white-space: pre-wrap; word-break: break-word; }
-table { width: 100%; display: block; overflow-x: auto; }
+table pre, table code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Wrap tables in a div to enable horizontal scrolling without breaking semantics */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table { width: 100%; }
 
 /* Respect user font scaling and keep consistent sizing */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
