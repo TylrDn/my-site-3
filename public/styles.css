@@ -258,29 +258,14 @@ nav a.active {
   background: var(--color-gradient-primary);
 }
 
-.hero-image,
-.hero-image-placeholder {
+
   width: 120px;
   height: 120px;
   border-radius: 50%;
   border: 2px solid var(--color-accent);
   margin: 0 auto 2rem;
   box-shadow: var(--border-glow);
-}
 
-.hero-image {
-  display: block;
-  object-fit: cover;
-}
-
-.hero-image-placeholder {
-  background: var(--color-gradient-surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--color-muted);
 }
 
 .cta-group {
@@ -701,15 +686,7 @@ footer {
     text-align: center;
   }
   
-  .hero-image,
-  .hero-image-placeholder {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 1.5rem;
-  }
 
-  .hero-image-placeholder {
-    font-size: 0.8rem;
   }
   
   h1 {
@@ -994,7 +971,7 @@ footer {
 /* High DPI displays */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .hero-image,
-  .hero-image-placeholder,
+
   .expertise-icon,
   .cert-badge {
     image-rendering: -webkit-optimize-contrast;
