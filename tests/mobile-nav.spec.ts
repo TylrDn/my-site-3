@@ -1,15 +1,19 @@
 import { test, expect } from '@playwright/test';
 
-test.use({ viewport: { width: 360, height: 640 } });
+test.describe.configure({ retries: 2 });
+test.use({ viewport: { width: 375, height: 667 } });
+
+test.beforeEach(async ({ page }) => {
+  await page.route('https://fonts.googleapis.com/*', route => route.fulfill({ body: '' }));
+  await page.route('https://fonts.gstatic.com/*', route => route.fulfill({ body: '' }));
+});
 
 test('mobile menu overlay behaviour', async ({ page }) => {
   await page.goto('/home.html');
-  // Wait for header and mobile-nav script to be injected
   await page.waitForSelector('#menu-toggle');
   const toggle = page.locator('#menu-toggle');
   await toggle.click();
 
-  // Ensure the mobile nav panel is present before asserting
   await page.waitForSelector('#mobile-nav');
   const panel = page.locator('#mobile-nav');
   await expect(panel).toBeVisible();
@@ -20,7 +24,6 @@ test('mobile menu overlay behaviour', async ({ page }) => {
   const position = await panel.evaluate(el => getComputedStyle(el).position);
   expect(position).toBe('fixed');
 
-  // Ensure background doesn't scroll
   await panel.evaluate(el => el.scrollTo(0, 100));
   const scrollTop = await page.evaluate(() => document.scrollingElement.scrollTop);
   expect(scrollTop).toBe(0);

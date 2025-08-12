@@ -2,6 +2,11 @@ import { test, expect } from '@playwright/test';
 
 const pages = ['/home.html', '/about.html'];
 
+test.beforeEach(async ({ page }) => {
+  await page.route('https://fonts.googleapis.com/*', route => route.fulfill({ body: '' }));
+  await page.route('https://fonts.gstatic.com/*', route => route.fulfill({ body: '' }));
+});
+
 test.describe('HTML structure', () => {
   for (const path of pages) {
     test(`validate structure for ${path}`, async ({ page }) => {

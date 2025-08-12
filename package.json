@@ -11,7 +11,10 @@
     "format": "prettier --write \"public/*.html\" \"src/**/*.js\" || echo \"✅ Nothing to format\"",
     "html:format": "prettier --write \"public/*.html\"",
     "ci": "npm run lint && npm run format && npm run build",
-    "test": "npm run lint && playwright test",
+    "test:e2e": "playwright test",
+    "test:e2e:ci": "playwright test --reporter=junit --coverage",
+    "coverage": "playwright test --coverage",
+    "test": "npm run lint && npm run test:e2e",
     "prepare": "husky install"
   },
   "engines": {

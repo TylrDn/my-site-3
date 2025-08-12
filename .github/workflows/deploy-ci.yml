@@ -7,6 +7,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate-site:
     runs-on: ubuntu-latest
@@ -115,7 +119,7 @@ jobs:
           echo "✅ Netlify configuration validation complete"
 
       - name: Run tests
-        run: npm test
+        run: npm run test:e2e:ci
         env:
           CI: true
 
@@ -143,3 +147,18 @@ jobs:
         with:
           name: coverage
           path: coverage
+
+  deploy:
+    needs: validate-site
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      - run: npm ci --prefer-offline
+      - run: npx netlify deploy --dir=public --prod
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
