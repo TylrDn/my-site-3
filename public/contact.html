@@ -13,6 +13,53 @@
       name="description"
       content="Get in touch with Taylor Dean for cloud architecture consulting, HPC solutions, and technology leadership opportunities. Based in Denver, Colorado."
     />
+    <meta
+      property="og:title"
+      content="Contact Taylor Dean - Cloud Engineer & HPC Specialist | MacroSight"
+    />
+    <meta
+      property="og:description"
+      content="Get in touch with Taylor Dean for cloud architecture consulting, HPC solutions, and technology leadership opportunities."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.macrosight.net/contact" />
+    <meta
+      property="og:image"
+      content="https://www.macrosight.net/img/headshot.jpg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Contact Taylor Dean - Cloud Engineer & HPC Specialist | MacroSight"
+    />
+    <meta
+      name="twitter:description"
+      content="Get in touch with Taylor Dean for cloud architecture consulting, HPC solutions, and technology leadership opportunities."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.macrosight.net/img/headshot.jpg"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.macrosight.net/home"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Contact",
+            "item": "https://www.macrosight.net/contact"
+          }
+        ]
+      }
+    </script>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -100,6 +147,48 @@
         </div>
       </div>
 
+      <!-- Contact Form -->
+      <div class="section">
+        <div class="card contact-card">
+          <h2>Send a Message</h2>
+          <form
+            name="contact-form"
+            method="POST"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+          >
+            <input type="hidden" name="form-name" value="contact-form" />
+            <p class="visually-hidden">
+              <label
+                >Don’t fill this out if you're human: <input name="bot-field"
+              /></label>
+            </p>
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" name="email" required />
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+              ></textarea>
+            </div>
+            <div
+              class="cf-turnstile"
+              data-sitekey="1x00000000000000000000AA"
+            ></div>
+            <button type="submit" class="cta-button">Send</button>
+          </form>
+        </div>
+      </div>
+
       <!-- Professional Services -->
       <div class="section">
         <div class="card">
@@ -165,6 +254,11 @@
       </div>
     </footer>
 
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    ></script>
     <script src="/include-header.js"></script>
   </body>
 </html>
