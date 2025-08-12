@@ -45,10 +45,15 @@ code {
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+/* Keep tables responsive without breaking semantics.
+   Wrap tables in a .table-wrapper to enable horizontal scrolling. */
+.table-wrapper {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
-  display: block;
-  overflow-x: auto;
 }
 
 /* Respect user font scaling and keep consistent sizing */

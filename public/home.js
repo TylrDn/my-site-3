@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Listen for mobile menu visibility changes dispatched by mobile-nav.js
 document.addEventListener("mobile-menu-toggle", (e) => {
+  // detail: { isActive: boolean }
   analytics.track("mobile_menu_toggle", {
     action: e.detail.isActive ? "open" : "close",
   });
