@@ -6,7 +6,7 @@ export default defineConfig({
     baseURL: 'http://localhost:4173',
   },
   webServer: {
-
+    command: 'vite public --port 4173',
     port: 4173,
     reuseExistingServer: !process.env.CI,
   },
