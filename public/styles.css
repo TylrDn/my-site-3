@@ -12,8 +12,9 @@
   --color-gradient-primary: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
   --color-gradient-surface: linear-gradient(135deg, #161616 0%, #1a1a1a 100%);
 
-  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  --font-main:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
   --radius: 8px;
   --radius-lg: 12px;
   --shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
@@ -27,22 +28,45 @@
 /* === Responsive Hardening Layer === */
 
 /* Fluid media: prevent overflow on small screens */
-img, video, canvas, svg, iframe {
+img,
+video,
+canvas,
+svg,
+iframe {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
 /* Prevent horizontal scroll with wide code/tables */
-pre, code { white-space: pre-wrap; word-break: break-word; }
-table { width: 100%; display: block; overflow-x: auto; }
+pre,
+code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.table-container {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+}
 
 /* Respect user font scaling and keep consistent sizing */
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 /* Make in-page anchor jumps clear the sticky header */
-h1, h2, h3, h4, h5, h6,
-[id] { scroll-margin-top: calc(var(--header-height) + 16px); }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+[id] {
+  scroll-margin-top: calc(var(--header-height) + 16px);
+}
 
 /* Visible keyboard focus, also useful on touch+keyboard hybrids */
 :focus-visible {
@@ -52,7 +76,10 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* Safe area support for phones with notches */
-body, header { padding-top: env(safe-area-inset-top, 0); }
+body,
+header {
+  padding-top: env(safe-area-inset-top, 0);
+}
 
 body {
   background: var(--color-bg);
@@ -67,7 +94,12 @@ body {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 600;
   line-height: 1.2;
   margin: 0 0 1rem 0;
@@ -143,14 +175,16 @@ header {
 }
 
 .brand span {
+  /* Fallback solid color for browsers that do not support background-clip: text */
+  color: var(--color-accent);
   font-size: 1.5rem;
   font-weight: 600;
   background: var(--color-gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background-clip: text; /* Not supported in Firefox as of 2024 */
+  /* If background-clip: text is not supported, the fallback color will be used */
 }
-
 
 nav {
   display: flex;
@@ -222,8 +256,10 @@ nav a.active {
   background: transparent;
   padding: 8px;
   margin: 0;
-  width: 44px; height: 44px; /* 44x44 Apple HIG */
-  display: grid; place-items: center;
+  width: 44px;
+  height: 44px; /* 44x44 Apple HIG */
+  display: grid;
+  place-items: center;
   line-height: 1;
   cursor: pointer;
   z-index: 60; /* above header & panel */
@@ -236,11 +272,14 @@ nav a.active {
   overflow-y: auto;
   z-index: 50;
   backdrop-filter: blur(6px);
-  background: rgba(0,0,0,0.75);
-  padding: 16px env(safe-area-inset-right, 16px) 24px env(safe-area-inset-left, 16px);
+  background: rgba(0, 0, 0, 0.75);
+  padding: 16px env(safe-area-inset-right, 16px) 24px
+    env(safe-area-inset-left, 16px);
 }
 
-html.nav-open { overflow: hidden; }
+html.nav-open {
+  overflow: hidden;
+}
 
 /* Avatar sizing & containment */
 .avatar,
@@ -273,7 +312,7 @@ html.nav-open { overflow: hidden; }
 }
 
 .hero-section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -360,7 +399,7 @@ html.nav-open { overflow: hidden; }
 }
 
 .current-role::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -666,8 +705,12 @@ footer {
 
 /* Tablet and smaller navigation */
 @media (max-width: 1023px) {
-  .desktop-nav { display: none; }
-  .hamburger { display: grid; }
+  .desktop-nav {
+    display: none;
+  }
+  .hamburger {
+    display: grid;
+  }
 }
 
 /* Mobile-First Responsive Design */
@@ -675,55 +718,56 @@ footer {
   body {
     font-size: 0.9rem;
   }
-  
+
   .section {
     padding: 1.5rem 1rem;
   }
-  
+
   header .section {
     padding: 1rem;
   }
-  
+
   .brand span {
     font-size: 1.5rem;
     margin-bottom: 0;
   }
 
-  .desktop-nav { display: none; }
-  .hamburger { display: grid; }
-  
+  .desktop-nav {
+    display: none;
+  }
+  .hamburger {
+    display: grid;
+  }
+
   .hero-section {
     padding: 3rem 1rem;
     text-align: center;
   }
-  
 
-  }
-  
   h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
   }
-  
+
   h2 {
     font-size: 1.25rem;
     margin-bottom: 1rem;
   }
-  
+
   h3 {
     font-size: 1.1rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1rem;
     margin: 0.75rem 0;
   }
-  
+
   .hero-location {
     font-size: 0.9rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .cta-group {
     flex-direction: column;
     gap: 0.75rem;
@@ -745,171 +789,175 @@ footer {
   .cta-button.secondary {
     width: 100%;
   }
-  
+
   .expertise-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .expertise-card {
     padding: 1.5rem;
   }
-  
+
   .expertise-icon {
     width: 40px;
     height: 40px;
     font-size: 0.75rem;
     margin-bottom: 1rem;
   }
-  
+
   .current-role {
     padding: 1.5rem;
   }
-  
+
   .role-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
     margin-bottom: 1rem;
   }
-  
+
   .role-duration {
     font-size: 0.8rem;
   }
-  
+
   .achievement-metrics {
     grid-template-columns: 1fr;
     gap: 1rem;
     margin-top: 1.5rem;
   }
-  
+
   .metric {
     padding: 1rem;
     text-align: center;
   }
-  
+
   .metric-number {
     font-size: 1.75rem;
   }
-  
+
   .tech-stack-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .tech-category {
     text-align: center;
   }
-  
+
   .tech-tags {
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
-  
+
   .tech-tag {
     font-size: 0.8rem;
     padding: 0.375rem 0.75rem;
   }
-  
+
   .certifications-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-  
+
   .cert-card {
     padding: 1rem;
     text-align: center;
   }
-  
+
   .cert-badge {
     width: 40px;
     height: 40px;
     font-size: 0.7rem;
     margin: 0 auto 0.75rem;
   }
-  
+
   .cert-card h4 {
     font-size: 0.9rem;
     margin-bottom: 0.25rem;
   }
-  
+
   .cert-card p {
     font-size: 0.8rem;
   }
-  
+
   .career-narrative {
     padding: 1.5rem;
   }
-  
+
   .narrative-text {
     font-size: 0.95rem;
     line-height: 1.7;
   }
-  
+
   footer {
     text-align: center;
     padding: 2rem 1rem;
   }
-  
+
   footer p {
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
   }
 }
 
-@media (min-width: 481px) and (max-width: 768px) {
+@media (min-width: 481px) and (max-width: 767px) {
   .section {
     padding: 2rem 1.5rem;
   }
-  
-  .desktop-nav { display: none; }
-  .hamburger { display: grid; }
-  
+
+  .desktop-nav {
+    display: none;
+  }
+  .hamburger {
+    display: grid;
+  }
+
   .hero-section {
     padding: 4rem 2rem;
   }
-  
+
   h1 {
     font-size: 2.5rem;
   }
-  
+
   h2 {
     font-size: 1.75rem;
   }
-  
+
   .expertise-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .tech-stack-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
   }
-  
+
   .certifications-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
   }
-  
+
   .achievement-metrics {
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
-  
+
   .cta-group {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
   }
-  
+
   .cta-button {
     width: 200px;
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .section {
     padding: 3rem 2rem;
   }
@@ -930,8 +978,12 @@ footer {
 }
 
 @media (min-width: 1024px) {
-  .hamburger { display: none; }
-  .desktop-nav { display: flex; }
+  .hamburger {
+    display: none;
+  }
+  .desktop-nav {
+    display: flex;
+  }
 }
 
 /* Touch-friendly interactions */
@@ -941,19 +993,21 @@ footer {
   nav a,
   .cert-card,
   .expertise-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
   }
-  
+
   .cta-button:active {
     transform: scale(0.98);
   }
-  
+
   .card:active,
   .cert-card:active,
   .expertise-card:active {
     transform: translateY(2px);
   }
-  
+
   nav a:active {
     transform: scale(0.95);
   }
@@ -962,7 +1016,6 @@ footer {
 /* High DPI displays */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .hero-image,
-
   .expertise-icon,
   .cert-badge {
     image-rendering: -webkit-optimize-contrast;
@@ -982,14 +1035,24 @@ footer {
   border: 6px solid var(--color-border);
   border-top: 6px solid var(--color-accent);
   animation: spin 1s linear infinite;
-  font-family: var(--font-main), -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-family:
+    var(--font-main),
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
   font-size: 1rem;
   z-index: 1000;
 }
 
 @keyframes spin {
-  0%   { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 /* Contact Page Styles */
@@ -1151,7 +1214,7 @@ footer {
 }
 
 .job-responsibilities li::before {
-  content: '▶';
+  content: "▶";
   position: absolute;
   left: 0;
   color: var(--color-accent);
@@ -1232,23 +1295,23 @@ footer {
 }
 
 /* Mobile Optimizations for Contact and Resume */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .services-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .job-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .certifications-grid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
@@ -1260,11 +1323,11 @@ footer {
     margin: 1rem 0;
     padding: 0.75rem 0;
   }
-  
+
   .service-item {
     padding: 1rem;
   }
-  
+
   .job-responsibilities li {
     padding-left: 1rem;
     font-size: 0.95rem;

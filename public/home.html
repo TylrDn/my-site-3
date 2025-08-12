@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
     <title>Taylor Dean - Cloud Engineer & HPC Specialist | MacroSight</title>
     <meta
       name="description"
@@ -17,43 +20,7 @@
     />
   </head>
   <body>
-    <header class="site-header">
-      <div class="section header-content">
-        <a class="brand" href="/"><span>MacroSight</span></a>
-
-        <button id="menu-toggle"
-                class="hamburger"
-                type="button"
-                aria-controls="site-menu"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span class="hamburger-box" aria-hidden="true">☰</span>
-        </button>
-
-        <nav id="site-menu" class="desktop-nav" aria-label="Primary">
-          <a href="/home" class="active">Home</a>
-          <a href="/about">About</a>
-          <a href="/experience">Experience</a>
-          <a href="/projects">Projects</a>
-          <a href="/resume">Resume</a>
-          <a href="/contact">Contact</a>
-          <a href="/invest">Invest</a>
-        </nav>
-      </div>
-
-      <!-- Mobile menu panel -->
-      <div class="mobile-nav" id="mobile-nav" hidden>
-        <nav aria-label="Mobile Primary">
-          <a href="/home" class="active">Home</a>
-          <a href="/about">About</a>
-          <a href="/experience">Experience</a>
-          <a href="/projects">Projects</a>
-          <a href="/resume">Resume</a>
-          <a href="/contact">Contact</a>
-          <a href="/invest">Invest</a>
-        </nav>
-      </div>
-    </header>
+    <div id="header-placeholder"></div>
 
     <main>
       <!-- Hero Section -->
@@ -65,14 +32,17 @@
             <img
               src="/images/profile.jpg"
               alt="Portrait of Taylor Dean"
-              width="320" height="320"
-              loading="eager" decoding="async" />
+              width="320"
+              height="320"
+              loading="eager"
+              decoding="async"
+            />
           </picture>
           <h1>Taylor Dean</h1>
           <h2>Cloud Engineer | HPC Specialist</h2>
           <p class="hero-subtitle">
-            AWS, Azure, and GCP Certified | Expert in GPU-Accelerated Computing &
-            Critical Infrastructure
+            AWS, Azure, and GCP Certified | Expert in GPU-Accelerated Computing
+            & Critical Infrastructure
           </p>
           <p class="hero-location">Denver, Colorado</p>
           <div class="cta-group">
@@ -503,7 +473,7 @@
       </div>
     </footer>
 
-    <script src="/mobile-nav.js" defer></script>
+    <script src="/include-header.js"></script>
     <script src="/home.js"></script>
   </body>
 </html>
