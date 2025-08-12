@@ -17,34 +17,41 @@
     />
   </head>
   <body>
-    <header>
-      <div class="section">
-        <div class="header-content">
-          <h1>MacroSight</h1>
-          <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-            <span id="menu-icon">☰</span>
-          </button>
-          <nav class="desktop-nav">
-            <a href="/home" class="active">Home</a>
-            <a href="/about">About</a>
-            <a href="/experience">Experience</a>
-            <a href="/projects">Projects</a>
-            <a href="/resume">Resume</a>
-            <a href="/contact">Contact</a>
-            <a href="/invest">Invest</a>
-          </nav>
-        </div>
-        <div class="mobile-nav" id="mobile-nav">
-          <nav>
-            <a href="/home" class="active">Home</a>
-            <a href="/about">About</a>
-            <a href="/experience">Experience</a>
-            <a href="/projects">Projects</a>
-            <a href="/resume">Resume</a>
-            <a href="/contact">Contact</a>
-            <a href="/invest">Invest</a>
-          </nav>
-        </div>
+    <header class="site-header">
+      <div class="section header-content">
+        <a class="brand" href="/"><span>MacroSight</span></a>
+
+        <button id="menu-toggle"
+                class="hamburger"
+                type="button"
+                aria-controls="site-menu"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+          <span class="hamburger-box" aria-hidden="true">☰</span>
+        </button>
+
+        <nav id="site-menu" class="desktop-nav" aria-label="Primary">
+          <a href="/home" class="active">Home</a>
+          <a href="/about">About</a>
+          <a href="/experience">Experience</a>
+          <a href="/projects">Projects</a>
+          <a href="/resume">Resume</a>
+          <a href="/contact">Contact</a>
+          <a href="/invest">Invest</a>
+        </nav>
+      </div>
+
+      <!-- Mobile menu panel -->
+      <div class="mobile-nav" id="mobile-nav" hidden>
+        <nav aria-label="Mobile Primary">
+          <a href="/home" class="active">Home</a>
+          <a href="/about">About</a>
+          <a href="/experience">Experience</a>
+          <a href="/projects">Projects</a>
+          <a href="/resume">Resume</a>
+          <a href="/contact">Contact</a>
+          <a href="/invest">Invest</a>
+        </nav>
       </div>
     </header>
 
@@ -52,15 +59,15 @@
       <!-- Hero Section -->
       <div class="section">
         <div class="hero-section">
-          <img
-            src="/img/headshot.jpg"
-            srcset="/img/headshot.jpg 1x, /img/headshot@2x.jpg 2x"
-            alt="Headshot of Taylor Dean"
-            class="hero-image hero-image--cover"
-            loading="lazy"
-            width="160"
-            height="160"
-          />
+          <picture class="avatar">
+            <source srcset="/images/profile.webp" type="image/webp" />
+            <source srcset="/images/profile.jpg" type="image/jpeg" />
+            <img
+              src="/images/profile.jpg"
+              alt="Portrait of Taylor Dean"
+              width="320" height="320"
+              loading="eager" decoding="async" />
+          </picture>
           <h1>Taylor Dean</h1>
           <h2>Cloud Engineer | HPC Specialist</h2>
           <p class="hero-subtitle">
@@ -496,7 +503,7 @@
       </div>
     </footer>
 
-    <script src="/mobile-nav.js"></script>
+    <script src="/mobile-nav.js" defer></script>
     <script src="/home.js"></script>
   </body>
 </html>
