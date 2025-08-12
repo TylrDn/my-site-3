@@ -21,6 +21,7 @@
     // Load mobile navigation script after header is injected
     const script = document.createElement("script");
     script.src = "/mobile-nav.js";
+    script.defer = true;
     document.body.appendChild(script);
   } catch (err) {
     console.error("Failed to load header:", err);
