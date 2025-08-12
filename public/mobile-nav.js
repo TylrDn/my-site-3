@@ -3,11 +3,26 @@
   function qs(sel) { return document.querySelector(sel); }
 
   function setupMenu() {
-    const btn   = qs('#menu-toggle');
+    const btn = qs('#menu-toggle');
     const panel = qs('#mobile-nav');
-    if (!btn || !panel) return;
+    const close = panel ? panel.querySelector('.close-nav') : null;
+    if (!btn || !panel || !close) return;
 
     let open = false;
+
+    function trapFocus(e) {
+      if (!open || e.key !== 'Tab') return;
+      const focusables = panel.querySelectorAll('a, button');
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
 
     function setState(next) {
       open = next;
@@ -27,17 +42,23 @@
       document.body.style.overflow = open ? 'hidden' : '';
       document.body.style.touchAction = open ? 'none' : '';
 
-      // Keep focus on toggle for accessibility
-      btn.focus();
+      if (open) {
+        close.focus();
+      } else {
+        btn.focus();
+      }
     }
 
-    // Close on link click inside panel
+    // Close on link click or overlay click inside panel
     panel.addEventListener('click', (e) => {
       const link = e.target.closest('a');
-      if (link) setState(false);
+      if (link || e.target === panel) setState(false);
     });
 
+    panel.addEventListener('keydown', trapFocus);
+
     btn.addEventListener('click', () => setState(!open));
+    close.addEventListener('click', () => setState(false));
     document.addEventListener('keydown', (e) => {
       if (open && e.key === 'Escape') setState(false);
     });
