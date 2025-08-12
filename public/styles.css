@@ -28,14 +28,15 @@
 /* === Responsive Hardening Layer === */
 
 /* Fluid media: prevent overflow on small screens */
-img,
-video,
-canvas,
-svg,
-iframe {
+:is(img, video, canvas, svg, iframe) {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* Ensure <picture> elements remain fluid via their <img> */
+picture > img {
+  max-width: 100%;
 }
 
 /* Prevent horizontal scroll with wide code/tables */
