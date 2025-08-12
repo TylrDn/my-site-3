@@ -4,8 +4,10 @@
   if (!placeholder) return;
   try {
     const res = await fetch("/header.html");
+    if (!res.ok) throw new Error(`Failed to fetch header: ${res.status}`);
     const html = await res.text();
-    placeholder.outerHTML = html;
+    placeholder.insertAdjacentHTML("beforebegin", html);
+    placeholder.remove();
 
     // Highlight active navigation link
     let path = window.location.pathname
