@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.macrosight.net/</loc>
+    <loc>https://macrosight.net/</loc>
   </url>
   <url>
-    <loc>https://www.macrosight.net/about</loc>
+    <loc>https://macrosight.net/home</loc>
   </url>
   <url>
-    <loc>https://www.macrosight.net/experience</loc>
+    <loc>https://macrosight.net/about</loc>
   </url>
   <url>
-    <loc>https://www.macrosight.net/projects</loc>
+    <loc>https://macrosight.net/experience</loc>
   </url>
   <url>
-    <loc>https://www.macrosight.net/resume</loc>
+    <loc>https://macrosight.net/projects</loc>
   </url>
   <url>
-    <loc>https://www.macrosight.net/contact</loc>
+    <loc>https://macrosight.net/resume</loc>
   </url>
   <url>
-    <loc>https://www.macrosight.net/invest</loc>
+    <loc>https://macrosight.net/contact</loc>
+  </url>
+  <url>
+    <loc>https://macrosight.net/invest</loc>
   </url>
 </urlset>
