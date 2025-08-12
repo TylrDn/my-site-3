@@ -20,7 +20,7 @@
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type"
-    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Strict-Transport-Security = "max-age=15768000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
@@ -35,7 +35,7 @@
     Access-Control-Allow-Origin = "https://macrosight.net"
     Access-Control-Allow-Methods = "GET, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type"
-    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Strict-Transport-Security = "max-age=15768000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
@@ -65,6 +65,18 @@
 # 🚦 Clean Routing Rules
 [[redirects]]
   from = "https://www.macrosight.net/*"
+  to = "https://macrosight.net/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.macrosight.net/*"
+  to = "https://macrosight.net/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://macrosight.net/*"
   to = "https://macrosight.net/:splat"
   status = 301
   force = true
