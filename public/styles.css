@@ -29,6 +29,7 @@
 
 /* Fluid media: prevent overflow on small screens */
 img,
+picture,
 video,
 canvas,
 svg,
