@@ -5,19 +5,21 @@
     "dev": "vite public --port 3000 --open",
     "build": "echo \"✅ Static site – no build needed\"",
     "preview": "vite public",
-    "lint": "npm run lint:js && npm run html:lint",
+    "lint": "npm run lint:js && npm run validate:html",
     "lint:js": "eslint \"src/**/*.js\" || echo \"✅ No JS files to lint\"",
+    "validate:html": "html-validate \"public/**/*.html\"",
     "format": "prettier --write \"public/*.html\" \"src/**/*.js\" || echo \"✅ Nothing to format\"",
-    "html:lint": "htmlhint \"public/*.html\" || echo \"✅ No HTML files to lint\"",
     "html:format": "prettier --write \"public/*.html\"",
     "ci": "npm run lint && npm run format && npm run build",
-    "test": "npm run lint && playwright test"
+    "test": "npm run lint && playwright test",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "vite": "^5.0.0",
     "eslint": "^8.56.0",
     "prettier": "^3.2.5",
-    "htmlhint": "^1.1.5",
+    "html-validate": "^9.0.0",
+    "husky": "^9.0.0",
     "sanitize-html": "^2.7.0",
     "@playwright/test": "^1.43.0"
   }
