@@ -18,22 +18,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Install dependencies
-        run: |
-          npm install -g prettier htmlhint eslint
-          
-      - name: Lint and prettify HTML in public/
-        run: |
-          echo "🎨 Prettifying HTML files in public/"
-          prettier --write "public/*.html"
-          echo "✅ HTML files prettified"
+        run: npm ci
 
-      - name: Validate HTML files
-        run: |
-          echo "🔍 Validating HTML files"
-          htmlhint "public/*.html"
-          echo "✅ HTML validation complete"
+      - name: Validate HTML structure
+        run: npm run validate:html
+
+      - name: Lint JavaScript
+        run: npm run lint:js
+
+      - name: Prettify HTML
+        run: npm run html:format
 
       - name: Check for postMessage listeners in static HTML
         run: |
@@ -90,5 +85,8 @@ jobs:
             echo "❌ HTML files CORS rule missing or incorrect"
             exit 1
           fi
-          
+
           echo "✅ Netlify configuration validation complete"
+
+      - name: Run tests
+        run: npm test

@@ -14,7 +14,7 @@
         font-size: 1.2rem;
         color: var(--color-muted);
       }
-      
+
       .loader::after {
         content: "";
         width: 20px;
@@ -25,37 +25,44 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
-      
+
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
     </style>
+  </head>
+  <body>
+    <div class="loader">Loading</div>
+    <noscript>
+      This page is meant to be embedded.
+      <a href="https://www.macrosight.net/home">Go to Home</a>
+    </noscript>
     <script>
       // Hardened postMessage injection for Wix Velo
       const ALLOWED_ORIGINS = [
         "https://www.macrosight.net",
         "https://macrosight.netlify.app"
       ];
-      
+
       function safeInject(html) {
         // Strip <head> content and inject only <body> content
         if (typeof html !== "string") return false;
-        
+
         // Extract body content, removing <head> entirely
         const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
         const bodyContent = bodyMatch ? bodyMatch[1] : html;
-        
+
         // Additional safety check - don't allow script or style tags
         if (/<(script|style)[\s>]/i.test(bodyContent)) return false;
-        
+
         document.body.innerHTML = bodyContent;
         return true;
       }
-      
+
       window.addEventListener("message", (event) => {
         if (!ALLOWED_ORIGINS.includes(event.origin)) return;
-        
+
         if (safeInject(event.data)) {
           const loader = document.querySelector(".loader");
           if (loader) loader.style.display = "none";
@@ -64,13 +71,6 @@
         }
       }, false);
     </script>
-  </head>
-  <body>
-    <div class="loader">Loading</div>
-    <noscript>
-      This page is meant to be embedded.
-      <a href="https://www.macrosight.net/home">Go to Home</a>
-    </noscript>
     <script src="/mobile-nav.js" defer></script>
   </body>
 </html>

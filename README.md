@@ -84,10 +84,23 @@ const html = await response.text();
 iframe.postMessage(html, 'https://www.macrosight.net');
 ```
 
+## HTML Validation
+
+HTML files are checked with [`html-validate`](https://github.com/html-validate/html-validate)
+to ensure links stay in the `<head>` and scripts either use `defer` or sit at
+the end of `<body>`. Run the validator locally with:
+
+```bash
+npm run validate:html
+```
+
+Errors show the file and rule that failed. Fix the markup and rerun the
+command until it exits with no output.
+
 ## Testing Commands
 
 ```bash
-# Run lint checks
+# Run lint and e2e checks
 npm test
 
 # Test CORS headers for HTML files
