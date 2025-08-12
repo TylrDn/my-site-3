@@ -270,16 +270,34 @@ nav a.active {
   z-index: 60; /* above header & panel */
 }
 
-/* Mobile panel overlays content below header */
+/* Full-screen mobile overlay */
 .mobile-nav {
   position: fixed;
-  inset: calc(var(--header-height, 64px) + env(safe-area-inset-top, 0)) 0 0 0;
+  inset: 0;
+  height: 100dvh;
   overflow-y: auto;
-  z-index: 50;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  z-index: 100;
   backdrop-filter: blur(6px);
-  background: rgba(0, 0, 0, 0.75);
-  padding: 16px env(safe-area-inset-right, 16px) 24px
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(env(safe-area-inset-top, 0) + 16px)
+    env(safe-area-inset-right, 16px) 24px
     env(safe-area-inset-left, 16px);
+}
+
+.mobile-nav .close-nav {
+  align-self: flex-end;
+  background: transparent;
+  border: none;
+  color: var(--color-fg);
+  width: 44px;
+  height: 44px;
+  margin-bottom: 1rem;
+  cursor: pointer;
 }
 
 html.nav-open {
