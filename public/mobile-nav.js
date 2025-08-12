@@ -9,9 +9,24 @@
   function setupMenu() {
     const btn = qs("#menu-toggle");
     const panel = qs("#mobile-nav");
+    const closeBtn = panel ? panel.querySelector(".close-nav") : null;
     if (!btn || !panel) return;
 
     let open = false;
+    let focusables = [];
+
+    function trapFocus(e) {
+      if (e.key !== "Tab" || focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
 
     function setState(next) {
       open = next;
@@ -36,19 +51,29 @@
       document.body.style.overflow = open ? "hidden" : "";
       document.body.style.touchAction = open ? "none" : "";
 
-      // Keep focus on the toggle for accessibility
-      btn.focus();
+      if (open) {
+        focusables = panel.querySelectorAll(
+          "a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])",
+        );
+        if (focusables.length) focusables[0].focus();
+      } else {
+        btn.focus();
+      }
     }
 
-    // Close when a nav link is tapped
+    // Close when a nav link is tapped or backdrop clicked
     panel.addEventListener("click", (e) => {
+      if (e.target === panel) return setState(false);
       const link = e.target.closest("a");
       if (link) setState(false);
     });
 
     btn.addEventListener("click", () => setState(!open));
+    closeBtn && closeBtn.addEventListener("click", () => setState(false));
     document.addEventListener("keydown", (e) => {
-      if (open && e.key === "Escape") setState(false);
+      if (!open) return;
+      if (e.key === "Escape") return setState(false);
+      trapFocus(e);
     });
 
     window.addEventListener("resize", () => {
