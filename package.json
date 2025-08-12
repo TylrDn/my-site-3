@@ -2,22 +2,23 @@
   "name": "macrosight-site",
   "version": "2.0.0",
   "scripts": {
-    "dev": "vite preview --port 3000 --open",
+    "dev": "vite public --port 3000 --open",
     "build": "echo \"✅ Static site – no build needed\"",
-    "preview": "vite preview",
+    "preview": "vite public",
     "lint": "npm run lint:js && npm run html:lint",
     "lint:js": "eslint \"src/**/*.js\" || echo \"✅ No JS files to lint\"",
     "format": "prettier --write \"public/*.html\" \"src/**/*.js\" || echo \"✅ Nothing to format\"",
     "html:lint": "htmlhint \"public/*.html\" || echo \"✅ No HTML files to lint\"",
     "html:format": "prettier --write \"public/*.html\"",
     "ci": "npm run lint && npm run format && npm run build",
-    "test": "npm run lint"
+    "test": "npm run lint && playwright test"
   },
   "devDependencies": {
     "vite": "^5.0.0",
     "eslint": "^8.56.0",
     "prettier": "^3.2.5",
     "htmlhint": "^1.1.5",
-    "sanitize-html": "^2.7.0"
+    "sanitize-html": "^2.7.0",
+    "@playwright/test": "^1.43.0"
   }
 }
