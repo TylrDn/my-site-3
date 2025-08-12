@@ -28,6 +28,22 @@ Validate HTML and JS before committing:
 npm run lint
 ```
 
+## Running tests locally
+
+The CI pipeline runs Playwright end-to-end tests after validating HTML. To run the same checks locally:
+
+```bash
+npm ci
+npx playwright install
+npm test
+```
+
+To view the local HTML report after a run:
+
+```bash
+npx playwright show-report
+```
+
 ## Documentation
 
 - [AUDIT-REPORT.md](AUDIT-REPORT.md) – deployment audit and fix history

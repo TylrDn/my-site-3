@@ -4,9 +4,13 @@ test.use({ viewport: { width: 360, height: 640 } });
 
 test('mobile menu overlay behaviour', async ({ page }) => {
   await page.goto('/home.html');
+  // Wait for header and mobile-nav script to be injected
+  await page.waitForSelector('#menu-toggle');
   const toggle = page.locator('#menu-toggle');
   await toggle.click();
 
+  // Ensure the mobile nav panel is present before asserting
+  await page.waitForSelector('#mobile-nav');
   const panel = page.locator('#mobile-nav');
   await expect(panel).toBeVisible();
 
