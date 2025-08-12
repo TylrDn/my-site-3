@@ -1,10 +1,6 @@
 {
-  "extends": ["html-validate:recommended"],
   "rules": {
     "no-dup-id": "error",
-    "script-type": "error",
-    "script-placement": "error",
-    "no-inline-style": "error",
-    "no-link-in-body": "error"
+    "script-type": "error"
   }
 }

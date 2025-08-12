@@ -17,9 +17,24 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: deps-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline
+
+      - name: Retry install if failed
+        if: failure()
+        run: |
+          echo "Retrying install with clean cache..."
+          rm -rf node_modules
+          npm cache clean --force || true
+          npm install
 
       - name: Validate HTML structure
         run: npm run validate:html

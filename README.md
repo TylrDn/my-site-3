@@ -4,6 +4,30 @@
 
 This static site implements a hybrid architecture that supports both standalone HTML pages and Wix-Velo iframe integration through postMessage communication.
 
+## Local development & troubleshooting
+
+This project uses **Node 20**. Ensure you're on the right version with `nvm use` (reads from `.nvmrc`).
+
+Install dependencies with a reproducible, cached install:
+
+```bash
+npm ci
+```
+
+If installation fails, clear the cache and retry:
+
+```bash
+rm -rf node_modules
+npm cache clean --force
+npm install
+```
+
+Validate HTML and JS before committing:
+
+```bash
+npm run lint
+```
+
 ## Documentation
 
 - [AUDIT-REPORT.md](AUDIT-REPORT.md) – deployment audit and fix history
