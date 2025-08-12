@@ -15,7 +15,7 @@
     let open = false;
     let focusables = [];
 
-    function trapFocus(e) {
+    const trapFocus = (e) => {
       if (e.key !== "Tab" || focusables.length === 0) return;
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
@@ -26,7 +26,7 @@
         e.preventDefault();
         first.focus();
       }
-    }
+    };
 
     function setState(next) {
       open = next;
