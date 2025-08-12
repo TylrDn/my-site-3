@@ -167,6 +167,24 @@ header {
   z-index: 100;
   transition: transform 0.3s ease;
   overflow: visible;
+  min-height: var(--header-height);
+  box-sizing: border-box;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-100%);
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 0.5rem 1rem;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 .header-content {

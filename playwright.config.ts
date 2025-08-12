@@ -13,6 +13,7 @@ export default defineConfig({
     : [['html', { open: 'never' }]],
   use: {
     baseURL: 'http://localhost:4173',
+    timezoneId: 'UTC',
   },
   webServer: {
     command: 'vite public --port 4173',

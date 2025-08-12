@@ -35,7 +35,14 @@ The CI pipeline runs Playwright end-to-end tests after validating HTML. To run t
 ```bash
 npm ci
 npx playwright install
-npm test
+npm test         # lint + e2e tests
+npm run coverage # generate coverage report
+```
+
+To run only the browser tests without linting:
+
+```bash
+npm run test:e2e
 ```
 
 To view the local HTML report after a run:
