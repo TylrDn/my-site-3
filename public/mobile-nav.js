@@ -1,69 +1,37 @@
-// eslint-disable-next-line no-unused-vars
-function toggleMobileMenu() {
-  const mobileNav = document.getElementById("mobile-nav");
-  const menuIcon = document.getElementById("menu-icon");
-  const toggleBtn = document.querySelector(".mobile-menu-toggle");
-  if (mobileNav && menuIcon && toggleBtn) {
-    mobileNav.classList.toggle("active");
-    const isActive = mobileNav.classList.contains("active");
-    menuIcon.textContent = isActive ? "✕" : "☰";
-    toggleBtn.setAttribute("aria-expanded", isActive);
-    document.body.style.overflow = isActive ? "hidden" : "";
-    document.dispatchEvent(
-      new CustomEvent("mobile-menu-toggle", { detail: { isActive } }),
-    );
-  }
-}
+// public/mobile-nav.js
+(function () {
+  function qs(sel) { return document.querySelector(sel); }
 
-function initMobileNav() {
-  const toggleBtn = document.querySelector(".mobile-menu-toggle");
-  if (toggleBtn) {
-    toggleBtn.setAttribute("aria-controls", "mobile-nav");
-    toggleBtn.setAttribute("aria-expanded", "false");
-  }
+  function setupMenu() {
+    const btn   = qs('#menu-toggle');
+    const panel = qs('#mobile-nav');
+    if (!btn || !panel) return;
 
-  document.querySelectorAll(".mobile-nav a").forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const target = link.getAttribute("href");
-      e.preventDefault();
-      setTimeout(() => {
-        const mobileNav = document.getElementById("mobile-nav");
-        if (mobileNav && mobileNav.classList.contains("active")) {
-          toggleMobileMenu();
-        }
-        if (target) {
-          window.location.href = target;
-        }
-      }, 100);
+    let open = false;
+
+    function setState(next) {
+      open = next;
+      panel.hidden = !open;
+      document.documentElement.classList.toggle('nav-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      // Lock scroll when open (iOS-friendly)
+      document.body.style.overflow = open ? 'hidden' : '';
+      document.body.style.touchAction = open ? 'none' : '';
+    }
+
+    btn.addEventListener('click', () => setState(!open));
+    document.addEventListener('keydown', (e) => {
+      if (open && e.key === 'Escape') setState(false);
     });
-  });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024 && open) setState(false);
+    });
+  }
 
-  document.addEventListener("click", (e) => {
-    const mobileNav = document.getElementById("mobile-nav");
-    const header = document.querySelector("header");
-    if (
-      mobileNav &&
-      mobileNav.classList.contains("active") &&
-      !header.contains(e.target)
-    ) {
-      toggleMobileMenu();
-    }
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMenu);
+  } else {
+    setupMenu();
+  }
+})();
 
-  document.addEventListener("keydown", (e) => {
-    const mobileNav = document.getElementById("mobile-nav");
-    if (
-      e.key === "Escape" &&
-      mobileNav &&
-      mobileNav.classList.contains("active")
-    ) {
-      toggleMobileMenu();
-    }
-  });
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initMobileNav);
-} else {
-  initMobileNav();
-}
