@@ -2,9 +2,9 @@
   "name": "macrosight-site",
   "version": "2.0.0",
   "scripts": {
-    "dev": "vite preview --port 3000 --open",
+    "dev": "vite public --port 3000 --open",
     "build": "echo \"✅ Static site – no build needed\"",
-    "preview": "vite preview",
+    "preview": "vite public",
     "lint": "npm run lint:js && npm run html:lint",
     "lint:js": "eslint \"src/**/*.js\" || echo \"✅ No JS files to lint\"",
     "format": "prettier --write \"public/*.html\" \"src/**/*.js\" || echo \"✅ Nothing to format\"",

@@ -3,7 +3,7 @@
   const placeholder = document.getElementById("header-placeholder");
   if (!placeholder) return;
   try {
-    const res = await fetch("/header.html");
+    const res = await fetch("header.html");
     const html = await res.text();
     placeholder.outerHTML = html;
 
@@ -20,7 +20,7 @@
 
     // Load mobile navigation script after header is injected
     const script = document.createElement("script");
-    script.src = "/mobile-nav.js";
+    script.src = "mobile-nav.js";
     script.defer = true;
     document.body.appendChild(script);
   } catch (err) {
