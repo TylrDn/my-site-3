@@ -45,11 +45,10 @@ code {
   white-space: pre-wrap;
   word-break: break-word;
 }
-.table-container {
-  overflow-x: auto;
-}
 table {
   width: 100%;
+  display: block;
+  overflow-x: auto;
 }
 
 /* Respect user font scaling and keep consistent sizing */
@@ -291,6 +290,12 @@ html.nav-open {
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   object-fit: cover;
+}
+
+/* Placeholder styling to stabilize layout during scaffolding */
+.placeholder-img {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
 }
 
 /* Layout */
