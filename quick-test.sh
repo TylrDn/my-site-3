@@ -5,7 +5,7 @@ echo "===================================="
 echo ""
 
 # Check if we're testing the right domain
-echo "🔍 Testing Netlify deployment..."
+echo "🔍 Testing production deployment..."
 echo ""
 
 # Function to extract header value
@@ -17,7 +17,7 @@ get_header() {
 
 # Test embed.html CORS
 echo "📍 Testing embed.html CORS header..."
-EMBED_CORS=$(get_header "https://macrosight.netlify.app/embed.html" "access-control-allow-origin")
+EMBED_CORS=$(get_header "https://macrosight.net/embed.html" "access-control-allow-origin")
 echo "   Result: $EMBED_CORS"
 if [[ "$EMBED_CORS" == "*" ]]; then
     echo "   ✅ CORRECT (allows Wix embedding)"
@@ -29,7 +29,7 @@ echo ""
 
 # Test home.html CORS
 echo "📍 Testing home.html CORS header..."
-HOME_CORS=$(get_header "https://macrosight.netlify.app/home.html" "access-control-allow-origin")
+HOME_CORS=$(get_header "https://macrosight.net/home.html" "access-control-allow-origin")
 echo "   Result: $HOME_CORS"
 if [[ "$HOME_CORS" == "*" ]]; then
     echo "   ✅ CORRECT (allows cross-origin fetching)"
@@ -41,19 +41,19 @@ echo ""
 
 # Test CSS CORS (should be restricted)
 echo "📍 Testing styles.css CORS header..."
-CSS_CORS=$(get_header "https://macrosight.netlify.app/styles.css" "access-control-allow-origin")
+CSS_CORS=$(get_header "https://macrosight.net/styles.css" "access-control-allow-origin")
 echo "   Result: $CSS_CORS"
-if [[ "$CSS_CORS" == "https://www.macrosight.net" ]]; then
+if [[ "$CSS_CORS" == "https://macrosight.net" ]]; then
     echo "   ✅ CORRECT (properly restricted)"
 else
-    echo "   ❌ INCORRECT (should be 'https://www.macrosight.net')"
+    echo "   ❌ INCORRECT (should be 'https://macrosight.net')"
     echo "   🔄 Changes may still be propagating..."
 fi
 echo ""
 
 # Test page availability
 echo "📍 Testing page availability..."
-STATUS=$(curl -s -I https://macrosight.netlify.app/embed.html | head -n 1 | awk '{print $2}')
+STATUS=$(curl -s -I https://macrosight.net/embed.html | head -n 1 | awk '{print $2}')
 if [[ "$STATUS" == "200" ]]; then
     echo "   ✅ Pages loading correctly (HTTP 200)"
 else
@@ -63,14 +63,14 @@ echo ""
 
 # Test security headers
 echo "📍 Testing security headers..."
-HSTS=$(get_header "https://macrosight.netlify.app/home.html" "strict-transport-security")
+HSTS=$(get_header "https://macrosight.net/home.html" "strict-transport-security")
 if [[ -n "$HSTS" ]]; then
     echo "   ✅ HSTS enabled: $HSTS"
 else
     echo "   ❌ HSTS missing"
 fi
 
-CSP=$(get_header "https://macrosight.netlify.app/home.html" "content-security-policy")
+CSP=$(get_header "https://macrosight.net/home.html" "content-security-policy")
 if [[ -n "$CSP" ]]; then
     echo "   ✅ CSP enabled: ${CSP:0:50}..."
 else

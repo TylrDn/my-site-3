@@ -22,7 +22,6 @@
     Access-Control-Allow-Headers = "Content-Type"
     Strict-Transport-Security = "max-age=15768000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
@@ -37,10 +36,9 @@
     Access-Control-Allow-Headers = "Content-Type"
     Strict-Transport-Security = "max-age=15768000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' https://macrosight.net https://macrosight.netlify.app"
+    Content-Security-Policy = "default-src 'self' https://macrosight.net; frame-ancestors https://www.wix.com https://*.wix.com https://*.wixsite.com https://editor.wix.com https://editor.wixstudio.com https://manage.wix.com"
 
 [[headers]]
   for = "/img/*"
