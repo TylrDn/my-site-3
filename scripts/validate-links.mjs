@@ -6,6 +6,7 @@ import { startServer } from './serve.mjs';
 
 const read = promisify(fs.readFile);
 const root = path.resolve('public');
+const PORT = process.env.PORT || 4173;
 
 function extractLinks(html) {
   const links = [];
@@ -17,7 +18,7 @@ function extractLinks(html) {
 
 async function existsHTTP(urlPath) {
   return new Promise((resolve) => {
-    const req = http.request({ host: 'localhost', port: 4173, path: urlPath, method: 'HEAD' }, (res) => {
+    const req = http.request({ host: 'localhost', port: PORT, path: urlPath, method: 'HEAD' }, (res) => {
       resolve(res.statusCode && res.statusCode >= 200 && res.statusCode < 400);
     });
     req.on('error', () => resolve(false));
@@ -26,7 +27,7 @@ async function existsHTTP(urlPath) {
 }
 
 async function main() {
-  const server = await startServer();
+  const server = await startServer(PORT);
   const htmlFiles = fs.readdirSync(root).filter(f => f.endsWith('.html'));
   let failures = 0;
   for (const file of htmlFiles) {

@@ -3,10 +3,20 @@
   "version": "2.0.0",
   "scripts": {
     "dev": "node scripts/serve.mjs",
-    "test:e2e:ci": "node --test tests",
+    "start": "node scripts/serve.mjs",
+    "lint": "eslint -c .eslintrc.json . --ext .js,.mjs,.ts --max-warnings=0",
+    "lint:html": "npx html-validate \"public/*.html\"",
+    "check:postmessage": "node scripts/check-html-postmessage.mjs",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node --test --test-reporter=spec tests",
+    "test:e2e": "npx playwright test",
+    "test:e2e:ci": "npx playwright test --reporter=junit",
+    "coverage": "npx playwright test --coverage",
     "validate:links": "node scripts/validate-links.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
-    "lint": "eslint -c .eslintrc.json .",
+    "deprecations": "npm deprecations",
+    "find-deadcode": "knip",
+    "prepare": "husky install",
     "format": "prettier -w ."
   },
   "engines": {
