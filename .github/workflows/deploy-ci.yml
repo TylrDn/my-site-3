@@ -15,7 +15,7 @@ jobs:
   validate-site:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Use Node (from .nvmrc)
         uses: actions/setup-node@v4
@@ -45,7 +45,7 @@ jobs:
       (needs.validate-site.result == 'success')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
