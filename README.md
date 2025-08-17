@@ -131,18 +131,15 @@ const html = await response.text();
 iframe.postMessage(html, 'https://www.macrosight.net');
 ```
 
-## HTML Validation
+## CSS Link Validation
 
-HTML files are checked with [`html-validate`](https://github.com/html-validate/html-validate)
-to ensure links stay in the `<head>` and scripts either use `defer` or sit at
-the end of `<body>`. Run the validator locally with:
+HTML files are checked to ensure they reference the global stylesheet at `/styles.css`. Run the validator locally with:
 
 ```bash
-npm run validate:html
+npm run validate:css
 ```
 
-Errors show the file and rule that failed. Fix the markup and rerun the
-command until it exits with no output.
+Errors show which files are missing the stylesheet link. Add it and rerun the command until it exits with no output.
 
 ## Testing Commands
 
