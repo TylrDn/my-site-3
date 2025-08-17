@@ -22,7 +22,7 @@ npm cache clean --force
 npm install
 ```
 
-Validate CSS and JS before committing:
+Validate JS and ensure each HTML page links the shared stylesheet before committing:
 
 ```bash
 npm run lint

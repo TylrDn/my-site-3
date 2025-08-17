@@ -7,6 +7,7 @@ const path = require('node:path');
 
 const port = 3000;
 const publicDir = path.join(process.cwd(), 'public');
+const debug = process.argv.includes('--debug') || process.argv.includes('--verbose');
 
 function startFallback() {
   return http.createServer((req, res) => {
@@ -30,7 +31,10 @@ function request(p) {
       let data = '';
       res.setEncoding('utf8');
       res.on('data', chunk => (data += chunk));
-      res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
+      res.on('end', () =>
+        resolve({ status: res.statusCode, headers: res.headers, body: data })
+      );
+      res.on('error', reject);
     }).on('error', reject);
   });
 }
@@ -53,11 +57,17 @@ async function waitForServer(retries = 50) {
       return;
     } catch (err) {
       lastError = err;
-      console.log(`waitForServer retry ${i + 1}/${retries}:`, err.message);
+      if (debug)
+        console.log(`waitForServer retry ${i + 1}/${retries}:`, err.message);
     }
     await delay(100);
   }
-  throw new Error('Server did not start' + (lastError ? `: ${lastError.message}` : ''));
+  throw new Error(
+    'Server did not start' +
+      (lastError
+        ? `: ${lastError.stack || lastError.message || lastError}`
+        : '')
+  );
 }
 
 (async () => {
