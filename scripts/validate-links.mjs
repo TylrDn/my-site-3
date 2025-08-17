@@ -3,10 +3,10 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 import http from 'node:http';
 import { startServer } from './serve.mjs';
+import { PORT } from './config.mjs';
 
 const read = promisify(fs.readFile);
 const root = path.resolve('public');
-const PORT = process.env.PORT || 4173;
 
 function extractLinks(html) {
   const links = [];
@@ -28,29 +28,32 @@ async function existsHTTP(urlPath) {
 
 async function main() {
   const server = await startServer(PORT);
-  const htmlFiles = fs.readdirSync(root).filter(f => f.endsWith('.html'));
   let failures = 0;
-  for (const file of htmlFiles) {
-    const html = await read(path.join(root, file), 'utf8');
-    const links = extractLinks(html);
-    const fileDir = path.dirname(file);
-    for (const href of links) {
-      if (!href.startsWith('http') && !href.startsWith('mailto:')) {
-        let urlPath;
-        if (href.startsWith('/')) {
-          urlPath = href;
-        } else {
-          urlPath = '/' + path.posix.join(fileDir, href);
-        }
-        const ok = await existsHTTP(urlPath);
-        if (!ok) {
-          console.error(`❌ Asset missing: ${file} → ${urlPath}`);
-          failures++;
+  try {
+    const htmlFiles = fs.readdirSync(root).filter(f => f.endsWith('.html'));
+    for (const file of htmlFiles) {
+      const html = await read(path.join(root, file), 'utf8');
+      const links = extractLinks(html);
+      const fileDir = path.dirname(file);
+      for (const href of links) {
+        if (!href.startsWith('http') && !href.startsWith('mailto:')) {
+          let urlPath;
+          if (href.startsWith('/')) {
+            urlPath = href;
+          } else {
+            urlPath = '/' + path.posix.join(fileDir, href);
+          }
+          const ok = await existsHTTP(urlPath);
+          if (!ok) {
+            console.error(`❌ Asset missing: ${file} → ${urlPath}`);
+            failures++;
+          }
         }
       }
     }
+  } finally {
+    await new Promise(resolve => server.close(resolve));
   }
-  server.close();
   if (failures) process.exit(1);
   console.log('✅ All asset links resolved.');
 }

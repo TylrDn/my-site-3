@@ -2,8 +2,6 @@ import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-const PORT = Number(process.env.PORT || 4173);
-
 test('iframe scales and has safe attrs', async ({ page }) => {
   const script = readFileSync(path.join('public', 'scripts', 'responsive-iframe.js'), 'utf8');
   await page.setContent(`
