@@ -6,8 +6,10 @@ async function main() {
     await import('@playwright/test');
   } catch {
     console.log('[@playwright/test] not installed; skipping e2e tests.');
+    process.exit(0);
     return;
   }
+  console.log('Running Playwright end-to-end tests...');
   const args = process.argv.slice(2);
   const child = spawn('npx', ['playwright', 'test', ...args], { stdio: 'inherit', shell: true });
   child.on('exit', code => process.exit(code));

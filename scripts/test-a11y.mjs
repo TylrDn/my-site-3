@@ -22,7 +22,7 @@ async function main() {
     console.error(err);
     process.exit(1);
   } finally {
-    server.close();
+    await new Promise(resolve => server.close(resolve));
   }
 }
 

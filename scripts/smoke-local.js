@@ -91,7 +91,7 @@ async function waitForServer(retries = 50) {
     console.log('Local smoke test passed');
   } finally {
     if (serverProc) serverProc.kill();
-    if (server) server.close();
+    if (server) await new Promise(r => server.close(r));
   }
 })();
 
