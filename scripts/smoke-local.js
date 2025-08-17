@@ -43,10 +43,25 @@ if (fs.existsSync(serveBin)) {
 }
 
 const delay = ms => new Promise(r => setTimeout(r, ms));
+async function waitForServer(retries = 50) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await request('/');
+      return;
+    } catch {}
+    await delay(100);
+  }
+  throw new Error('Server did not start');
+}
 
 (async () => {
-  await delay(500);
+  await waitForServer();
   try {
+    const root = await request('/');
+    if (root.status !== 200) throw new Error('/ status ' + root.status);
+    if (!(root.headers['content-type'] || '').includes('text/html')) {
+      throw new Error('/ content-type ' + root.headers['content-type']);
+    }
     const page = await request('/home.html');
     if (page.status !== 200) throw new Error('home.html status ' + page.status);
     const css = await request('/styles.css');
