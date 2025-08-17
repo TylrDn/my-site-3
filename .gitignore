@@ -1,6 +1,11 @@
 # Node dependencies
 node_modules/
 
+dist/
+playwright-report/
+test-results/
+coverage/
+
 # Editor configs
 .vscode/
 .idea/
@@ -14,3 +19,5 @@ jsconfig.json
 
 # Local rebuild triggers
 .netlify-rebuild-trigger
+
+.DS_Store

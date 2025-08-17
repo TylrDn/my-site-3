@@ -1,133 +1,28 @@
 [build]
   publish = "public"
-  command = ""
 
-# 🔒 Secure and CORS-Compatible Headers
+# Clean URLs if you serve subpages (optional)
+[[redirects]]
+  from = "/*"
+  to = "/:splat"
+  status = 200
 
-# Specific CORS rules for embedding (highest priority)
-[[headers]]
-  for = "/embed.html"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type"
-    X-Content-Type-Options = "nosniff"
-
-# CORS rules for all other HTML files (medium priority)
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type"
-    Strict-Transport-Security = "max-age=15768000; includeSubDomains; preload"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-    X-Robots-Tag = "index, follow"
-
-# General security headers for all other files (lowest priority)
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
-    Access-Control-Allow-Origin = "https://macrosight.net"
-    Access-Control-Allow-Methods = "GET, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type"
-    Strict-Transport-Security = "max-age=15768000; includeSubDomains; preload"
-    X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' https://macrosight.net https://macrosight.netlify.app"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self'; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
 
-[[headers]]
-  for = "/img/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
+# Caching
 [[headers]]
   for = "/styles.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "text/css; charset=utf-8"
 
 [[headers]]
-  for = "/include-header.js"
+  for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/mobile-nav.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# 🚦 Clean Routing Rules
-[[redirects]]
-  from = "https://www.macrosight.net/*"
-  to = "https://macrosight.net/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "http://www.macrosight.net/*"
-  to = "https://macrosight.net/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "http://macrosight.net/*"
-  to = "https://macrosight.net/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/:path+/"
-  to = "/:path+"
-  status = 301
-  force = true
-[[redirects]]
-  from = "/"
-  to = "/home.html"
-  status = 200
-
-[[redirects]]
-  from = "/home"
-  to = "/home.html"
-  status = 301
-
-[[redirects]]
-  from = "/about"
-  to = "/about.html"
-  status = 301
-
-[[redirects]]
-  from = "/resume"
-  to = "/resume.html"
-  status = 301
-
-[[redirects]]
-  from = "/projects"
-  to = "/projects.html"
-  status = 301
-
-[[redirects]]
-  from = "/contact"
-  to = "/contact.html"
-  status = 301
-
-[[redirects]]
-  from = "/invest"
-  to = "/invest.html"
-  status = 301
-
-[[redirects]]
-  from = "/experience"
-  to = "/experience.html"
-  status = 301
-
-[[redirects]]
-  from = "/404"
-  to = "/404.html"
-  status = 404

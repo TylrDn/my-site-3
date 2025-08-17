@@ -1,0 +1,12 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 60000
+  },
+  "urls": [
+    "http://localhost:4173/index.html"
+  ],
+  "chromeLaunchConfig": {
+    "args": ["--no-sandbox"]
+  }
+}
