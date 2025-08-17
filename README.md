@@ -22,7 +22,7 @@ npm cache clean --force
 npm install
 ```
 
-Validate HTML and JS before committing:
+Validate CSS and JS before committing:
 
 ```bash
 npm run lint
@@ -30,7 +30,7 @@ npm run lint
 
 ## Running tests locally
 
-The CI pipeline runs Playwright end-to-end tests after validating HTML. To run the same checks locally:
+The CI pipeline runs Playwright end-to-end tests after validating CSS links. To run the same checks locally:
 
 ```bash
 npm ci
