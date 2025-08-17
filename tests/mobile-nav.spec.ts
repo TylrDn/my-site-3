@@ -1,4 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { chromium } from 'playwright-core';
+import fs from 'fs';
+
+const browserInstalled = fs.existsSync(chromium.executablePath());
+test.skip(!browserInstalled, 'Chromium browser not installed');
 
 test.describe.configure({ retries: 2 });
 test.use({ viewport: { width: 375, height: 667 } });

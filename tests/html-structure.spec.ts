@@ -1,4 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { chromium } from 'playwright-core';
+import fs from 'fs';
+
+const browserInstalled = fs.existsSync(chromium.executablePath());
+test.skip(!browserInstalled, 'Chromium browser not installed');
 
 const pages = ['/home.html', '/about.html'];
 

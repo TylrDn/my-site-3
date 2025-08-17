@@ -17,6 +17,7 @@
     "test:e2e:ci": "playwright test --reporter=junit --coverage",
     "coverage": "playwright test --coverage",
     "test": "npm run lint && npm run test:e2e",
+    "test:install": "npx playwright install --with-deps",
     "prepare": "husky install"
   },
   "engines": {
@@ -29,6 +30,6 @@
     "html-validate": "^9.0.0",
     "husky": "^9.0.0",
     "sanitize-html": "^2.7.0",
-    "@playwright/test": "^1.43.0"
+    "@playwright/test": "^1.47.0"
   }
 }
