@@ -1,6 +1,5 @@
 import { startServer } from './serve.mjs';
-
-const PORT = process.env.PORT || 4173;
+import { PORT } from './config.mjs';
 
 async function main() {
   const server = await startServer(PORT);

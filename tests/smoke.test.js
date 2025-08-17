@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { startServer, stopServer } from './helpers/server.mjs';
+import { PORT } from '../scripts/config.mjs';
 
-const PORT = process.env.PORT || 4173;
 const BASE = `http://localhost:${PORT}`;
 
 test('homepage renders and CSS loads', async () => {

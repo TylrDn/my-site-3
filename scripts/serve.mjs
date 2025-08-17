@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { PORT } from './config.mjs';
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -14,7 +15,7 @@ const MIME = {
   '.svg': 'image/svg+xml'
 };
 
-export async function startServer(port = process.env.PORT || 4173, rootDir = 'public') {
+export async function startServer(port = PORT, rootDir = 'public') {
   const root = path.resolve(rootDir);
   const server = http.createServer(async (req, res) => {
     const rawPath = decodeURIComponent(req.url.split('?')[0]);
@@ -53,6 +54,6 @@ export async function startServer(port = process.env.PORT || 4173, rootDir = 'pu
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   startServer().then(() => {
-    console.log(`Serving http://localhost:${process.env.PORT || 4173}`);
+    console.log(`Serving http://localhost:${PORT}`);
   });
 }
