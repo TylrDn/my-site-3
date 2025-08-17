@@ -51,6 +51,7 @@
   for = "/styles.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "text/css; charset=utf-8"
 
 [[headers]]
   for = "/include-header.js"
@@ -89,7 +90,7 @@
 [[redirects]]
   from = "/"
   to = "/home.html"
-  status = 301
+  status = 200
 
 [[redirects]]
   from = "/home"
