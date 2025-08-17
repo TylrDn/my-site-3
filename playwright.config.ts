@@ -16,7 +16,7 @@ export default defineConfig({
     timezoneId: 'UTC',
   },
   webServer: {
-    command: 'vite public --port 4173',
+    command: 'node tests/fixtures/server.js',
     port: 4173,
     reuseExistingServer: !process.env.CI,
   },

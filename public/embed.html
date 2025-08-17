@@ -44,6 +44,12 @@
         "https://www.macrosight.net",
         "https://macrosight.netlify.app"
       ];
+      // Test-only: allow local origins to simulate Wix in CI
+      try {
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+          ALLOWED_ORIGINS.push(window.location.origin);
+        }
+      } catch {}
 
       function safeInject(html) {
         // Strip <head> content and inject only <body> content
