@@ -1,15 +1,8 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": "eslint:recommended",
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
-  "globals": {
-    "$w": "readonly"
-  },
-  "rules": {}
+  "env": { "browser": true, "es2022": true, "node": true },
+  "extends": ["eslint:recommended"],
+  "parserOptions": { "ecmaVersion": "latest", "sourceType": "module" },
+  "ignorePatterns": ["public/**/*.js"],
+  "globals": { "$w": "readonly" },
+  "rules": { "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }] }
 }
