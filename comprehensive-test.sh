@@ -64,21 +64,21 @@ echo "==========================="
 
 # Test 1: embed.html (critical for Wix)
 ((total_tests++))
-if test_url_with_retry "https://macrosight.netlify.app/embed.html" "*" "embed.html (Wix embedding)"; then
+if test_url_with_retry "https://macrosight.net/embed.html" "*" "embed.html (Wix embedding)"; then
     ((passed_tests++))
 fi
 echo ""
 
 # Test 2: home.html (general HTML)
 ((total_tests++))
-if test_url_with_retry "https://macrosight.netlify.app/home.html" "*" "home.html (HTML files)"; then
+if test_url_with_retry "https://macrosight.net/home.html" "*" "home.html (HTML files)"; then
     ((passed_tests++))
 fi
 echo ""
 
 # Test 3: styles.css (assets - should be restricted)
 ((total_tests++))
-if test_url_with_retry "https://macrosight.netlify.app/styles.css" "https://www.macrosight.net" "styles.css (assets)"; then
+if test_url_with_retry "https://macrosight.net/styles.css" "https://macrosight.net" "styles.css (assets)"; then
     ((passed_tests++))
 fi
 echo ""
@@ -88,7 +88,7 @@ echo "========================"
 
 # Test security headers
 echo "🔍 Testing security headers on home.html..."
-security_response=$(curl -s -I "https://macrosight.netlify.app/home.html" 2>/dev/null)
+security_response=$(curl -s -I "https://macrosight.net/home.html" 2>/dev/null)
 
 ((total_tests++))
 if echo "$security_response" | grep -qi "strict-transport-security"; then
@@ -123,7 +123,7 @@ echo "======================"
 critical_files=("home.html" "about.html" "embed.html" "projects.html" "contact.html")
 for file in "${critical_files[@]}"; do
     ((total_tests++))
-    status=$(curl -s -I "https://macrosight.netlify.app/$file" | head -n 1 | awk '{print $2}')
+    status=$(curl -s -I "https://macrosight.net/$file" | head -n 1 | awk '{print $2}')
     if [[ "$status" == "200" ]]; then
         echo "   ✅ $file: Available (200)"
         ((passed_tests++))
@@ -198,7 +198,7 @@ fi
 echo ""
 echo "🔗 USEFUL LINKS:"
 echo "   Netlify Dashboard: https://app.netlify.com"
-echo "   Live Site: https://macrosight.netlify.app"
+echo "   Live Site: https://macrosight.net"
 echo "   GitHub Actions: https://github.com/TylrDn/my-site-3/actions"
 echo ""
 echo "📝 For detailed testing: see TESTING-GUIDE.md"
