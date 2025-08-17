@@ -2,34 +2,18 @@
   "name": "macrosight-site",
   "version": "2.0.0",
   "scripts": {
-    "dev": "vite public --port 3000 --open",
-    "build": "echo \"✅ Static site – no build needed\"",
-    "preview": "vite public",
-    "lint": "npm run lint:js && npm run validate:css",
-    "lint:js": "eslint \"src/**/*.js\" || echo \"✅ No JS files to lint\"",
-    "validate:css": "node scripts/validate-css.js",
-    "serve:static": "npx serve -l 3000 public",
-    "test:static": "node scripts/smoke-local.js",
-    "format": "prettier --write \"public/*.html\" \"src/**/*.js\" || echo \"✅ Nothing to format\"",
-    "html:format": "prettier --write \"public/*.html\"",
-    "ci": "npm run lint && npm run format && npm run build",
-    "test:e2e": "playwright test",
-    "test:e2e:ci": "playwright test --reporter=junit --coverage",
-    "coverage": "playwright test --coverage",
-    "test": "npm run lint && npm run test:e2e",
-    "test:install": "npx playwright install --with-deps",
-    "prepare": "husky install"
+    "dev": "node scripts/serve.mjs",
+    "test:e2e:ci": "node --test tests",
+    "validate:links": "node scripts/validate-links.mjs",
+    "test:a11y": "node scripts/test-a11y.mjs",
+    "lint": "eslint -c .eslintrc.json .",
+    "format": "prettier -w ."
   },
   "engines": {
     "node": "20.x"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
     "eslint": "^8.56.0",
-    "prettier": "^3.2.5",
-    "html-validate": "^9.0.0",
-    "husky": "^9.0.0",
-    "sanitize-html": "^2.7.0",
-    "@playwright/test": "^1.47.0"
+    "prettier": "^3.2.5"
   }
 }

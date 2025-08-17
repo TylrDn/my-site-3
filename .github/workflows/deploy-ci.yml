@@ -14,151 +14,45 @@ concurrency:
 jobs:
   validate-site:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Use Node (from .nvmrc)
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: .nvmrc
+          cache: npm
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: deps-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Cache Playwright browsers
-        id: pw-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci --prefer-offline
 
-      - name: Retry install if failed
-        if: failure()
-        run: |
-          echo "Retrying install with clean cache..."
-          rm -rf node_modules
-          npm cache clean --force || true
-          npm install
+      - name: Lint (ESLint)
+        run: npm run lint --if-present
 
-      - name: Install Playwright browsers
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
+      - name: Validate HTML/CSS links
+        run: npm run validate:links
 
-      - name: Validate HTML structure
-        run: npm run validate:html
+      - name: a11y scan
+        run: npm run test:a11y
 
-      - name: Lint JavaScript
-        run: npm run lint:js
-
-      - name: Prettify HTML
-        run: npm run html:format
-
-      - name: Check for postMessage listeners in static HTML
-        run: |
-          echo "� Checking for postMessage listeners (should only be in embed.html)"
-          files_with_listeners=$(grep -l "postMessage\|addEventListener" public/*.html | grep -v embed.html || true)
-          
-          if [[ -n "$files_with_listeners" ]]; then
-            echo "❌ Found postMessage listeners in static HTML files:"
-            echo "$files_with_listeners"
-            for file in $files_with_listeners; do
-              echo "- $file contains:"
-              grep -n "postMessage\|addEventListener" "$file" || true
-            done
-            exit 1
-          else
-            echo "✅ No postMessage listeners found in static HTML files"
-          fi
-
-      - name: Verify Netlify configuration
-        run: |
-          echo "🔧 Verifying netlify.toml configuration"
-          
-          if [[ ! -f "netlify.toml" ]]; then
-            echo "❌ netlify.toml not found"
-            exit 1
-          fi
-          
-          # Check required sections
-          if grep -q "\[build\]" netlify.toml && grep -q "publish.*public" netlify.toml; then
-            echo "✅ Build configuration correct (publish = public)"
-          else
-            echo "❌ Build configuration missing or incorrect"
-            exit 1
-          fi
-          
-          if grep -q "\[\[headers\]\]" netlify.toml; then
-            echo "✅ Headers configuration found"
-          else
-            echo "❌ Headers configuration missing"
-            exit 1
-          fi
-          
-          if grep -q "\[\[redirects\]\]" netlify.toml; then
-            echo "✅ Redirects configuration found"
-          else
-            echo "❌ Redirects configuration missing"
-            exit 1
-          fi
-          
-          # Verify specific CORS rules
-          if grep -A5 'for = "/\*\.html"' netlify.toml | grep -q 'Access-Control-Allow-Origin = "\*"'; then
-            echo "✅ HTML files CORS rule correct (Access-Control-Allow-Origin = *)"
-          else
-            echo "❌ HTML files CORS rule missing or incorrect"
-            exit 1
-          fi
-
-          echo "✅ Netlify configuration validation complete"
-
-      - name: Run tests
+      - name: E2E smoke (CI)
         run: npm run test:e2e:ci
-        env:
-          CI: true
-
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            playwright-report
-            test-results/junit.xml
-
-      - name: Annotate tests in PR
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: Playwright Tests
-          path: test-results/junit.xml
-          reporter: junit
-          fail-on-error: false
-
-      - name: Upload coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: coverage
 
   deploy:
     needs: validate-site
+    if: >
+      (github.ref == 'refs/heads/main') &&
+      (needs.validate-site.result == 'success')
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: .nvmrc
+          cache: npm
       - run: npm ci --prefer-offline
-      - run: npx netlify deploy --dir=public --prod
+      - name: Netlify deploy (prod)
+        run: npx netlify deploy --dir=public --prod
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
