@@ -31,6 +31,7 @@
         100% { transform: rotate(360deg); }
       }
     </style>
+    <script defer src="/scripts/responsive-iframe.js"></script>
   </head>
   <body>
     <div class="loader">Loading</div>
@@ -38,6 +39,9 @@
       This page is meant to be embedded.
       <a href="https://www.macrosight.net/home">Go to Home</a>
     </noscript>
+    <div class="iframe-container" style="--iframe-aspect:16/9">
+      <iframe data-ri title="Embedded content"></iframe>
+    </div>
     <script>
       // Hardened postMessage injection for Wix Velo
       const ALLOWED_ORIGINS = [

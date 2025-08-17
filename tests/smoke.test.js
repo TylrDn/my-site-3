@@ -1,11 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { startServer } from '../scripts/serve.mjs';
+import { startServer, stopServer } from './helpers/server.mjs';
 
-const BASE = 'http://localhost:4173';
+const PORT = process.env.PORT || 4173;
+const BASE = `http://localhost:${PORT}`;
 
 test('homepage renders and CSS loads', async () => {
-  const server = await startServer();
+  await startServer(PORT);
   try {
     const res = await fetch(BASE + '/');
     assert.equal(res.status, 200);
@@ -15,6 +16,6 @@ test('homepage renders and CSS loads', async () => {
     const cssRes = await fetch(BASE + '/styles.css');
     assert.equal(cssRes.status, 200);
   } finally {
-    server.close();
+    await stopServer();
   }
 });

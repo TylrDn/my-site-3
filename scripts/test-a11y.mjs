@@ -1,9 +1,11 @@
 import { startServer } from './serve.mjs';
 
+const PORT = process.env.PORT || 4173;
+
 async function main() {
-  const server = await startServer();
+  const server = await startServer(PORT);
   try {
-    const res = await fetch('http://localhost:4173/index.html');
+    const res = await fetch(`http://localhost:${PORT}/index.html`);
     const html = await res.text();
     let fail = false;
     if (!/<title>[^<]+<\/title>/i.test(html)) {

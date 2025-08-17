@@ -23,11 +23,22 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
-      - name: Install deps
-        run: npm ci --prefer-offline
+        - name: Install deps
+          run: npm ci --prefer-offline
+        - name: Retry install if failed
+          if: failure()
+          run: |
+            echo "Retrying install with clean cache..."
+            rm -rf node_modules
+            npm cache clean --force || true
+            npm install
 
-      - name: Lint (ESLint)
-        run: npm run lint --if-present
+        - name: Lint (ESLint + HTML)
+          run: |
+            npm run lint --if-present
+            npm run lint:html --if-present
+        - name: Static HTML postMessage listener check
+          run: npm run check:postmessage
 
       - name: Validate HTML/CSS links
         run: npm run validate:links
@@ -35,8 +46,23 @@ jobs:
       - name: a11y scan
         run: npm run test:a11y
 
-      - name: E2E smoke (CI)
-        run: npm run test:e2e:ci
+        - name: Unit tests (Node test runner)
+          run: npm run test:unit
+        - name: Deprecations / dead code
+          run: |
+            npm run deprecations || true
+            npm run find-deadcode || true
+        - name: Start static server
+          run: |
+            PORT=4173 NODE_ENV=test nohup node scripts/serve.mjs > /dev/null 2>&1 &
+            echo $! > server.pid
+            sleep 1
+        - name: E2E (Playwright minimal)
+          run: npm run test:e2e
+        - name: Stop server
+          if: always()
+          run: |
+            if [ -f server.pid ]; then kill -9 $(cat server.pid) || true; fi
 
   deploy:
     needs: validate-site
