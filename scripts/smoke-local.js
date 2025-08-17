@@ -27,8 +27,10 @@ function startFallback() {
 function request(p) {
   return new Promise((resolve, reject) => {
     http.get({ host: 'localhost', port, path: p }, res => {
-      res.on('data', () => {});
-      res.on('end', () => resolve({ status: res.statusCode, headers: res.headers }));
+      let data = '';
+      res.setEncoding('utf8');
+      res.on('data', chunk => (data += chunk));
+      res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
     }).on('error', reject);
   });
 }
@@ -44,14 +46,18 @@ if (fs.existsSync(serveBin)) {
 
 const delay = ms => new Promise(r => setTimeout(r, ms));
 async function waitForServer(retries = 50) {
+  let lastError;
   for (let i = 0; i < retries; i++) {
     try {
       await request('/');
       return;
-    } catch {}
+    } catch (err) {
+      lastError = err;
+      console.log(`waitForServer retry ${i + 1}/${retries}:`, err.message);
+    }
     await delay(100);
   }
-  throw new Error('Server did not start');
+  throw new Error('Server did not start' + (lastError ? `: ${lastError.message}` : ''));
 }
 
 (async () => {
@@ -64,6 +70,9 @@ async function waitForServer(retries = 50) {
     }
     const page = await request('/home.html');
     if (page.status !== 200) throw new Error('home.html status ' + page.status);
+    if (!page.body.includes('<link rel="stylesheet" href="/styles.css">')) {
+      throw new Error('home.html missing stylesheet link');
+    }
     const css = await request('/styles.css');
     if (css.status !== 200) throw new Error('styles.css status ' + css.status);
     if (!(css.headers['content-type'] || '').includes('text/css')) {
