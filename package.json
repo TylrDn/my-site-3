@@ -1,0 +1,16 @@
+{
+  "name": "my-site-3",
+  "version": "1.0.0",
+  "description": "Simple static website built with vanilla HTML, CSS, and JavaScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests specified\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
