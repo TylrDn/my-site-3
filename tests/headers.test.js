@@ -11,14 +11,8 @@ function findHeaderBlock(forPath) {
     .find(block => block.startsWith(`for = "${forPath}"`));
 }
 
-test('embed.html exposes required CORS headers', () => {
-  const block = findHeaderBlock('/embed.html');
+test('global headers include CSP', () => {
+  const block = findHeaderBlock('/*');
   assert(block, 'header block missing');
-  assert(block.includes('Access-Control-Allow-Origin'), 'CORS header missing');
-});
-
-test('all html files allow CORS', () => {
-  const block = findHeaderBlock('/*.html');
-  assert(block, 'html header block missing');
-  assert(block.includes('Access-Control-Allow-Origin'), 'CORS header missing');
+  assert(block.includes('Content-Security-Policy'), 'CSP header missing');
 });

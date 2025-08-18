@@ -17,10 +17,13 @@ export function waitForIframe(iframe, { timeoutMs = 10000 } = {}) {
     }, timeoutMs);
 
     iframe.addEventListener('load', onLoad, { once: true });
-
-    // If iframe already loaded (cached)
-    if (iframe.contentWindow && iframe.complete) {
-      onLoad();
+    try {
+      const doc = iframe.contentWindow && iframe.contentWindow.document;
+      if (doc && (doc.readyState === 'complete' || doc.readyState === 'interactive')) {
+        Promise.resolve().then(onLoad);
+      }
+    } catch {
+      // cross-origin: cannot read, rely on 'load' event
     }
   });
 }

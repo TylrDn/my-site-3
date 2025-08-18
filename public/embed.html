@@ -27,18 +27,101 @@
       }
 
       @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
     </style>
+    <script src="./assets/origins-global.js" defer></script>
+    <script>
+      // Allowed parents that may embed this page (use your exact prod/staging origins)
+      const ALLOWED_PARENTS = [
+        'https://www.macrosight.net',
+        'https://macrosight.netlify.app'
+      ];
+
+      // Use the single source of truth
+      const patternToRegex =
+        (window.__MYAPP__ && window.__MYAPP__.patternToRegex) ||
+        ((p) => { throw new Error('patternToRegex not loaded'); });
+
+      // Pre-build regexes for speed
+      const PARENT_RX = ALLOWED_PARENTS.map(patternToRegex);
+
+      // Keep a stable reference to the iframe you expect to talk to (if you control it),
+      // otherwise enforce origin-only checks.
+      let expectedSource = null;
+
+      function isAllowedOrigin(origin) {
+        try {
+          const { hostname } = new URL(origin);
+          return PARENT_RX.some((rx) => rx.test(hostname) || rx.test(origin));
+        } catch {
+          return false;
+        }
+      }
+
+      // Minimal sanitizer: strips <script>, event attributes, javascript: URLs, <head>.
+      // This is intentionally *restrictive*. Prefer DOMPurify if you decide to add it later.
+      function sanitizeHtml(html) {
+        const parser = new DOMParser();
+        // Parse to a detached document (don’t trust until sanitized). MDN: DOMParser does not sanitize.
+        const doc = parser.parseFromString(String(html), 'text/html');
+
+        // Nuke <head> content & scripts
+        const head = doc.querySelector('head');
+        if (head) head.remove();
+
+        doc.querySelectorAll('script, link[rel="preload"][as="script"]').forEach((n) => n.remove());
+
+        // Remove inline handlers and javascript: URLs
+        doc.querySelectorAll('*').forEach((el) => {
+          [...el.attributes].forEach((attr) => {
+            const name = attr.name.toLowerCase();
+            const value = attr.value || '';
+            if (name.startsWith('on')) el.removeAttribute(attr.name);
+            if ((name === 'href' || name === 'src') && /^\s*javascript:/i.test(value)) {
+              el.removeAttribute(attr.name);
+            }
+          });
+        });
+
+        // Only allow body children to be injected
+        const frag = document.createDocumentFragment();
+        [...doc.body.childNodes].forEach((n) => frag.appendChild(n));
+        return frag;
+      }
+
+      // Trusted Types (best effort; requires CSP TrustedTypes policy to be fully enforced)
+      const ttPolicy = window.trustedTypes?.createPolicy?.('appSanitizer', {
+        createHTML: (s) => s
+      });
+
+      window.addEventListener('message', (event) => {
+        if (!isAllowedOrigin(event.origin)) return; // MDN: always validate origin.
+
+        // Optional: pin source after first valid message
+        if (expectedSource && event.source !== expectedSource) return;
+        if (!expectedSource) expectedSource = event.source;
+
+        // Accept only strings (HTML) – reject objects to avoid prototype/JSON hijinks
+        const payload = event.data;
+        if (typeof payload !== 'string') return;
+
+        // Sanitize and inject strictly into your known container
+        const container = document.getElementById('embed-root');
+        if (!container) return;
+
+        // Clear any existing content/skeleton safely
+        while (container.firstChild) container.removeChild(container.firstChild);
+
+        const frag = sanitizeHtml(payload);
+        container.appendChild(frag);
+      });
+    </script>
     <script defer src="/scripts/responsive-iframe.js"></script>
   </head>
   <body>
-    <div class="loader">Loading</div>
+    <div id="embed-root"><div class="loader">Loading</div></div>
     <noscript>
       This page is meant to be embedded.
       <a href="https://www.macrosight.net/home">Go to Home</a>
@@ -46,69 +129,6 @@
     <div class="iframe-container" style="--iframe-aspect: 16/9">
       <iframe data-ri title="Embedded content"></iframe>
     </div>
-    <script>
-      // Hardened postMessage injection for Wix Velo
-      const ALLOWED_PARENTS = [
-        'https://www.wix.com',
-        'https://*.wix.com',
-        'https://*.wixsite.com',
-        'https://editor.wix.com',
-        'https://editor.wixstudio.com',
-        'https://manage.wix.com',
-      ];
-
-      // Test-only: allow local origins to simulate Wix in CI
-      try {
-        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-          ALLOWED_PARENTS.push(window.location.origin);
-        }
-      } catch {}
-
-      function patternToRegex(pattern) {
-        const escaped = pattern.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&').replace(/\\\*/g, '[^.]+');
-        return new RegExp(`^${escaped}$`);
-      }
-
-      function isAllowedOrigin(origin) {
-        return ALLOWED_PARENTS.some((p) => patternToRegex(p).test(origin));
-      }
-
-      function safeInject({ html, css }) {
-        if (typeof html !== 'string') return false;
-
-        const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-        const bodyContent = bodyMatch ? bodyMatch[1] : html;
-
-        if (/<(script|style)[\s>]/i.test(bodyContent)) return false;
-
-        document.body.innerHTML = '';
-        if (typeof css === 'string' && css.trim() !== '') {
-          const style = document.createElement('style');
-          style.textContent = css;
-          document.body.appendChild(style);
-        }
-        document.body.insertAdjacentHTML('beforeend', bodyContent);
-        return true;
-      }
-
-      window.addEventListener(
-        'message',
-        (event) => {
-          if (!isAllowedOrigin(event.origin)) return;
-          const { type, html, css } = event.data || {};
-          if (type !== 'INJECT') return;
-
-          if (safeInject({ html, css })) {
-            const loader = document.querySelector('.loader');
-            if (loader) loader.style.display = 'none';
-          } else {
-            document.body.innerHTML =
-              '<div style="padding:2em;text-align:center;color:#c00;">Sorry, content failed to load. Please try again later.</div>';
-          }
-        },
-        false
-      );
-    </script>
     <script src="/mobile-nav.js" defer></script>
   </body>
 </html>
