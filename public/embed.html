@@ -48,26 +48,29 @@
     </div>
     <script>
       // Hardened postMessage injection for Wix Velo
-      const ALLOWED_PARENTS = new Set([
+      const ALLOWED_PARENTS = [
         'https://www.wix.com',
         'https://*.wix.com',
         'https://*.wixsite.com',
         'https://editor.wix.com',
         'https://editor.wixstudio.com',
         'https://manage.wix.com',
-      ]);
+      ];
 
       // Test-only: allow local origins to simulate Wix in CI
       try {
         if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-          ALLOWED_PARENTS.add(window.location.origin);
+          ALLOWED_PARENTS.push(window.location.origin);
         }
       } catch {}
 
+      function patternToRegex(pattern) {
+        const escaped = pattern.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&').replace(/\\\*/g, '[^.]+');
+        return new RegExp(`^${escaped}$`);
+      }
+
       function isAllowedOrigin(origin) {
-        return [...ALLOWED_PARENTS].some((p) =>
-          new RegExp('^' + p.replace(/\*/g, '.*') + '$').test(origin)
-        );
+        return ALLOWED_PARENTS.some((p) => patternToRegex(p).test(origin));
       }
 
       function safeInject({ html, css }) {

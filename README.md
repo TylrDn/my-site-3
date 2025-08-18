@@ -238,7 +238,7 @@ Learn more about [this repo's file structure](https://support.wix.com/en/article
 
 ## Test your code with the Local Editor
 
-The Local Editor allows you test changes made to your site in real time. The code in your local IDE is synced with the Local Editor, so you can test your changes before committing them to your repo. You can also change the site design in the Local Editor and sync it with your IDE.
+The Local Editor allows you to test changes made to your site in real time. The code in your local IDE is synced with the Local Editor, so you can test your changes before committing them to your repo. You can also change the site design in the Local Editor and sync it with your IDE.
 
 Start the Local Editor by navigating to this repo's directory in your terminal and running `wix dev`.
 
