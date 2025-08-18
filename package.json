@@ -15,22 +15,20 @@
     "validate:links": "node scripts/validate-links.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
     "find-deadcode": "knip",
-    "prepare": "husky install",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "validate:css": "bash scripts/validate-css-links.sh"
   },
   "engines": {
-    "node": "20.19.4"
+    "node": ">=20 <21",
+    "npm": ">=10"
   },
   "devDependencies": {
     "eslint": "^9.33.0",
     "knip": "^3.0.0",
-    "prettier": "^3.2.5"
-  },
-  "overrides": {
-    "npm-deprecations": "npm:@jsdevtools/rehype-noop@1.0.0"
+    "prettier": "3.2.5"
   },
   "optionalDependencies": {
-    "@playwright/test": "^1.44.0",
+    "@playwright/test": "1.44.0",
     "html-validate": "^9.4.0"
   },
   "packageManager": "npm@10.8.2"

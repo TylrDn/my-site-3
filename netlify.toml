@@ -7,42 +7,26 @@
   NPM_FLAGS = "--quiet --no-audit --no-fund"
 
 # 🔒 Secure and CORS-Compatible Headers
-
-# Specific CORS rules for embedding (highest priority)
-[[headers]]
-  for = "/embed.html"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type"
-    X-Content-Type-Options = "nosniff"
-
-# CORS rules for all other HTML files (medium priority)
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type"
-    Strict-Transport-Security = "max-age=15768000; includeSubDomains; preload"
-    X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-    X-Robots-Tag = "index, follow"
-
-# General security headers for all other files (lowest priority)
 [[headers]]
   for = "/*"
   [headers.values]
-    Access-Control-Allow-Origin = "https://macrosight.net"
-    Access-Control-Allow-Methods = "GET, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type"
-    Strict-Transport-Security = "max-age=15768000; includeSubDomains; preload"
+    Content-Security-Policy = """
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data:;
+    connect-src 'self';
+    frame-src https://*.wix.com https://*.wixstatic.com;
+    frame-ancestors https://www.wix.com https://editor.wix.com https://*.wixsite.com https://www.macrosight.net;
+    base-uri 'self';
+    form-action 'self';
+    require-trusted-types-for 'script';
+    trusted-types appSanitizer;
+  """
+    Referrer-Policy = "no-referrer"
     X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' https://macrosight.net; frame-ancestors https://www.wix.com https://*.wix.com https://*.wixsite.com https://editor.wix.com https://editor.wixstudio.com https://manage.wix.com"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
 
 [[headers]]
   for = "/img/*"
@@ -89,6 +73,7 @@
   to = "/:path+"
   status = 301
   force = true
+
 [[redirects]]
   from = "/"
   to = "/home.html"

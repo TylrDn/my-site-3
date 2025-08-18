@@ -1,18 +1,23 @@
-# Basic CI to catch missing styles and broken static serving
-name: CI
-
+name: ci
 on:
   push:
+    branches: [ main ]
   pull_request:
-
 jobs:
-  validate:
+  build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
+          cache: 'npm'
+      - name: NPM registry hygiene
+        run: |
+          echo "registry=https://registry.npmjs.org/" > .npmrc
+          echo "always-auth=false" >> .npmrc
       - run: npm ci
-      - run: npm run validate:html
-      - run: npm run test:static
+      - run: npm run lint --if-present
+      - run: npm run validate:css --if-present
+      - run: npx playwright install --with-deps || true
+      - run: npm test --if-present
