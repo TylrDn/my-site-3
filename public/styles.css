@@ -235,19 +235,46 @@ header {
   /* If background-clip: text is not supported, the fallback color will be used */
 }
 
-nav {
+/* Desktop navigation */
+.desktop-nav {
   display: flex;
-  gap: 2rem;
   align-items: center;
   margin-top: 0;
+}
+
+/* Fallback spacing for browsers without flexbox gap */
+.desktop-nav a + a {
+  margin-left: 2rem;
+}
+
+@supports (gap: 2rem) {
+  .desktop-nav {
+    gap: 2rem;
+  }
+  .desktop-nav a + a {
+    margin-left: 0;
+  }
 }
 
 .mobile-nav nav {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
   margin: 0;
   width: 100%;
+}
+
+/* Fallback spacing for mobile menu */
+.mobile-nav nav a + a {
+  margin-top: 0.75rem;
+}
+
+@supports (gap: 0.75rem) {
+  .mobile-nav nav {
+    gap: 0.75rem;
+  }
+  .mobile-nav nav a + a {
+    margin-top: 0;
+  }
 }
 
 .mobile-nav nav a {
@@ -266,6 +293,7 @@ nav {
 }
 
 .mobile-nav nav a:hover,
+.mobile-nav nav a:focus-visible,
 .mobile-nav nav a.active {
   background: var(--color-accent);
   color: var(--color-bg);
@@ -273,27 +301,37 @@ nav {
   box-shadow: var(--shadow);
 }
 
+.mobile-nav nav a:focus-visible {
+  outline-color: var(--color-bg);
+}
+
 .mobile-nav nav a:active {
   transform: scale(0.98);
 }
 
-nav a {
+.desktop-nav a {
   color: var(--color-muted);
   text-decoration: none;
   font-weight: 400;
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
-  transition: all 0.3s ease;
+  transition: color 0.3s ease, background 0.3s ease;
   font-family: var(--font-mono);
   font-size: 0.9rem;
 }
 
-nav a:hover {
+.desktop-nav a:hover,
+.desktop-nav a:focus-visible {
   color: var(--color-accent);
   background: rgba(0, 212, 255, 0.1);
 }
 
-nav a.active {
+.desktop-nav a:focus-visible {
+  outline: 2px dashed var(--color-accent);
+  outline-offset: 4px;
+}
+
+.desktop-nav a.active {
   color: var(--color-accent);
   background: rgba(0, 212, 255, 0.15);
   box-shadow: var(--border-glow);
