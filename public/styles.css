@@ -40,9 +40,29 @@ picture > img {
 }
 
 /* Responsive iframe wrapper */
-.iframe-container{position:relative;width:100%;aspect-ratio:var(--iframe-aspect,16/9);overflow:clip}
-.iframe-container>iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.iframe-skeleton{position:absolute;inset:0;display:grid;place-items:center;font:500 14px/1.2 system-ui,sans-serif;opacity:.8}
+.iframe-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--iframe-aspect, 16/9);
+  overflow: clip;
+}
+.iframe-container > iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.iframe-skeleton {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font:
+    500 14px/1.2 system-ui,
+    sans-serif;
+  opacity: 0.8;
+}
 
 /* Prevent horizontal scroll with wide code/tables */
 pre,
@@ -309,8 +329,7 @@ nav a.active {
   flex-direction: column;
   align-items: center;
   padding: calc(env(safe-area-inset-top, 0) + 16px)
-    env(safe-area-inset-right, 16px) 24px
-    env(safe-area-inset-left, 16px);
+    env(safe-area-inset-right, 16px) 24px env(safe-area-inset-left, 16px);
 }
 
 .mobile-nav .close-nav {
@@ -1381,4 +1400,176 @@ footer {
     padding-left: 1rem;
     font-size: 0.95rem;
   }
+}
+
+/* === Global Navigation & Typography Upgrades === */
+:root {
+  --container-max: 1200px;
+  --header-bg: rgba(11, 11, 16, 0.6);
+  --header-bg-scrolled: rgba(11, 11, 16, 0.85);
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--color-border);
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+.site-header.scrolled {
+  background: var(--header-bg-scrolled);
+}
+
+.site-header.hide {
+  transform: translateY(-100%);
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+}
+
+.brand {
+  font-weight: 600;
+  color: var(--color-fg);
+  text-decoration: none;
+}
+
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav-toggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--color-fg);
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav {
+  padding: 2rem 1rem;
+  background: var(--header-bg-scrolled);
+}
+
+.nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.nav a {
+  color: var(--color-fg);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+}
+
+#primary-nav[hidden] {
+  display: none;
+}
+
+html.menu-open {
+  overflow: hidden;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  clip: auto;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent);
+  color: #000;
+  border-radius: var(--radius);
+}
+
+@media (max-width: 899px) {
+  #primary-nav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 900px) {
+  .nav {
+    padding: 0;
+    background: none;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  #primary-nav[hidden] {
+    display: flex;
+  }
+}
+
+/* Typography */
+h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+p {
+  line-height: 1.7;
 }
