@@ -82,8 +82,18 @@
   });
 
   overlay.addEventListener('click', (e) => {
-    if (e.target === overlay || e.target.tagName === 'A') {
+    if (e.target === overlay) {
       closeMenu();
+    } else if (e.target.tagName === 'A') {
+      const href = e.target.getAttribute('href');
+      if (
+        href &&
+        !href.startsWith('#') &&
+        ((href.startsWith('http') && href !== window.location.href) ||
+          (!href.startsWith('http') && href !== window.location.pathname))
+      ) {
+        closeMenu();
+      }
     }
   });
 
