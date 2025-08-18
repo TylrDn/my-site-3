@@ -1,6 +1,10 @@
 [build]
   publish = "public"
-  command = ""
+  command = "if [ -f package-lock.json ]; then npm ci; else npm install; fi && npm run build"
+
+[build.environment]
+  NODE_VERSION = "20.19.4"
+  NPM_FLAGS = "--quiet --no-audit --no-fund"
 
 # 🔒 Secure and CORS-Compatible Headers
 

@@ -1,8 +1,6 @@
 // @ts-nocheck
 import { fetch } from 'wix-fetch';
-
-// ✅ Use production domain with valid CORS headers
-const base = 'https://macrosight.net';
+import { BASE_ORIGIN } from '../config/origins.js';
 
 /**
  * Injects HTML from Netlify into a Wix HTML Component with loader and error fallback.
@@ -21,11 +19,11 @@ export function injectHtml(componentId, fileSlug, loadingMsg = 'Loading...') {
   $comp.postMessage(`<div style="padding:2em;text-align:center;color:#888;">${loadingMsg}</div>`);
 
   Promise.all([
-    fetch(`${base}/${fileSlug}.html`).then((res) => {
+    fetch(`${BASE_ORIGIN}/${fileSlug}.html`).then((res) => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.text();
     }),
-    fetch(`${base}/styles.css`).then((res) => {
+    fetch(`${BASE_ORIGIN}/styles.css`).then((res) => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.text();
     }),

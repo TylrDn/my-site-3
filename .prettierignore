@@ -1,2 +1,5 @@
 .wix/
 archive/
+node_modules
+dist
+.netlify

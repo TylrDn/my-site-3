@@ -12,6 +12,8 @@
 // Note: This is a WEB MODULE - can be imported by both backend and frontend code
 
 import { fetch } from 'wix-fetch';
+import { BASE_ORIGIN } from '../config/origins.js';
+import { waitForIframe } from './waitForIframe.js';
 
 /**
  * Injects HTML content into a Wix HTML Component via embed.html iframe
@@ -28,44 +30,32 @@ export async function injectHtml(componentId, pageName) {
     }
 
     // Set the iframe source to embed.html with loading spinner
-    htmlComponent.src = 'https://macrosight.net/embed.html';
+    htmlComponent.src = `${BASE_ORIGIN}/embed.html`;
 
-    // Wait for the iframe to load
-    await new Promise((resolve) => {
-      const checkIframe = () => {
-        if (htmlComponent.contentWindow) {
-          resolve();
-        } else {
-          setTimeout(checkIframe, 100);
-        }
-      };
-      checkIframe();
-    });
-
-    // Give the iframe a moment to fully initialize
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // Wait for the iframe to load with timeout
+    await waitForIframe(htmlComponent, { timeoutMs: 10000 });
 
     // Fetch the page content
     const [htmlContent, css] = await Promise.all([
-      fetch(`https://macrosight.net/${pageName}.html`).then((r) => {
+      fetch(`${BASE_ORIGIN}/${pageName}.html`).then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.text();
       }),
-      fetch('https://macrosight.net/styles.css').then((r) => {
+      fetch(`${BASE_ORIGIN}/styles.css`).then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.text();
       }),
     ]);
 
     const iframe = htmlComponent.contentWindow;
-    iframe.postMessage({ type: 'INJECT', html: htmlContent, css }, 'https://macrosight.net');
+    iframe.postMessage({ type: 'INJECT', html: htmlContent, css }, BASE_ORIGIN);
   } catch (error) {
     console.error(`Failed to inject ${pageName}.html into #${componentId}:`, error);
 
     // Fallback - try to load embed.html directly
     const htmlComponent = $w(`#${componentId}`);
     if (htmlComponent) {
-      htmlComponent.src = `https://macrosight.net/embed.html`;
+      htmlComponent.src = `${BASE_ORIGIN}/embed.html`;
     }
   }
 }
