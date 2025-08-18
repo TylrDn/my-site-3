@@ -2,6 +2,7 @@
   "name": "macrosight-site",
   "version": "2.0.0",
   "scripts": {
+    "build": "echo 'No build step required'",
     "dev": "node scripts/serve.mjs",
     "start": "node scripts/serve.mjs",
     "lint": "eslint . --ext .js,.mjs,.ts --max-warnings=0",
