@@ -350,23 +350,24 @@ header {
   z-index: 60; /* above header & panel */
 }
 
-/* Full-screen mobile overlay */
+/* Mobile dropdown panel */
 .mobile-nav {
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  height: 100dvh;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  position: absolute;
+  top: calc(var(--header-height) + 0.5rem);
+  right: 1rem;
+  width: min(260px, calc(100% - 2rem));
   z-index: 100;
-  backdrop-filter: blur(6px);
-  background: rgba(0, 0, 0, 0.85);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: calc(env(safe-area-inset-top, 0) + 16px)
-    env(safe-area-inset-right, 16px) 24px env(safe-area-inset-left, 16px);
+  align-items: stretch;
+  padding: calc(env(safe-area-inset-top, 0) + 1rem)
+    calc(env(safe-area-inset-right, 0) + 1rem)
+    calc(env(safe-area-inset-bottom, 0) + 1rem)
+    calc(env(safe-area-inset-left, 0) + 1rem);
 }
 
 .mobile-nav .close-nav {
@@ -376,7 +377,7 @@ header {
   color: var(--color-fg);
   width: 44px;
   height: 44px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   cursor: pointer;
 }
 
