@@ -1499,6 +1499,13 @@ footer {
   color: var(--color-fg);
   text-decoration: none;
   padding: 0.5rem 1rem;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.nav a:hover,
+.nav a:focus {
+  color: var(--color-accent);
 }
 
 #primary-nav[hidden] {
@@ -1549,10 +1556,12 @@ html.menu-open {
   .nav {
     padding: 0;
     background: none;
+    margin-left: auto;
   }
 
   .nav ul {
     display: flex;
+    align-items: center;
     gap: 2rem;
   }
 
