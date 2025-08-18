@@ -1577,11 +1577,11 @@ html.menu-open {
 @media (max-width: 899px) {
   #primary-nav {
     position: fixed;
-    top: var(--header-height);
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
+    padding-top: var(--header-height);
     overflow-y: auto;
+    background: var(--header-bg-scrolled);
+    z-index: 50;
   }
 
   .nav a {
