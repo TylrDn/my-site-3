@@ -242,20 +242,6 @@ header {
   margin-top: 0;
 }
 
-/* Fallback spacing for browsers without flexbox gap */
-.desktop-nav a + a {
-  margin-left: 2rem;
-}
-
-@supports (gap: 2rem) {
-  .desktop-nav {
-    gap: 2rem;
-  }
-  .desktop-nav a + a {
-    margin-left: 0;
-  }
-}
-
 .mobile-nav nav {
   display: flex;
   flex-direction: column;
@@ -263,17 +249,25 @@ header {
   width: 100%;
 }
 
-/* Fallback spacing for mobile menu */
+/* Fallback spacing for browsers without flexbox gap */
+.desktop-nav a + a {
+  margin-left: 2rem;
+}
+
 .mobile-nav nav a + a {
   margin-top: 0.75rem;
 }
 
-@supports (gap: 0.75rem) {
+@supports (gap: 1rem) {
+  .desktop-nav {
+    gap: 2rem;
+  }
   .mobile-nav nav {
     gap: 0.75rem;
   }
+  .desktop-nav a + a,
   .mobile-nav nav a + a {
-    margin-top: 0;
+    margin: 0;
   }
 }
 
@@ -293,6 +287,7 @@ header {
 }
 
 .mobile-nav nav a:hover,
+.mobile-nav nav a:focus,
 .mobile-nav nav a:focus-visible,
 .mobile-nav nav a.active {
   background: var(--color-accent);
@@ -301,6 +296,7 @@ header {
   box-shadow: var(--shadow);
 }
 
+.mobile-nav nav a:focus,
 .mobile-nav nav a:focus-visible {
   outline-color: var(--color-bg);
 }
@@ -321,11 +317,13 @@ header {
 }
 
 .desktop-nav a:hover,
+.desktop-nav a:focus,
 .desktop-nav a:focus-visible {
   color: var(--color-accent);
   background: rgba(0, 212, 255, 0.1);
 }
 
+.desktop-nav a:focus,
 .desktop-nav a:focus-visible {
   outline: 2px dashed var(--color-accent);
   outline-offset: 4px;
@@ -356,6 +354,7 @@ header {
 .mobile-nav {
   position: fixed;
   inset: 0;
+  height: 100vh;
   height: 100dvh;
   overflow-y: auto;
   overscroll-behavior: contain;
