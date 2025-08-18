@@ -48,17 +48,48 @@
             "position": 2,
             "name": "Invest",
             "item": "https://macrosight.net/invest"
-        }
-      ]
-    }
+          }
+        ]
+      }
     </script>
     <link rel="canonical" href="https://macrosight.net/invest" />
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css" />
+    <meta name="theme-color" content="#0b0b10" />
+    <link rel="prefetch" href="/experience.html" as="document" />
+    <link rel="prefetch" href="/projects.html" as="document" />
+    <link rel="prefetch" href="/contact.html" as="document" />
+    <link rel="prefetch" href="/resume.html" as="document" />
   </head>
   <body>
-    <div id="header-placeholder"></div>
+    <header class="site-header" data-sticky>
+      <a class="skip-link" href="#main">Skip to content</a>
+      <div class="container navbar">
+        <a class="brand" href="index.html">MacroSight</a>
+        <button
+          class="nav-toggle"
+          aria-controls="primary-nav"
+          aria-expanded="false"
+          aria-label="Open menu"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+        <nav id="primary-nav" class="nav" data-collapsible>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="experience.html">Experience</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="invest.html">Invest</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-    <main id="main-content">
+    <main id="main" tabindex="-1">
       <div class="section">
         <div class="card">
           <h1>Investment Opportunities</h1>
@@ -88,7 +119,6 @@
         <p>&copy; 2025 MacroSight. All rights reserved.</p>
       </div>
     </footer>
-
-    <script src="./include-header.js"></script>
+    <script src="/nav.js" defer></script>
   </body>
 </html>
