@@ -1550,8 +1550,22 @@ footer {
   display: none;
 }
 
-html.menu-open {
+body.scroll-lock {
   overflow: hidden;
+}
+
+[data-menu-overlay] {
+  position: fixed;
+  inset: 0;
+  padding-top: calc(var(--header-height) + env(safe-area-inset-top));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--header-bg-scrolled);
+  overflow-y: auto;
+  z-index: 100;
+}
+
+[data-menu-overlay][hidden] {
+  display: none;
 }
 
 .skip-link {
@@ -1577,12 +1591,7 @@ html.menu-open {
 
 @media (max-width: 899px) {
   #primary-nav {
-    position: fixed;
-    inset: 0;
-    padding-top: var(--header-height);
-    overflow-y: auto;
-    background: var(--header-bg-scrolled);
-    z-index: 50;
+    display: none;
   }
 
   .nav a {
