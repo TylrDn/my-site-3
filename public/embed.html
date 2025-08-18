@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <title>MacroSight Embed</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="./styles.css" />
     <style>
       .loader {
         display: flex;
@@ -118,17 +118,17 @@
         container.appendChild(frag);
       });
     </script>
-    <script defer src="/scripts/responsive-iframe.js"></script>
+    <script defer src="./scripts/responsive-iframe.js"></script>
   </head>
   <body>
     <div id="embed-root"><div class="loader">Loading</div></div>
     <noscript>
       This page is meant to be embedded.
-      <a href="https://www.macrosight.net/home">Go to Home</a>
+      <a href="home.html">Go to Home</a>
     </noscript>
     <div class="iframe-container" style="--iframe-aspect: 16/9">
       <iframe data-ri title="Embedded content"></iframe>
     </div>
-    <script src="/mobile-nav.js" defer></script>
+    <script src="./mobile-nav.js" defer></script>
   </body>
 </html>

@@ -7,7 +7,7 @@
       const alt = el.getAttribute("data-alt") || "";
       el.innerHTML = `
           <picture>
-            <img src="/img/Placeholder.jpg" width="300" height="200" alt="${alt}" loading="lazy" decoding="async" class="placeholder-img" />
+            <img src="img/Placeholder.jpg" width="300" height="200" alt="${alt}" loading="lazy" decoding="async" class="placeholder-img" />
           </picture>`;
     });
   }
