@@ -50,11 +50,16 @@ function renderSegments(){
 }
 function renderPillars(pillars){
   const all=['all',...pillars];
-  els.pillarContainer.innerHTML=all.map(p=>{
-    const active=(p===state.pillar);
-    const label=p==='all'?'All Pillars':p;
-    return `<button class="chip" role="switch" aria-pressed="${active}" data-pillar="${p}">${label}</button>`;
-  }).join('');
+  els.pillarContainer.textContent='';
+  all.forEach(p=>{
+    const btn=document.createElement('button');
+    btn.className='chip';
+    btn.setAttribute('role','switch');
+    btn.dataset.pillar=p;
+    btn.setAttribute('aria-pressed',String(p===state.pillar));
+    btn.textContent=p==='all'?'All Pillars':p;
+    els.pillarContainer.appendChild(btn);
+  });
 }
 function buildCard(p){
   const article=document.createElement('article');
@@ -132,10 +137,16 @@ function renderGrid(projects){
   els.meta.textContent=parts.join(' ');
 }
 function renderTags(tags){
-  els.tagContainer.innerHTML=tags.map(tag=>{
-    const active=state.tags.has(tag);
-    return `<button class="chip" role="switch" aria-pressed="${active}" data-tag="${tag}">#${tag}</button>`;
-  }).join('');
+  els.tagContainer.textContent='';
+  tags.forEach(tag=>{
+    const btn=document.createElement('button');
+    btn.className='chip';
+    btn.setAttribute('role','switch');
+    btn.dataset.tag=tag;
+    btn.setAttribute('aria-pressed',String(state.tags.has(tag)));
+    btn.textContent='#'+tag;
+    els.tagContainer.appendChild(btn);
+  });
 }
 
 /* --- Filtering --- */
@@ -164,7 +175,7 @@ function bindEvents(all){
   els.pillarContainer.addEventListener('click',e=>{
     const chip=e.target.closest('.chip');if(!chip) return;
     state.pillar=chip.dataset.pillar;writeUrl();renderGrid(filterProjects(all));
-    renderPillars(uniq(all.map(p=>p.pillar)));
+    renderPillars(uniq(all.map(p=>p.pillar)).sort());
   });
   els.tagContainer.addEventListener('click',e=>{
     const chip=e.target.closest('.chip');if(!chip) return;
