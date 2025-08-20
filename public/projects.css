@@ -12,16 +12,18 @@
 .category-filter button {
   margin: 0 0.5rem;
   padding: 0.4rem 0.8rem;
-  border: 1px solid #888;
+  border: 1px solid var(--color-border);
   background: transparent;
-  border-radius: 4px;
+  border-radius: var(--radius);
   cursor: pointer;
   font-size: 0.9rem;
+  color: var(--color-fg);
 }
 .category-filter button.active,
 .category-filter button:hover {
-  background: #888;
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-color: var(--color-accent);
 }
 
 .category {
@@ -38,19 +40,22 @@
 }
 
 .project-card {
-  background: #fff;
-  border-radius: 8px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
+  text-decoration: none;
+  color: var(--color-fg);
 }
 .project-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-hover);
 }
 
 .project-card h3 {
@@ -69,10 +74,10 @@
 
 .tech-badge, .badge {
   display: inline-block;
-  background: #e0e0e0;
-  color: #333;
+  background: var(--color-border);
+  color: var(--color-fg);
   padding: 0.2rem 0.4rem;
-  border-radius: 3px;
+  border-radius: var(--radius);
   font-size: 0.75rem;
   margin: 0 0.25rem 0.25rem 0;
 }
@@ -86,13 +91,13 @@
 .stars svg {
   width: 16px;
   height: 16px;
-  fill: goldenrod;
+  fill: var(--color-warning);
   margin-right: 0.25rem;
 }
 
 .last-updated {
   font-size: 0.75rem;
-  color: #666;
+  color: var(--color-muted);
   margin-top: 0.5rem;
 }
 
@@ -101,20 +106,11 @@
   top: 1rem;
   right: 1rem;
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: var(--radius);
   font-size: 0.7rem;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--color-bg);
 }
-.status-active { background: #4caf50; }
-.status-beta { background: #ff9800; }
-.status-archived { background: #9e9e9e; }
-
-@media (prefers-color-scheme: dark) {
-  body { background: #121212; color: #eee; }
-  .project-card { background: #1e1e1e; box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
-  .tech-badge, .badge { background: #333; color: #eee; }
-  .category-filter button { border-color: #ccc; color: #eee; }
-  .category-filter button.active,
-  .category-filter button:hover { background: #eee; color: #000; }
-}
+.status-active { background: var(--color-success); }
+.status-beta { background: var(--color-warning); }
+.status-archived { background: var(--color-muted); }
