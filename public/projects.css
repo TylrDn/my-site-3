@@ -1,0 +1,120 @@
+/* Projects page specific styles */
+
+.hero {
+  text-align: center;
+  padding: 4rem 1rem 2rem;
+}
+
+.category-filter {
+  text-align: center;
+  margin: 1rem 0 2rem;
+}
+.category-filter button {
+  margin: 0 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #888;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.category-filter button.active,
+.category-filter button:hover {
+  background: #888;
+  color: #fff;
+}
+
+.category {
+  margin-bottom: 3rem;
+}
+.category h2 {
+  margin: 0 0 1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.project-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.project-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.project-card .tagline {
+  flex-grow: 1;
+}
+
+.tech-badges, .badges {
+  margin-top: 0.5rem;
+}
+
+.tech-badge, .badge {
+  display: inline-block;
+  background: #e0e0e0;
+  color: #333;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  margin: 0 0.25rem 0.25rem 0;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+.stars svg {
+  width: 16px;
+  height: 16px;
+  fill: goldenrod;
+  margin-right: 0.25rem;
+}
+
+.last-updated {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #fff;
+}
+.status-active { background: #4caf50; }
+.status-beta { background: #ff9800; }
+.status-archived { background: #9e9e9e; }
+
+@media (prefers-color-scheme: dark) {
+  body { background: #121212; color: #eee; }
+  .project-card { background: #1e1e1e; box-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+  .tech-badge, .badge { background: #333; color: #eee; }
+  .category-filter button { border-color: #ccc; color: #eee; }
+  .category-filter button.active,
+  .category-filter button:hover { background: #eee; color: #000; }
+}

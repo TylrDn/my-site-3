@@ -1,0 +1,90 @@
+[
+  {
+    "title": "mlops-argo-mlflow",
+    "repo": "https://github.com/user/mlops-argo-mlflow",
+    "tagline": "End-to-end ML pipelines with Argo Workflows and MLflow.",
+    "tech": ["Argo", "MLflow", "FastAPI"],
+    "stars": 42,
+    "last_updated": "2025-08-10",
+    "badges": ["CI", "MIT"],
+    "status": "active",
+    "category": "MLOps"
+  },
+  {
+    "title": "pytorch-ddp-nccl-distributed",
+    "repo": "https://github.com/user/pytorch-ddp-nccl-distributed",
+    "tagline": "PyTorch DistributedDataParallel examples with NCCL.",
+    "tech": ["PyTorch", "NCCL", "Docker"],
+    "stars": 27,
+    "last_updated": "2025-07-15",
+    "badges": ["CI"],
+    "status": "active",
+    "category": "GPU/HPC"
+  },
+  {
+    "title": "triton-inference-helm",
+    "repo": "https://github.com/user/triton-inference-helm",
+    "tagline": "Helm charts for NVIDIA Triton Inference Server.",
+    "tech": ["Helm", "Kubernetes", "Triton"],
+    "stars": 18,
+    "last_updated": "2025-06-01",
+    "badges": ["MIT"],
+    "status": "beta",
+    "category": "GPU/HPC"
+  },
+  {
+    "title": "slurm-mini-hpc",
+    "repo": "https://github.com/user/slurm-mini-hpc",
+    "tagline": "Tiny Slurm cluster for learning HPC basics.",
+    "tech": ["Slurm", "Ansible"],
+    "stars": 33,
+    "last_updated": "2025-05-20",
+    "badges": ["CI"],
+    "status": "active",
+    "category": "GPU/HPC"
+  },
+  {
+    "title": "k8s-gpu-baseline",
+    "repo": "https://github.com/user/k8s-gpu-baseline",
+    "tagline": "Baseline Kubernetes setup for GPU workloads.",
+    "tech": ["Kubernetes", "GPU", "CUDA"],
+    "stars": 21,
+    "last_updated": "2025-04-10",
+    "badges": ["CI"],
+    "status": "active",
+    "category": "GPU/HPC"
+  },
+  {
+    "title": "hmc-power-orchestrator",
+    "repo": "https://github.com/user/hmc-power-orchestrator",
+    "tagline": "Automate IBM Power HMC operations.",
+    "tech": ["Python", "AIX", "PowerVM"],
+    "stars": 12,
+    "last_updated": "2025-03-12",
+    "badges": ["MIT"],
+    "status": "active",
+    "category": "IBM Power"
+  },
+  {
+    "title": "vios-autoconfig",
+    "repo": "https://github.com/user/vios-autoconfig",
+    "tagline": "Automated VIOS configuration scripts.",
+    "tech": ["Bash", "PowerVC"],
+    "stars": 9,
+    "last_updated": "2025-02-08",
+    "badges": ["CI"],
+    "status": "beta",
+    "category": "IBM Power"
+  },
+  {
+    "title": "powervs-terraform-bootstrap",
+    "repo": "https://github.com/user/powervs-terraform-bootstrap",
+    "tagline": "Terraform templates for IBM PowerVS bootstrap.",
+    "tech": ["Terraform", "PowerVS"],
+    "stars": 15,
+    "last_updated": "2025-01-30",
+    "badges": ["MIT"],
+    "status": "active",
+    "category": "IBM Power"
+  }
+]
