@@ -2,179 +2,38 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1,viewport-fit=cover"
-    />
-    <title>Technical Projects – Taylor Dean | MacroSight</title>
-    <meta
-      name="description"
-      content="Explore Taylor Dean's portfolio of high-impact technical projects including cloud transformations, microservices architectures, and scalable systems serving millions of users."
-    />
-    <meta
-      property="og:title"
-      content="Technical Projects – Taylor Dean | MacroSight"
-    />
-    <meta
-      property="og:description"
-      content="Explore Taylor Dean's portfolio of high-impact technical projects including cloud transformations and scalable systems."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://macrosight.net/projects" />
-    <meta
-      property="og:image"
-      content="https://macrosight.net/img/Taylor_headshot.jpg"
-    />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Technical Projects – Taylor Dean | MacroSight"
-    />
-    <meta
-      name="twitter:description"
-      content="Explore Taylor Dean's portfolio of high-impact technical projects including cloud transformations and scalable systems."
-    />
-    <meta
-      name="twitter:image"
-      content="https://macrosight.net/img/Taylor_headshot.jpg"
-    />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://macrosight.net/home"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Projects",
-            "item": "https://macrosight.net/projects"
-          }
-        ]
-      }
-    </script>
-    <link rel="canonical" href="https://macrosight.net/projects" />
-    <link rel="stylesheet" href="./styles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <meta name="theme-color" content="#0b0b10" />
-    <link rel="prefetch" href="/experience.html" as="document" />
-    <link rel="prefetch" href="/projects.html" as="document" />
-    <link rel="prefetch" href="/contact.html" as="document" />
-    <link rel="prefetch" href="/resume.html" as="document" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Projects – Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="projects.css" />
   </head>
   <body>
     <div id="header-placeholder"></div>
-<main id="main" tabindex="-1">
-      <!-- Hero Section -->
-      <div class="section">
-        <div class="hero-section">
-          <h1>Technical Projects Portfolio</h1>
-          <p
-            style="
-              font-size: 1.2rem;
-              color: var(--color-muted);
-              max-width: 800px;
-              margin: 1.5rem auto;
-            "
-          >
-            Explore open-source projects and code samples.
-          </p>
-        </div>
-      </div>
 
-      <!-- Repository Links -->
-      <div class="section">
-        <h2>Open Source Projects</h2>
-        <div class="grid grid-3">
-          <a
-            class="card project-card"
-            href="https://github.com/macrosight/cloud-hpc"
-            target="_blank"
-            rel="noopener"
-          >
-            <img
-              src="img/Placeholder.jpg"
-              alt="Cloud HPC infrastructure"
-              width="300"
-              height="200"
-              loading="lazy"
-            />
-            <h3>Cloud HPC Infrastructure</h3>
-            <p>
-              Terraform modules and Kubernetes configs for scalable GPU
-              clusters.
-            </p>
-          </a>
-          <a
-            class="card project-card"
-            href="https://github.com/macrosight/analytics-pipeline"
-            target="_blank"
-            rel="noopener"
-          >
-            <img
-              src="img/Placeholder.jpg"
-              alt="Analytics pipeline"
-              width="300"
-              height="200"
-              loading="lazy"
-            />
-            <h3>Real-time Analytics Pipeline</h3>
-            <p>
-              Event-driven data pipeline processing billions of events per day.
-            </p>
-          </a>
-          <a
-            class="card project-card"
-            href="https://github.com/macrosight/api-gateway"
-            target="_blank"
-            rel="noopener"
-          >
-            <img
-              src="img/Placeholder.jpg"
-              alt="API gateway"
-              width="300"
-              height="200"
-              loading="lazy"
-            />
-            <h3>High-Performance API Gateway</h3>
-            <p>Service mesh and gateway built for low-latency microservices.</p>
-          </a>
-        </div>
-      </div>
+    <header class="hero">
+      <h1>Infrastructure & MLOps Projects</h1>
+      <p>
+        Electrical Engineer turned Software Engineer focused on ML pipelines,
+        GPU/HPC clusters, and IBM Power automation.
+      </p>
+    </header>
 
-      <!-- Call to Action -->
-      <div class="section">
-        <div class="card" style="text-align: center">
-          <h2>Interested in Technical Collaboration?</h2>
-          <p>
-            Explore the repositories above or reach out to discuss your project
-            needs.
-          </p>
-          <div style="margin-top: 2rem">
-            <a href="contact.html" class="cta-button">Get in Touch</a>
-            <a href="experience.html" class="cta-button secondary"
-              >View Full Experience</a
-            >
-          </div>
-        </div>
-      </div>
+    <nav class="category-filter" aria-label="Project categories"></nav>
+
+    <main id="main" tabindex="-1">
+      <div id="projects" class="section"></div>
     </main>
 
     <footer>
       <div class="section">
-        <p>&copy; 2025 MacroSight. Empowering technology leadership.</p>
+        <p>&copy; 2025 MacroSight. Cloud Engineering Excellence.</p>
+        <p class="footer-location">
+          Denver, Colorado | Available for Remote & Hybrid Opportunities
+        </p>
       </div>
     </footer>
-    <script src="./nav.js" defer></script>
+
+    <script src="projects.js" defer></script>
+    <script src="nav.js" defer></script>
   </body>
 </html>
