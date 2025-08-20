@@ -64,7 +64,15 @@
   const header = document.querySelector('.site-header');
   if (!toggle || !overlay) return;
 
-      if (linkPath === path) link.classList.add('active');
+  // Highlight the current page in both the desktop and mobile navigation
+  const path = window.location.pathname.split('/').pop();
+  document
+    .querySelectorAll('#primary-nav a, #mobile-nav a')
+    .forEach((link) => {
+      const linkPath = link.getAttribute('href');
+      if (linkPath === path) {
+        link.classList.add('active');
+      }
     });
 
   const focusableSelectors =
