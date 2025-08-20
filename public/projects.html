@@ -1,53 +1,46 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Projects – Portfolio</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="projects.css" />
-  </head>
-  <body>
-    <div id="header-placeholder"></div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects – MacroSight</title>
+  <link rel="preload" href="/public/data/projects.json" as="fetch" crossorigin="anonymous">
+  <link rel="stylesheet" href="/public/projects.css" />
+</head>
+<body>
+  <div id="header-placeholder"></div>
 
-    <header class="hero">
-      <h1>Infrastructure & MLOps Projects</h1>
-      <p>
-        Electrical Engineer turned Software Engineer focused on ML pipelines,
-        GPU/HPC clusters, and IBM Power automation.
-      </p>
+  <main class="container">
+    <header class="page-header">
+      <h1>Projects</h1>
+      <p class="lede">Engineering work across cloud, HPC, and automation. Toggle demos vs. the broader library, filter by pillars/tags, or search.</p>
     </header>
 
-    <nav class="category-filter" aria-label="Project categories"></nav>
+    <!-- Segmented control -->
+    <nav class="segments" role="tablist" aria-label="Project type">
+      <button class="segment is-active" role="tab" aria-selected="true" data-type="all">All</button>
+      <button class="segment" role="tab" aria-selected="false" data-type="demo">Demos</button>
+      <button class="segment" role="tab" aria-selected="false" data-type="library">Library</button>
+    </nav>
 
-    <main id="main" tabindex="-1">
-      <div id="projects" class="section"></div>
-      <noscript>
-        <ul class="project-list">
-          <li><a href="https://github.com/kubernetes/kubernetes">kubernetes</a></li>
-          <li><a href="https://github.com/pytorch/pytorch">pytorch</a></li>
-          <li><a href="https://github.com/mlflow/mlflow">mlflow</a></li>
-          <li><a href="https://github.com/triton-inference-server/server">triton-inference-server</a></li>
-          <li><a href="https://github.com/argoproj/argo-workflows">argo-workflows</a></li>
-          <li><a href="https://github.com/kubeflow/kubeflow">kubeflow</a></li>
-          <li><a href="https://github.com/hashicorp/terraform">terraform</a></li>
-          <li><a href="https://github.com/ansible/ansible">ansible</a></li>
-          <li><a href="https://github.com/prometheus/prometheus">prometheus</a></li>
-          <li><a href="https://github.com/SchedMD/slurm">slurm</a></li>
-        </ul>
-      </noscript>
-    </main>
+    <!-- Pillar filter + tags + search -->
+    <section class="filters">
+      <div class="pillars" id="pillar-container" aria-label="Pillar filters"></div>
+      <div class="tags" id="tag-container" aria-label="Tag filters"></div>
+      <label class="search">
+        <span class="sr-only">Search projects</span>
+        <input id="search-input" type="search" placeholder="Search projects…" enterkeyhint="search" />
+      </label>
+    </section>
 
-    <footer>
-      <div class="section">
-        <p>&copy; 2025 MacroSight. Cloud Engineering Excellence.</p>
-        <p class="footer-location">
-          Denver, Colorado | Available for Remote & Hybrid Opportunities
-        </p>
-      </div>
-    </footer>
+    <!-- Results meta -->
+    <div class="meta" id="results-meta" aria-live="polite"></div>
 
-    <script src="projects.js" defer></script>
-    <script src="nav.js" defer></script>
-  </body>
+    <!-- Grid -->
+    <section id="projects-grid" class="grid" aria-live="polite"></section>
+  </main>
+
+  <script src="/public/projects.js" type="module"></script>
+  <script src="/public/nav.js"></script>
+</body>
 </html>
