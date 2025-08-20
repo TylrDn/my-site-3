@@ -1,16 +1,62 @@
-(async function () {
+(function () {
   const placeholder = document.getElementById('header-placeholder');
   if (!placeholder) return;
-  try {
-    const res = await fetch('header.html');
-    if (!res.ok) throw new Error(`Failed to fetch header: ${res.status}`);
-    const html = await res.text();
-    placeholder.insertAdjacentHTML('beforebegin', html);
-    placeholder.remove();
-  } catch (err) {
-    console.error('Failed to load header:', err);
-    return;
-  }
+
+  const headerHTML = `\
+<header class="site-header" data-sticky>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="container navbar">
+    <a class="brand" href="index.html">MacroSight</a>
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-controls="mobile-nav"
+      aria-expanded="false"
+      aria-label="Open menu"
+      data-menu-toggle
+    >
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+    <nav id="primary-nav" class="nav" data-collapsible>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="invest.html">Invest</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div
+  id="mobile-nav"
+  class="menu-overlay"
+  role="dialog"
+  aria-modal="true"
+  hidden
+  data-menu-overlay
+>
+  <nav class="nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="resume.html">Resume</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="invest.html">Invest</a></li>
+    </ul>
+  </nav>
+</div>
+`;
+
+  placeholder.insertAdjacentHTML('beforebegin', headerHTML);
+  placeholder.remove();
 
   const body = document.body;
   const toggle = document.querySelector('[data-menu-toggle]');
