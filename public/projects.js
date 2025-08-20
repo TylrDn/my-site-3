@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('projects.json')
     .then((res) => res.json())
     .then((data) => {
+      data.sort(
+        (a, b) => new Date(b.last_updated) - new Date(a.last_updated)
+      );
       renderProjects(data);
       setupFilters(data);
     })
@@ -41,26 +44,25 @@ function groupBy(arr, key) {
 }
 
 function buildCard(p) {
-  const article = document.createElement('article');
-  article.className = 'project-card';
+  const link = document.createElement('a');
+  link.className = 'project-card';
+  link.href = p.repo;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
 
   const status = document.createElement('span');
   status.className = `status status-${p.status}`;
   status.textContent = p.status;
-  article.appendChild(status);
+  link.appendChild(status);
 
   const title = document.createElement('h3');
-  const link = document.createElement('a');
-  link.href = p.repo;
-  link.textContent = p.title;
-  link.target = '_blank';
-  title.appendChild(link);
-  article.appendChild(title);
+  title.textContent = p.title;
+  link.appendChild(title);
 
   const tagline = document.createElement('p');
   tagline.className = 'tagline';
   tagline.textContent = p.tagline;
-  article.appendChild(tagline);
+  link.appendChild(tagline);
 
   const techList = document.createElement('div');
   techList.className = 'tech-badges';
@@ -70,19 +72,18 @@ function buildCard(p) {
     span.textContent = t;
     techList.appendChild(span);
   });
-  article.appendChild(techList);
+  link.appendChild(techList);
 
   const stars = document.createElement('div');
   stars.className = 'stars';
-  stars.innerHTML =
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.787 1.402 8.168L12 18.896l-7.336 3.87 1.402-8.168L.132 9.211l8.2-1.193z"/></svg>' +
-    ` ${p.stars}`;
-  article.appendChild(stars);
+  stars.setAttribute('aria-label', `${p.stars} GitHub stars`);
+  stars.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63L2 9.24l5.46 4.73L5.82 21z"/></svg> ${p.stars}`;
+  link.appendChild(stars);
 
   const last = document.createElement('p');
   last.className = 'last-updated';
   last.textContent = `Updated ${formatDate(p.last_updated)}`;
-  article.appendChild(last);
+  link.appendChild(last);
 
   const badgeList = document.createElement('div');
   badgeList.className = 'badges';
@@ -92,9 +93,9 @@ function buildCard(p) {
     span.textContent = b;
     badgeList.appendChild(span);
   });
-  article.appendChild(badgeList);
+  link.appendChild(badgeList);
 
-  return article;
+  return link;
 }
 
 function formatDate(iso) {
@@ -110,14 +111,18 @@ function setupFilters(projects) {
   const categories = Array.from(new Set(projects.map((p) => p.category)));
   const filterNav = document.querySelector('.category-filter');
   const allBtn = document.createElement('button');
+  allBtn.type = 'button';
   allBtn.textContent = 'All';
   allBtn.className = 'active';
+  allBtn.setAttribute('aria-pressed', 'true');
   allBtn.addEventListener('click', () => filter('All'));
   filterNav.appendChild(allBtn);
 
   categories.forEach((cat) => {
     const btn = document.createElement('button');
+    btn.type = 'button';
     btn.textContent = cat;
+    btn.setAttribute('aria-pressed', 'false');
     btn.addEventListener('click', () => filter(cat));
     filterNav.appendChild(btn);
   });
@@ -125,7 +130,11 @@ function setupFilters(projects) {
   function filter(cat) {
     document
       .querySelectorAll('.category-filter button')
-      .forEach((btn) => btn.classList.toggle('active', btn.textContent === cat));
+      .forEach((btn) => {
+        const active = btn.textContent === cat;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', String(active));
+      });
     document.querySelectorAll('#projects .category').forEach((section) => {
       section.style.display =
         cat === 'All' || section.dataset.category === cat ? '' : 'none';
