@@ -1,0 +1,152 @@
+[
+  /* ===================== DEMOS ===================== */
+  {
+    "id": "pytorch-ddp-nccl-distributed",
+    "name": "PyTorch DDP + NCCL (K8s/Slurm/Docker)",
+    "summary": "Turn‑key DDP with NCCL for single/multi‑node GPU training. Includes Docker, K8s Job + optional Kubeflow PyTorchJob, Slurm sbatch, Makefile, CI.",
+    "type": "demo",
+    "pillar": "GPU",
+    "featured": true,
+    "tags": ["pytorch", "ddp", "nccl", "gpu", "k8s", "slurm", "docker"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/pytorch-ddp-nccl-distributed",
+      "live": null
+    }
+  },
+  {
+    "id": "mlops-argo-mlflow",
+    "name": "MLOps Template: Argo Workflows + MLflow + FastAPI",
+    "summary": "End‑to‑end pipeline (prep → train → evaluate → register) tracked in MLflow, deploy via FastAPI; Dockerfiles, K8s manifests, HPA, Makefile, CI.",
+    "type": "demo",
+    "pillar": "MLOps",
+    "featured": true,
+    "tags": ["mlops", "argo", "mlflow", "fastapi", "k8s", "python"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/mlops-argo-mlflow",
+      "live": null
+    }
+  },
+  {
+    "id": "triton-inference-helm",
+    "name": "Triton Inference on K8s (Helm + HPA)",
+    "summary": "NVIDIA Triton on Kubernetes with a minimal model repo, Helm chart, HPA, Locust load test, Prometheus/Grafana metrics and dashboard.",
+    "type": "demo",
+    "pillar": "GPU",
+    "tags": ["triton", "helm", "k8s", "gpu", "observability", "prometheus", "grafana", "hpa", "locust"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/triton-inference-helm",
+      "live": null
+    }
+  },
+  {
+    "id": "slurm-mini-hpc",
+    "name": "Mini Slurm HPC (compose + Ansible)",
+    "summary": "Mini Slurm cluster: docker‑compose for slurmctld/slurmdbd/2×slurmd + Ansible VM setup, sample CPU/GPU sbatch, NCCL all‑reduce test, Prom exporter.",
+    "type": "demo",
+    "pillar": "Infrastructure",
+    "tags": ["slurm", "hpc", "ansible", "docker-compose", "prometheus"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/slurm-mini-hpc",
+      "live": null
+    }
+  },
+  {
+    "id": "k8s-gpu-baseline",
+    "name": "K8s GPU Baseline (NVIDIA plugin, DCGM, NFD)",
+    "summary": "Production‑leaning GPU baseline: NVIDIA device plugin, NFD, DCGM exporter, metrics, ingress, NetworkPolicies; KIND smoke; Helm/Kustomize; CI linting.",
+    "type": "demo",
+    "pillar": "GPU",
+    "tags": ["k8s", "gpu", "nvidia", "dcgm", "nfd", "observability", "kustomize", "kind"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/k8s-gpu-baseline",
+      "live": null
+    }
+  },
+
+  /* ---- IBM POWER / AIX / PowerVS (Demos) ---- */
+  {
+    "id": "hmc-power-orchestrator",
+    "name": "HMC Power Orchestrator (LPAR CLI)",
+    "summary": "Python CLI for IBM HMC REST APIs to inventory/utilization and perform dynamic CPU/memory adjustments for LPARs.",
+    "type": "demo",
+    "pillar": "IBM Power",
+    "tags": ["ibm-power", "hmc", "aix", "lpars", "python", "rest"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/hmc-power-orchestrator",
+      "live": null
+    }
+  },
+  {
+    "id": "vios-autoconfig",
+    "name": "VIOS Autoconfig Toolkit",
+    "summary": "Shell toolkit to automate VIOS operations (vSCSI/NPIV/SEA) via HMC CLI and viosvrcmd.",
+    "type": "demo",
+    "pillar": "IBM Power",
+    "tags": ["ibm-power", "vios", "aix", "npiv", "shell"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/vios-autoconfig",
+      "live": null
+    }
+  },
+  {
+    "id": "powervs-terraform-bootstrap",
+    "name": "PowerVS Terraform Bootstrap",
+    "summary": "Terraform IaC templates for provisioning AIX/Linux LPARs in IBM Power Virtual Server.",
+    "type": "demo",
+    "pillar": "IBM Power",
+    "tags": ["terraform", "powervs", "ibm-cloud", "aix", "linux"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/powervs-terraform-bootstrap",
+      "live": null
+    }
+  },
+  {
+    "id": "ibm-system-i-as400",
+    "name": "IBM System i (AS/400) Payroll Uploader",
+    "summary": "Excel→CSV conversion, upload to IFS over SSH/FTPS, invoke IBM i program; includes PUB400 quick start.",
+    "type": "demo",
+    "pillar": "IBM Power",
+    "tags": ["ibm-i", "as400", "excel", "ftp", "ssh", "python", "cli", "fork"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/IBM-System-i_AS400",
+      "live": null
+    }
+  },
+
+  /* ===================== LIBRARY ===================== */
+  {
+    "id": "my-site-3",
+    "name": "MacroSight (current site, vanilla HTML/CSS/JS)",
+    "summary": "This site’s codebase. Lightweight, responsive static layout with injected nav/footer, no frameworks.",
+    "type": "library",
+    "pillar": "Infrastructure",
+    "tags": ["web", "vanilla-js", "static-site", "responsive"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/my-site-3",
+      "live": "https://macrosight.net"
+    }
+  },
+  {
+    "id": "macrosight-net-v2",
+    "name": "MacroSight.net v2 (archived site rev)",
+    "summary": "Prior site iteration; useful as a design/code reference for your portfolio evolution.",
+    "type": "library",
+    "pillar": "Infrastructure",
+    "tags": ["web", "html", "css", "portfolio", "archived"],
+    "image": null,
+    "links": {
+      "repo": "https://github.com/TylrDn/MacroSight.net-v2",
+      "live": null
+    }
+  }
+]

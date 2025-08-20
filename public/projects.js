@@ -1,143 +1,155 @@
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('projects.json')
-    .then((res) => res.json())
-    .then((data) => {
-      data.sort(
-        (a, b) => new Date(b.last_updated) - new Date(a.last_updated)
-      );
-      renderProjects(data);
-      setupFilters(data);
-    })
-    .catch((err) => console.error('Failed to load projects', err));
-});
+// projects.js
+const state = {
+  type: 'all',        // 'all' | 'demo' | 'library'
+  pillar: 'all',      // 'all' | 'Infrastructure' | 'MLOps' | 'GPU' | 'IBM Power'
+  tags: new Set(),
+  search: ''
+};
 
-function renderProjects(projects) {
-  const grouped = groupBy(projects, 'category');
-  const container = document.getElementById('projects');
-  container.innerHTML = '';
-  Object.keys(grouped).forEach((cat) => {
-    const section = document.createElement('section');
-    section.className = 'category';
-    section.dataset.category = cat;
+const els = {
+  segments: null,
+  pillarContainer: null,
+  tagContainer: null,
+  search: null,
+  grid: null,
+  meta: null
+};
 
-    const header = document.createElement('h2');
-    header.textContent = cat;
-    section.appendChild(header);
+const DATA_URL = '/public/data/projects.json';
+const qs = (s,r=document)=>r.querySelector(s);
+const qsa = (s,r=document)=>Array.from(r.querySelectorAll(s));
+const toTitle = s => s ? s[0].toUpperCase()+s.slice(1) : '';
+const uniq = arr => [...new Set(arr)];
+const includesCI = (t,n)=>t.toLowerCase().includes(n.toLowerCase());
 
-    const grid = document.createElement('div');
-    grid.className = 'card-grid';
+/* --- URL state --- */
+function readUrl(){
+  const p=new URLSearchParams(location.search);
+  state.type=p.get('type')||'all';
+  state.pillar=p.get('pillar')||'all';
+  state.search=p.get('search')||'';
+  state.tags=new Set((p.get('tag')||'').split(',').filter(Boolean));
+}
+function writeUrl(replace=false){
+  const p=new URLSearchParams();
+  if(state.type!=='all') p.set('type',state.type);
+  if(state.pillar!=='all') p.set('pillar',state.pillar);
+  if(state.search) p.set('search',state.search);
+  if(state.tags.size) p.set('tag',[...state.tags].join(','));
+  const url=`${location.pathname}?${p.toString()}`;
+  (replace?history.replaceState:history.pushState).call(history,null,'',url);
+}
 
-    grouped[cat].forEach((p) => {
-      grid.appendChild(buildCard(p));
-    });
+/* --- Rendering --- */
+function renderSegments(){
+  qsa('.segment').forEach(btn=>{
+    const active=btn.dataset.type===state.type||(state.type==='all'&&btn.dataset.type==='all');
+    btn.classList.toggle('is-active',active);
+    btn.setAttribute('aria-selected',String(active));
+  });
+}
+function renderPillars(pillars){
+  const all=['all',...pillars];
+  els.pillarContainer.innerHTML=all.map(p=>{
+    const active=(p===state.pillar);
+    const label=p==='all'?'All Pillars':p;
+    return `<button class="chip" role="switch" aria-pressed="${active}" data-pillar="${p}">${label}</button>`;
+  }).join('');
+}
+function buildCard(p){
+  const img=p.image?`<img alt="" src="${p.image}" loading="lazy">`:'';
+  return `
+  <article class="card" data-type="${p.type}">
+    <div class="thumb">${img}</div>
+    <div class="body">
+      <h3>${p.name}</h3>
+      <p>${p.summary}</p>
+      <div class="meta-row">
+        <span class="badge">${toTitle(p.type)}</span>
+        <span class="badge">${p.pillar}</span>
+        ${p.tags.slice(0,4).map(t=>`<span class="badge">#${t}</span>`).join('')}
+      </div>
+    </div>
+    <div class="actions">
+      ${p.links?.live?`<a href="${p.links.live}" target="_blank" rel="noopener">Live</a>`:''}
+      ${p.links?.repo?`<a href="${p.links.repo}" target="_blank" rel="noopener">Repo</a>`:''}
+    </div>
+  </article>`;
+}
+function renderGrid(projects){
+  els.grid.innerHTML=projects.map(buildCard).join('');
+  const count=projects.length;
+  const seg=state.type==='all'?'All':toTitle(state.type);
+  const parts=[`${count} project${count===1?'':'s'}`,seg];
+  if(state.pillar!=='all') parts.push(`· ${state.pillar}`);
+  if(state.tags.size) parts.push(`· ${[...state.tags].map(t=>'#'+t).join(', ')}`);
+  if(state.search) parts.push(`· “${state.search}”`);
+  els.meta.textContent=parts.join(' ');
+}
+function renderTags(tags){
+  els.tagContainer.innerHTML=tags.map(tag=>{
+    const active=state.tags.has(tag);
+    return `<button class="chip" role="switch" aria-pressed="${active}" data-tag="${tag}">#${tag}</button>`;
+  }).join('');
+}
 
-    section.appendChild(grid);
-    container.appendChild(section);
+/* --- Filtering --- */
+function filterProjects(rows){
+  return rows.filter(p=>{
+    if(state.type!=='all'&&p.type!==state.type) return false;
+    if(state.pillar!=='all'&&p.pillar!==state.pillar) return false;
+    if(state.tags.size&&![...state.tags].every(t=>p.tags.includes(t))) return false;
+    if(state.search){
+      const hay=[p.name,p.summary,p.tags.join(' '),p.pillar].join(' ');
+      if(!includesCI(hay,state.search)) return false;
+    }
+    return true;
+  }).sort((a,b)=>{
+    if((b.featured|0)-(a.featured|0)) return (b.featured|0)-(a.featured|0);
+    return a.name.localeCompare(b.name);
   });
 }
 
-function groupBy(arr, key) {
-  return arr.reduce((acc, item) => {
-    (acc[item[key]] = acc[item[key]] || []).push(item);
-    return acc;
-  }, {});
-}
-
-function buildCard(p) {
-  const link = document.createElement('a');
-  link.className = 'project-card';
-  link.href = p.repo;
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
-
-  const status = document.createElement('span');
-  status.className = `status status-${p.status}`;
-  status.textContent = p.status;
-  link.appendChild(status);
-
-  const title = document.createElement('h3');
-  title.textContent = p.title;
-  link.appendChild(title);
-
-  const tagline = document.createElement('p');
-  tagline.className = 'tagline';
-  tagline.textContent = p.tagline;
-  link.appendChild(tagline);
-
-  const techList = document.createElement('div');
-  techList.className = 'tech-badges';
-  p.tech.forEach((t) => {
-    const span = document.createElement('span');
-    span.className = 'tech-badge';
-    span.textContent = t;
-    techList.appendChild(span);
+/* --- Events --- */
+function bindEvents(all){
+  els.segments.addEventListener('click',e=>{
+    const btn=e.target.closest('.segment');if(!btn) return;
+    state.type=btn.dataset.type;renderSegments();writeUrl();renderGrid(filterProjects(all));
   });
-  link.appendChild(techList);
-
-  const stars = document.createElement('div');
-  stars.className = 'stars';
-  stars.setAttribute('aria-label', `${p.stars} GitHub stars`);
-  stars.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63L2 9.24l5.46 4.73L5.82 21z"/></svg> ${p.stars}`;
-  link.appendChild(stars);
-
-  const last = document.createElement('p');
-  last.className = 'last-updated';
-  last.textContent = `Updated ${formatDate(p.last_updated)}`;
-  link.appendChild(last);
-
-  const badgeList = document.createElement('div');
-  badgeList.className = 'badges';
-  p.badges.forEach((b) => {
-    const span = document.createElement('span');
-    span.className = 'badge';
-    span.textContent = b;
-    badgeList.appendChild(span);
+  els.pillarContainer.addEventListener('click',e=>{
+    const chip=e.target.closest('.chip');if(!chip) return;
+    state.pillar=chip.dataset.pillar;writeUrl();renderGrid(filterProjects(all));
+    renderPillars(uniq(all.map(p=>p.pillar)));
   });
-  link.appendChild(badgeList);
-
-  return link;
-}
-
-function formatDate(iso) {
-  const date = new Date(iso);
-  return date.toLocaleDateString(undefined, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
+  els.tagContainer.addEventListener('click',e=>{
+    const chip=e.target.closest('.chip');if(!chip) return;
+    const tag=chip.dataset.tag;
+    if(state.tags.has(tag)) state.tags.delete(tag); else state.tags.add(tag);
+    chip.setAttribute('aria-pressed',String(state.tags.has(tag)));
+    writeUrl();renderGrid(filterProjects(all));
+  });
+  let tId=0;
+  els.search.addEventListener('input',e=>{
+    clearTimeout(tId);tId=setTimeout(()=>{
+      state.search=e.target.value.trim();writeUrl();renderGrid(filterProjects(all));
+    },120);
+  });
+  window.addEventListener('popstate',()=>{
+    readUrl();renderSegments();els.search.value=state.search;
+    renderGrid(filterProjects(all));
   });
 }
 
-function setupFilters(projects) {
-  const categories = Array.from(new Set(projects.map((p) => p.category)));
-  const filterNav = document.querySelector('.category-filter');
-  const allBtn = document.createElement('button');
-  allBtn.type = 'button';
-  allBtn.textContent = 'All';
-  allBtn.className = 'active';
-  allBtn.setAttribute('aria-pressed', 'true');
-  allBtn.addEventListener('click', () => filter('All'));
-  filterNav.appendChild(allBtn);
-
-  categories.forEach((cat) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.textContent = cat;
-    btn.setAttribute('aria-pressed', 'false');
-    btn.addEventListener('click', () => filter(cat));
-    filterNav.appendChild(btn);
-  });
-
-  function filter(cat) {
-    document
-      .querySelectorAll('.category-filter button')
-      .forEach((btn) => {
-        const active = btn.textContent === cat;
-        btn.classList.toggle('active', active);
-        btn.setAttribute('aria-pressed', String(active));
-      });
-    document.querySelectorAll('#projects .category').forEach((section) => {
-      section.style.display =
-        cat === 'All' || section.dataset.category === cat ? '' : 'none';
-    });
-  }
+/* --- Init --- */
+async function init(){
+  els.segments=qs('.segments');els.pillarContainer=qs('#pillar-container');
+  els.tagContainer=qs('#tag-container');els.search=qs('#search-input');
+  els.grid=qs('#projects-grid');els.meta=qs('#results-meta');
+  readUrl();
+  const res=await fetch(DATA_URL,{cache:'no-store'});const data=await res.json();
+  renderPillars(uniq(data.map(p=>p.pillar)).sort());
+  renderTags(uniq(data.flatMap(p=>p.tags)).sort());
+  renderSegments();els.search.value=state.search;
+  renderGrid(filterProjects(data));bindEvents(data);writeUrl(true);
 }
+init().catch(err=>{console.error(err);qs('#projects-grid').innerHTML='<p>Failed to load projects.</p>';});
