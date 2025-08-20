@@ -64,13 +64,15 @@
   const header = document.querySelector('.site-header');
   if (!toggle || !overlay) return;
 
-  let path = window.location.pathname.replace(/\/$/, '');
-  if (!path || path === '/') path = '/index.html';
+  let path = window.location.pathname;
+  if (path.endsWith('/')) path += 'index.html';
+  else if (!path.split('/').pop().includes('.')) path += '.html';
   document
     .querySelectorAll('#primary-nav a, [data-menu-overlay] a')
     .forEach((link) => {
-      const linkPath = new URL(link.getAttribute('href'), window.location)
-        .pathname.replace(/\/$/, '');
+      let linkPath = new URL(link.getAttribute('href'), window.location).pathname;
+      if (linkPath.endsWith('/')) linkPath += 'index.html';
+      else if (!linkPath.split('/').pop().includes('.')) linkPath += '.html';
       if (linkPath === path) link.classList.add('active');
     });
 

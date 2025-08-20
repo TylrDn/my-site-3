@@ -4,13 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Projects – MacroSight</title>
-  <link rel="preload" href="/public/data/projects.json" as="fetch" crossorigin="anonymous">
-  <link rel="stylesheet" href="/public/projects.css" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'" />
+  <link rel="preload" href="data/projects.json" as="fetch" crossorigin="anonymous" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="projects.css" />
 </head>
 <body>
   <div id="header-placeholder"></div>
 
-  <main class="container">
+  <main id="main" class="container">
     <header class="page-header">
       <h1>Projects</h1>
       <p class="lede">Engineering work across cloud, HPC, and automation. Toggle demos vs. the broader library, filter by pillars/tags, or search.</p>
@@ -40,7 +42,7 @@
     <section id="projects-grid" class="grid" aria-live="polite"></section>
   </main>
 
-  <script src="/public/projects.js" type="module"></script>
-  <script src="/public/nav.js"></script>
+  <script src="projects.js" type="module"></script>
+  <script src="nav.js"></script>
 </body>
 </html>
