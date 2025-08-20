@@ -15,7 +15,7 @@ const els = {
   meta: null
 };
 
-const DATA_URL = '/public/data/projects.json';
+const DATA_URL = 'data/projects.json';
 const qs = (s,r=document)=>r.querySelector(s);
 const qsa = (s,r=document)=>Array.from(r.querySelectorAll(s));
 const toTitle = s => s ? s[0].toUpperCase()+s.slice(1) : '';
@@ -57,27 +57,72 @@ function renderPillars(pillars){
   }).join('');
 }
 function buildCard(p){
-  const img=p.image?`<img alt="" src="${p.image}" loading="lazy">`:'';
-  return `
-  <article class="card" data-type="${p.type}">
-    <div class="thumb">${img}</div>
-    <div class="body">
-      <h3>${p.name}</h3>
-      <p>${p.summary}</p>
-      <div class="meta-row">
-        <span class="badge">${toTitle(p.type)}</span>
-        <span class="badge">${p.pillar}</span>
-        ${p.tags.slice(0,4).map(t=>`<span class="badge">#${t}</span>`).join('')}
-      </div>
-    </div>
-    <div class="actions">
-      ${p.links?.live?`<a href="${p.links.live}" target="_blank" rel="noopener">Live</a>`:''}
-      ${p.links?.repo?`<a href="${p.links.repo}" target="_blank" rel="noopener">Repo</a>`:''}
-    </div>
-  </article>`;
+  const article=document.createElement('article');
+  article.className='card';
+  article.dataset.type=p.type;
+
+  const thumb=document.createElement('div');
+  thumb.className='thumb';
+  if(p.image){
+    const img=document.createElement('img');
+    img.alt='';
+    img.src=p.image;
+    img.loading='lazy';
+    thumb.appendChild(img);
+  }
+  article.appendChild(thumb);
+
+  const body=document.createElement('div');
+  body.className='body';
+  const h3=document.createElement('h3');
+  h3.textContent=p.name;
+  body.appendChild(h3);
+  const para=document.createElement('p');
+  para.textContent=p.summary;
+  body.appendChild(para);
+  const meta=document.createElement('div');
+  meta.className='meta-row';
+  const badgeType=document.createElement('span');
+  badgeType.className='badge';
+  badgeType.textContent=toTitle(p.type);
+  meta.appendChild(badgeType);
+  const badgePillar=document.createElement('span');
+  badgePillar.className='badge';
+  badgePillar.textContent=p.pillar;
+  meta.appendChild(badgePillar);
+  p.tags.slice(0,4).forEach(t=>{
+    const span=document.createElement('span');
+    span.className='badge';
+    span.textContent='#'+t;
+    meta.appendChild(span);
+  });
+  body.appendChild(meta);
+  article.appendChild(body);
+
+  const actions=document.createElement('div');
+  actions.className='actions';
+  if(p.links?.live){
+    const a=document.createElement('a');
+    a.href=p.links.live;
+    a.target='_blank';
+    a.rel='noopener';
+    a.textContent='Live';
+    actions.appendChild(a);
+  }
+  if(p.links?.repo){
+    const a=document.createElement('a');
+    a.href=p.links.repo;
+    a.target='_blank';
+    a.rel='noopener';
+    a.textContent='Repo';
+    actions.appendChild(a);
+  }
+  article.appendChild(actions);
+  return article;
 }
 function renderGrid(projects){
-  els.grid.innerHTML=projects.map(buildCard).join('');
+  els.grid.textContent='';
+  projects.forEach(p=>els.grid.appendChild(buildCard(p)));
   const count=projects.length;
   const seg=state.type==='all'?'All':toTitle(state.type);
   const parts=[`${count} project${count===1?'':'s'}`,seg];
@@ -146,10 +191,19 @@ async function init(){
   els.tagContainer=qs('#tag-container');els.search=qs('#search-input');
   els.grid=qs('#projects-grid');els.meta=qs('#results-meta');
   readUrl();
-  const res=await fetch(DATA_URL,{cache:'no-store'});const data=await res.json();
+  let data;
+  try{
+    const res=await fetch(DATA_URL,{cache:'no-store'});
+    if(!res.ok) throw new Error(res.statusText);
+    data=await res.json();
+  }catch(err){
+    console.error(err);
+    els.grid.textContent='Failed to load projects.';
+    return;
+  }
   renderPillars(uniq(data.map(p=>p.pillar)).sort());
   renderTags(uniq(data.flatMap(p=>p.tags)).sort());
   renderSegments();els.search.value=state.search;
   renderGrid(filterProjects(data));bindEvents(data);writeUrl(true);
 }
-init().catch(err=>{console.error(err);qs('#projects-grid').innerHTML='<p>Failed to load projects.</p>';});
+init();

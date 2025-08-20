@@ -65,12 +65,14 @@
   if (!toggle || !overlay) return;
 
   let path = window.location.pathname.replace(/\/$/, '');
-  if (!path || path === '/') path = '/index.html';
+  if (!path || path === '') path = '/index.html';
+  else if (!path.includes('.')) path += '.html';
   document
     .querySelectorAll('#primary-nav a, [data-menu-overlay] a')
     .forEach((link) => {
-      const linkPath = new URL(link.getAttribute('href'), window.location)
+      let linkPath = new URL(link.getAttribute('href'), window.location)
         .pathname.replace(/\/$/, '');
+      if (!linkPath.includes('.')) linkPath += '.html';
       if (linkPath === path) link.classList.add('active');
     });
 
