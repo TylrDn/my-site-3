@@ -1,5 +1,4 @@
 [
-  /* ===================== DEMOS ===================== */
   {
     "id": "pytorch-ddp-nccl-distributed",
     "name": "PyTorch DDP + NCCL (K8s/Slurm/Docker)",
@@ -68,8 +67,7 @@
     }
   },
 
-  /* ---- IBM POWER / AIX / PowerVS (Demos) ---- */
-  {
+    {
     "id": "hmc-power-orchestrator",
     "name": "HMC Power Orchestrator (LPAR CLI)",
     "summary": "Python CLI for IBM HMC REST APIs to inventory/utilization and perform dynamic CPU/memory adjustments for LPARs.",
@@ -122,8 +120,7 @@
     }
   },
 
-  /* ===================== LIBRARY ===================== */
-  {
+    {
     "id": "my-site-3",
     "name": "MacroSight (current site, vanilla HTML/CSS/JS)",
     "summary": "This site’s codebase. Lightweight, responsive static layout with injected nav/footer, no frameworks.",
