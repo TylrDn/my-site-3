@@ -390,11 +390,11 @@ html.nav-open body {
 .avatar,
 .avatar img {
   display: block;
-  width: clamp(128px, 40vw, 280px);
+  width: clamp(160px, 40vw, 320px);
   height: auto;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* Placeholder styling to stabilize layout during scaffolding */
