@@ -4,6 +4,7 @@
   "description": "Simple static website built with vanilla HTML, CSS, and JavaScript.",
   "main": "index.js",
   "scripts": {
+    "start": "http-server public -p 4173 -c-1",
     "test": "echo \"No tests specified\""
   },
   "keywords": [],
@@ -12,5 +13,8 @@
   "type": "commonjs",
   "devDependencies": {
     "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "axios": "^1.7.4"
   }
 }
