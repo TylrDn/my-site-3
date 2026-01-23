@@ -1,0 +1,93 @@
+name: Security Checks
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run weekly security scan
+    - cron: '0 0 * * 0'
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check for hardcoded secrets
+        run: |
+          echo "🔍 Scanning for hardcoded credentials..."
+          
+          # Check for common secret patterns
+          if grep -r -i -E "(password|api[_-]?key|secret|token|private[_-]?key)[\s]*[:=][\s]*['\"][^'\"]+['\"]" public/ --exclude-dir=node_modules --exclude="*.min.js" 2>/dev/null; then
+            echo "::warning::Found potential hardcoded credentials - please review"
+          else
+            echo "✅ No obvious hardcoded credentials found"
+          fi
+      
+      - name: Validate security headers configuration
+        run: |
+          echo "🛡️ Checking security headers..."
+          
+          if ! grep -q "Strict-Transport-Security" netlify.toml; then
+            echo "::error::❌ Missing HSTS header"
+            exit 1
+          fi
+          
+          if ! grep -q "Content-Security-Policy" netlify.toml; then
+            echo "::error::❌ Missing CSP header"
+            exit 1
+          fi
+          
+          if ! grep -q "X-Frame-Options" netlify.toml; then
+            echo "::error::❌ Missing X-Frame-Options header"
+            exit 1
+          fi
+          
+          echo "✅ All required security headers configured"
+      
+      - name: Check HTML validity
+        run: |
+          echo "📝 Validating HTML files..."
+          
+          # Basic HTML validation
+          for file in public/*.html; do
+            if [ -f "$file" ]; then
+              # Check for basic HTML structure
+              if grep -q "<!DOCTYPE html>" "$file" && grep -q "</html>" "$file"; then
+                echo "✅ $(basename $file) has valid structure"
+              else
+                echo "::warning::$(basename $file) may have structural issues"
+              fi
+            fi
+          done
+      
+      - name: Check for outdated dependencies
+        run: |
+          echo "📦 Checking dependencies..."
+          
+          if [ -f "package.json" ]; then
+            # Check if package-lock.json exists
+            if [ ! -f "package-lock.json" ]; then
+              echo "::warning::No package-lock.json found - dependencies not locked"
+            else
+              echo "✅ Dependencies are locked"
+            fi
+          fi
+      
+      - name: Verify robots.txt and sitemap
+        run: |
+          echo "🤖 Checking SEO files..."
+          
+          if [ ! -f "public/robots.txt" ]; then
+            echo "::warning::robots.txt not found"
+          else
+            echo "✅ robots.txt exists"
+          fi
+          
+          if [ ! -f "public/sitemap.xml" ]; then
+            echo "::warning::sitemap.xml not found"
+          else
+            echo "✅ sitemap.xml exists"
+          fi

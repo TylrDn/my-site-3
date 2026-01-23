@@ -1,0 +1,59 @@
+name: Monthly SSL Certificate Check
+
+on:
+  schedule:
+    # Run on the 1st of every month at 9am UTC
+    - cron: '0 9 1 * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  check-ssl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check SSL Certificate
+        run: |
+          echo "🔒 Checking SSL certificate for macrosight.net"
+          
+          # Get certificate expiration date
+          EXPIRY=$(echo | openssl s_client -servername macrosight.net -connect macrosight.net:443 2>/dev/null | openssl x509 -noout -enddate | cut -d= -f2)
+          
+          if [ -z "$EXPIRY" ]; then
+            echo "❌ Failed to retrieve certificate"
+            exit 1
+          fi
+          
+          echo "Certificate expires: $EXPIRY"
+          
+          # Calculate days until expiration
+          EXPIRY_EPOCH=$(date -d "$EXPIRY" +%s)
+          NOW_EPOCH=$(date +%s)
+          DAYS_LEFT=$(( ($EXPIRY_EPOCH - $NOW_EPOCH) / 86400 ))
+          
+          echo "Days until expiration: $DAYS_LEFT"
+          
+          # Alert if less than 30 days
+          if [ $DAYS_LEFT -lt 30 ]; then
+            echo "::error::⚠️ Certificate expires in $DAYS_LEFT days! Check Netlify dashboard."
+            exit 1
+          elif [ $DAYS_LEFT -lt 60 ]; then
+            echo "::warning::Certificate will expire in $DAYS_LEFT days (should auto-renew soon)"
+          else
+            echo "✅ Certificate is healthy ($DAYS_LEFT days remaining)"
+          fi
+          
+          # Verify certificate is valid
+          if echo | openssl s_client -servername macrosight.net -connect macrosight.net:443 2>/dev/null | grep -q "Verify return code: 0"; then
+            echo "✅ Certificate is valid and trusted"
+          else
+            echo "::error::❌ Certificate validation failed"
+            exit 1
+          fi
+      
+      - name: Check www subdomain
+        run: |
+          echo "🔒 Checking www.macrosight.net"
+          if curl -sI https://www.macrosight.net | grep -q "HTTP/2 200\|HTTP/2 301"; then
+            echo "✅ www subdomain is accessible"
+          else
+            echo "::warning::www subdomain may have issues"
+          fi

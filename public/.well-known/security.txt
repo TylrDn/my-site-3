@@ -1,0 +1,5 @@
+Contact: https://github.com/TylrDn/my-site-3/security/advisories/new
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://macrosight.net/.well-known/security.txt
+Policy: https://macrosight.net/security-policy.html
