@@ -1,20 +1,14 @@
 {
   "name": "my-site-3",
   "version": "1.0.0",
-  "description": "Simple static website built with vanilla HTML, CSS, and JavaScript.",
-  "main": "index.js",
+  "description": "Taylor Dean's professional portfolio - static site built with vanilla HTML, CSS, and JavaScript.",
   "scripts": {
-    "start": "http-server public -p 4173 -c-1",
-    "test": "echo \"No tests specified\""
+    "start": "http-server public -p 4173 -c-1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["portfolio", "cloud-engineer", "hpc"],
+  "author": "Taylor Dean",
   "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "http-server": "^14.1.1"
-  },
-  "dependencies": {
-    "axios": "^1.7.4"
   }
 }

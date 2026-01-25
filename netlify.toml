@@ -49,18 +49,4 @@
     
     # Prevent MIME sniffing
     X-Content-Type-Options = "nosniff"
-    
-    # Cache static assets for 1 year
-    Cache-Control = "public, max-age=31536000, immutable"
 
-# Override cache for HTML
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-# Security.txt
-[[headers]]
-  for = "/.well-known/security.txt"
-  [headers.values]
-    Content-Type = "text/plain; charset=utf-8"
