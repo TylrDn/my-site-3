@@ -16,7 +16,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
     <meta name="theme-color" content="#0b0b10" />
     <style>
       :root {
@@ -135,7 +134,7 @@
           <p class="ta-subtitle">Real-time market signals &amp; automated alert dashboard</p>
           <div class="ta-status-badge">
             <span class="ta-status-dot" id="ta-conn-dot"></span>
-            <span id="ta-conn-label">Connecting…</span>
+            <span id="ta-conn-label">Loading…</span>
             <span class="ta-sys-chip offline" id="ta-sys-chip" style="margin-left:0.35rem">—</span>
           </div>
         </div>
@@ -188,6 +187,7 @@
     </main>
 
     <script src="../nav.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script>
     (function () {
       'use strict';
@@ -195,7 +195,7 @@
       /** Same-origin Netlify proxy — API key stays server-side. Dev override: ?api=https://host:8080 */
       const PROXY_API   = '/trade-alert/api';
       const PROXY_HEALTH = '/trade-alert/health';
-      const POLL_MS     = 30_000;
+      let POLL_MS     = 30_000;
 
       function useDirectApi() {
         return !!new URLSearchParams(location.search).get('api');
@@ -223,14 +223,16 @@
 
       function setConnStatus(online, status) {
         connDot.className = 'ta-status-dot' + (online ? (status === 'degraded' ? ' degraded' : '') : ' offline');
-        connLabel.textContent = online ? 'Live' : 'Offline';
-        if (online && status) {
-          sysChip.textContent = status.toUpperCase();
-          sysChip.className = 'ta-sys-chip ' + (status === 'live' ? 'live' : status === 'degraded' ? 'degraded' : 'offline');
-        } else if (!online) {
+        if (!online) {
+          connLabel.textContent = 'Offline';
           sysChip.textContent = 'OFFLINE';
           sysChip.className = 'ta-sys-chip offline';
+          return;
         }
+        const st = (status || 'live').toLowerCase();
+        connLabel.textContent = st === 'degraded' ? 'Degraded' : 'Live';
+        sysChip.textContent = st.toUpperCase();
+        sysChip.className = 'ta-sys-chip ' + (st === 'live' ? 'live' : st === 'degraded' ? 'degraded' : 'offline');
       }
 
       async function probeOnline() {
@@ -314,6 +316,9 @@
           const redisOk = health.redis_ok;
           setKPI('kpi-redis', redisOk ? 'OK' : 'DOWN', redisOk ? 'positive' : 'negative');
           setSub('kpi-redis-sub', health.redis_latency_ms != null ? health.redis_latency_ms + 'ms' : '');
+          if (kpis.poll_interval_ms && Number(kpis.poll_interval_ms) > 0) {
+            POLL_MS = Number(kpis.poll_interval_ms);
+          }
         } catch (err) {
           console.error('KPI load failed:', err.message);
           if (/proxy not configured|DASHBOARD_API_KEY/i.test(err.message)) {
@@ -441,9 +446,12 @@
         }
       }
 
-      Chart.defaults.color       = '#7a7a7a';
-      Chart.defaults.borderColor = 'rgba(255,255,255,0.07)';
-      Chart.defaults.font.size   = 11;
+      function configureChartDefaults() {
+        if (typeof Chart === 'undefined') return;
+        Chart.defaults.color       = '#7a7a7a';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.07)';
+        Chart.defaults.font.size   = 11;
+      }
 
       async function loadAll() {
         await Promise.all([loadKPIs(), loadGateChart(), loadWinrateChart(), loadFreqChart(), loadSymbolsChart(), loadAlerts()]);
@@ -452,6 +460,7 @@
       }
 
       async function init() {
+        configureChartDefaults();
         connLabel.textContent = 'Loading…';
         const online = await probeOnline();
         if (!online) {
@@ -462,14 +471,9 @@
           }, POLL_MS);
           return;
         }
-        try {
-          await loadAll();
-          pollTimer = setInterval(loadAll, POLL_MS);
-        } catch (err) {
-          if (/proxy not configured|DASHBOARD_API_KEY/i.test(err.message)) {
-            showSetupError(err.message);
-          }
-        }
+        await loadAll();
+        clearInterval(pollTimer);
+        pollTimer = setInterval(loadAll, POLL_MS);
       }
 
       init();
