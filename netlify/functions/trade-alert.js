@@ -23,11 +23,31 @@ const ALLOWED = new Set([
 ]);
 
 function parseRoute(event) {
-  const prefix = '/.netlify/functions/trade-alert/';
-  let rest = event.path.startsWith(prefix) ? event.path.slice(prefix.length) : '';
+  let rest = '';
+
+  // Direct function URL: /.netlify/functions/trade-alert/summary
+  const fnPrefix = '/.netlify/functions/trade-alert/';
+  if (event.path.startsWith(fnPrefix)) {
+    rest = event.path.slice(fnPrefix.length);
+  }
+
+  // Rewrite from netlify.toml: /trade-alert/api/summary → function (path stays original)
+  if (!rest) {
+    const apiPrefix = '/trade-alert/api/';
+    if (event.path.startsWith(apiPrefix)) {
+      rest = event.path.slice(apiPrefix.length);
+    }
+  }
+
+  // Splat param from some redirect configurations
+  if (!rest && event.pathParameters?.splat) {
+    rest = String(event.pathParameters.splat).replace(/^\//, '');
+  }
+
   if (!rest && event.queryStringParameters?.path) {
     rest = event.queryStringParameters.path.replace(/^\//, '');
   }
+
   if (!rest || rest.includes('..') || /^https?:/i.test(rest)) {
     return null;
   }
