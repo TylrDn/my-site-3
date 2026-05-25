@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Trade Alert Dashboard | MacroSight</title>
+    <meta name="description" content="MacroSight Trade Alert — real-time market signal dashboard for active traders and automated strategies." />
+    <meta property="og:title" content="Trade Alert Dashboard | MacroSight" />
+    <meta property="og:description" content="Real-time market signal dashboard by Taylor Dean / MacroSight." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.macrosight.net/trade-alert/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- API base: override via ?api=https://... or set this meta tag -->
+    <meta name="trade-alert-api-base" content="https://trade-alert-api.macrosight.net" />
+    <link rel="canonical" href="https://www.macrosight.net/trade-alert/" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <meta name="theme-color" content="#0b0b10" />
+    <style>
+      .ta-hero {
+        padding: 3rem 0 2rem;
+        text-align: center;
+      }
+      .ta-hero h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 300;
+        background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+      }
+      .ta-hero .ta-subtitle {
+        color: var(--color-muted);
+        font-size: 1.1rem;
+        font-weight: 400;
+        margin-bottom: 1.5rem;
+      }
+      .ta-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: rgba(0, 212, 255, 0.08);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        border-radius: 99px;
+        padding: 0.3rem 0.85rem;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--color-accent);
+        margin-bottom: 2rem;
+      }
+      .ta-status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--color-accent);
+        animation: pulse-dot 2s ease-in-out infinite;
+      }
+      .ta-status-dot.offline {
+        background: var(--color-warning);
+        animation: none;
+      }
+      @keyframes pulse-dot {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+      .ta-auth-gate {
+        max-width: 420px;
+        margin: 0 auto 3rem;
+        background: var(--color-card);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+      }
+      .ta-auth-gate h2 {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--color-fg);
+        margin-bottom: 0.5rem;
+      }
+      .ta-auth-gate p {
+        font-size: 0.9rem;
+        color: var(--color-muted);
+        margin-bottom: 1.25rem;
+      }
+      .ta-input-row {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .ta-input-row input {
+        flex: 1;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        padding: 0.6rem 0.9rem;
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        color: var(--color-fg);
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .ta-input-row input:focus { border-color: var(--color-accent); }
+      .ta-input-row button {
+        background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+        color: #000;
+        border: none;
+        border-radius: var(--radius);
+        padding: 0.6rem 1.1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        white-space: nowrap;
+        min-height: 44px;
+      }
+      .ta-input-row button:hover { opacity: 0.85; }
+      .ta-auth-error {
+        margin-top: 0.6rem;
+        font-size: 0.82rem;
+        color: #ff6b6b;
+        display: none;
+      }
+      .ta-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .ta-kpi-card {
+        background: var(--color-card);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        padding: 1.1rem 1.25rem;
+      }
+      .ta-kpi-card .kpi-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--color-muted);
+        margin-bottom: 0.35rem;
+      }
+      .ta-kpi-card .kpi-value {
+        font-family: var(--font-mono);
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: var(--color-fg);
+        font-variant-numeric: tabular-nums;
+      }
+      .ta-kpi-card .kpi-value.positive { color: var(--color-success); }
+      .ta-kpi-card .kpi-value.negative { color: #ff6b6b; }
+      .ta-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+      }
+      .ta-section-header h2 {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--color-fg);
+        margin: 0;
+      }
+      .ta-refresh-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+        color: var(--color-muted);
+        cursor: pointer;
+        transition: border-color 0.2s, color 0.2s;
+        min-height: 44px;
+      }
+      .ta-refresh-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+      .ta-refresh-btn svg { width: 14px; height: 14px; }
+      .ta-table-wrap {
+        background: var(--color-card);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-bottom: 2rem;
+      }
+      .ta-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+      }
+      .ta-table thead th {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--color-muted);
+        border-bottom: 1px solid var(--color-border);
+        white-space: nowrap;
+      }
+      .ta-table tbody tr {
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        transition: background 0.15s;
+      }
+      .ta-table tbody tr:last-child { border-bottom: none; }
+      .ta-table tbody tr:hover { background: rgba(0, 212, 255, 0.03); }
+      .ta-table tbody td {
+        padding: 0.75rem 1rem;
+        color: var(--color-fg);
+        font-variant-numeric: tabular-nums;
+      }
+      .ta-table tbody td.mono { font-family: var(--font-mono); }
+      .ta-badge {
+        display: inline-block;
+        padding: 0.2rem 0.55rem;
+        border-radius: 99px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .ta-badge.buy  { background: rgba(0,255,136,0.12); color: var(--color-success); }
+      .ta-badge.sell { background: rgba(255,107,107,0.12); color: #ff6b6b; }
+      .ta-badge.hold { background: rgba(255,170,0,0.12);  color: var(--color-warning); }
+      .ta-empty {
+        padding: 3.5rem 1rem;
+        text-align: center;
+        color: var(--color-muted);
+      }
+      .ta-empty svg { width: 40px; height: 40px; margin: 0 auto 1rem; opacity: 0.3; }
+      .ta-empty p { font-size: 0.9rem; margin: 0; }
+      @keyframes shimmer {
+        0%   { background-position: -200% 0; }
+        100% { background-position:  200% 0; }
+      }
+      .skeleton {
+        display: inline-block;
+        background: linear-gradient(90deg, #161616 25%, #1e1e1e 50%, #161616 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s ease-in-out infinite;
+        border-radius: 4px;
+        height: 1em;
+      }
+      .ta-config-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        padding: 0.6rem 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+      .ta-config-bar label { font-size: 0.78rem; color: var(--color-muted); white-space: nowrap; }
+      .ta-config-bar input {
+        flex: 1;
+        min-width: 200px;
+        background: transparent;
+        border: none;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--color-accent);
+        outline: none;
+      }
+      .ta-config-bar button {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        padding: 0.3rem 0.7rem;
+        font-size: 0.78rem;
+        color: var(--color-muted);
+        cursor: pointer;
+        transition: border-color 0.2s, color 0.2s;
+      }
+      .ta-config-bar button:hover { border-color: var(--color-accent); color: var(--color-accent); }
+      #ta-dashboard { display: none; }
+      @media (max-width: 600px) {
+        .ta-table thead { display: none; }
+        .ta-table tbody tr {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          padding: 0.75rem 1rem;
+          gap: 0.25rem 0.5rem;
+        }
+        .ta-table tbody td { padding: 0; font-size: 0.82rem; }
+        .ta-table tbody td::before {
+          content: attr(data-label);
+          display: block;
+          font-size: 0.68rem;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: var(--color-muted);
+          margin-bottom: 0.1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+    <main id="main" tabindex="-1">
+      <div class="section">
+        <div class="ta-hero">
+          <h1>Trade Alert</h1>
+          <p class="ta-subtitle">Real-time market signals &amp; automated alert dashboard</p>
+          <div class="ta-status-badge">
+            <span class="ta-status-dot" id="ta-conn-dot"></span>
+            <span id="ta-conn-label">Connecting…</span>
+          </div>
+        </div>
+
+        <div class="ta-auth-gate" id="ta-auth-gate">
+          <h2>API Key Required</h2>
+          <p>Enter your <code>DASHBOARD_API_KEY</code> to access live data. Stored in memory for this session only.</p>
+          <div class="ta-input-row">
+            <input type="password" id="ta-key-input" placeholder="sk-…" autocomplete="off" aria-label="API key" />
+            <button id="ta-key-submit">Connect</button>
+          </div>
+          <p class="ta-auth-error" id="ta-auth-error">Invalid key or API unreachable.</p>
+        </div>
+
+        <div id="ta-dashboard">
+          <div class="ta-config-bar">
+            <label for="ta-api-input">API Base</label>
+            <input type="text" id="ta-api-input" aria-label="API base URL" />
+            <button id="ta-api-save">Update</button>
+          </div>
+
+          <div class="ta-kpi-grid">
+            <div class="ta-kpi-card">
+              <div class="kpi-label">Total Alerts</div>
+              <div class="kpi-value" id="kpi-total"><span class="skeleton" style="width:3rem"></span></div>
+            </div>
+            <div class="ta-kpi-card">
+              <div class="kpi-label">Active Positions</div>
+              <div class="kpi-value" id="kpi-active"><span class="skeleton" style="width:2.5rem"></span></div>
+            </div>
+            <div class="ta-kpi-card">
+              <div class="kpi-label">Win Rate</div>
+              <div class="kpi-value" id="kpi-win"><span class="skeleton" style="width:3.5rem"></span></div>
+            </div>
+            <div class="ta-kpi-card">
+              <div class="kpi-label">P&amp;L Today</div>
+              <div class="kpi-value" id="kpi-pnl"><span class="skeleton" style="width:4rem"></span></div>
+            </div>
+          </div>
+
+          <div class="ta-section-header">
+            <h2>Recent Alerts</h2>
+            <button class="ta-refresh-btn" id="ta-refresh" aria-label="Refresh alerts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+              Refresh
+            </button>
+          </div>
+
+          <div class="ta-table-wrap">
+            <table class="ta-table" aria-label="Trade alerts">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Symbol</th>
+                  <th>Signal</th>
+                  <th>Price</th>
+                  <th>Confidence</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="ta-tbody">
+                <tr><td colspan="6">
+                  <div class="ta-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    <p>Loading alerts…</p>
+                  </div>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="../nav.js" defer></script>
+    <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const metaBase = document.querySelector('meta[name="trade-alert-api-base"]');
+      const DEFAULT_API = 'https://trade-alert-api.macrosight.net';
+      let API_BASE = (params.get('api') || (metaBase && metaBase.content) || DEFAULT_API).replace(/\/$/, '');
+      let API_KEY = '';
+
+      const connDot   = document.getElementById('ta-conn-dot');
+      const connLabel = document.getElementById('ta-conn-label');
+      const authGate  = document.getElementById('ta-auth-gate');
+      const dashboard = document.getElementById('ta-dashboard');
+      const apiInput  = document.getElementById('ta-api-input');
+      apiInput.value  = API_BASE;
+
+      function setConnStatus(ok) {
+        connDot.classList.toggle('offline', !ok);
+        connLabel.textContent = ok ? 'API Connected' : 'API Offline';
+      }
+
+      async function probeAPI() {
+        try {
+          const r = await fetch(API_BASE + '/health', { signal: AbortSignal.timeout(4000) });
+          setConnStatus(r.ok); return r.ok;
+        } catch { setConnStatus(false); return false; }
+      }
+
+      document.getElementById('ta-key-submit').addEventListener('click', async () => {
+        const val = document.getElementById('ta-key-input').value.trim();
+        if (!val) return;
+        try {
+          const r = await fetch(API_BASE + '/health', {
+            headers: { 'X-API-Key': val },
+            signal: AbortSignal.timeout(5000)
+          });
+          if (r.ok || r.status === 200) {
+            API_KEY = val;
+            authGate.style.display = 'none';
+            dashboard.style.display = 'block';
+            document.getElementById('ta-auth-error').style.display = 'none';
+            loadAll();
+          } else {
+            document.getElementById('ta-auth-error').style.display = 'block';
+          }
+        } catch {
+          API_KEY = val;
+          authGate.style.display = 'none';
+          dashboard.style.display = 'block';
+          setConnStatus(false);
+          renderEmpty('API unreachable. Start the trade-alert stack and refresh.');
+        }
+      });
+
+      document.getElementById('ta-key-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('ta-key-submit').click();
+      });
+
+      document.getElementById('ta-api-save').addEventListener('click', () => {
+        const v = apiInput.value.trim().replace(/\/$/, '');
+        if (v) { API_BASE = v; probeAPI(); loadAll(); }
+      });
+
+      async function apiFetch(path) {
+        const r = await fetch(API_BASE + path, {
+          headers: { 'X-API-Key': API_KEY },
+          signal: AbortSignal.timeout(8000)
+        });
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
+      }
+
+      async function loadKPIs() {
+        try {
+          const d = await apiFetch('/api/summary');
+          setText('kpi-total',  d.total_alerts       ?? '--');
+          setText('kpi-active', d.active_positions   ?? '--');
+          setText('kpi-win',    d.win_rate != null ? (d.win_rate * 100).toFixed(1) + '%' : '--');
+          const pnlEl = document.getElementById('kpi-pnl');
+          if (d.pnl_today != null) {
+            pnlEl.textContent = (d.pnl_today >= 0 ? '+' : '') + '$' + d.pnl_today.toLocaleString();
+            pnlEl.className = 'kpi-value ' + (d.pnl_today >= 0 ? 'positive' : 'negative');
+          } else { pnlEl.textContent = '--'; }
+        } catch { ['kpi-total','kpi-active','kpi-win','kpi-pnl'].forEach(id => setText(id, '--')); }
+      }
+
+      async function loadAlerts() {
+        try {
+          const data = await apiFetch('/api/alerts?limit=50');
+          const alerts = Array.isArray(data) ? data : (data.alerts || []);
+          if (!alerts.length) { renderEmpty('No alerts yet. Signals will appear here as they fire.'); return; }
+          document.getElementById('ta-tbody').innerHTML = alerts.map(a => {
+            const sig   = (a.signal || '').toLowerCase();
+            const badge = ['buy','sell','hold'].includes(sig) ? sig : 'hold';
+            const ts    = a.timestamp ? new Date(a.timestamp).toLocaleTimeString() : '--';
+            const price = a.price != null ? '$' + Number(a.price).toLocaleString(undefined, {minimumFractionDigits:2}) : '--';
+            const conf  = a.confidence != null ? (a.confidence * 100).toFixed(0) + '%' : '--';
+            return `<tr>
+              <td class="mono" data-label="Time">${ts}</td>
+              <td data-label="Symbol"><strong>${a.symbol || '--'}</strong></td>
+              <td data-label="Signal"><span class="ta-badge ${badge}">${a.signal || badge}</span></td>
+              <td class="mono" data-label="Price">${price}</td>
+              <td class="mono" data-label="Confidence">${conf}</td>
+              <td data-label="Status">${a.status || 'open'}</td>
+            </tr>`;
+          }).join('');
+        } catch { renderEmpty('Could not load alerts — check API connection.'); }
+      }
+
+      function renderEmpty(msg) {
+        document.getElementById('ta-tbody').innerHTML =
+          `<tr><td colspan="6"><div class="ta-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><p>${msg}</p></div></td></tr>`;
+      }
+
+      function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+      function loadAll() { probeAPI(); loadKPIs(); loadAlerts(); }
+
+      document.getElementById('ta-refresh').addEventListener('click', loadAll);
+      probeAPI();
+    })();
+    </script>
+  </body>
+</html>

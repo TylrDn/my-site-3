@@ -21,4 +21,9 @@
   <url>
     <loc>https://macrosight.net/invest</loc>
   </url>
+  <url>
+    <loc>https://www.macrosight.net/trade-alert/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

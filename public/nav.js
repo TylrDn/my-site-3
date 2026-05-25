@@ -6,7 +6,7 @@
 <header class="site-header" data-sticky>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="container navbar">
-    <a class="brand" href="index.html">MacroSight</a>
+    <a class="brand" href="/">MacroSight</a>
     <button
       class="nav-toggle"
       type="button"
@@ -21,13 +21,14 @@
     </button>
     <nav id="primary-nav" class="nav" data-collapsible>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="experience.html">Experience</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="resume.html">Resume</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="invest.html">Invest</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/experience">Experience</a></li>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/resume">Resume</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/invest">Invest</a></li>
+        <li><a href="/trade-alert/">Trade Alert</a></li>
       </ul>
     </nav>
   </div>
@@ -43,13 +44,14 @@
 >
   <nav class="nav" aria-label="Primary">
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="experience.html">Experience</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="resume.html">Resume</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="invest.html">Invest</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/experience">Experience</a></li>
+      <li><a href="/projects">Projects</a></li>
+      <li><a href="/resume">Resume</a></li>
+      <li><a href="/contact">Contact</a></li>
+      <li><a href="/invest">Invest</a></li>
+      <li><a href="/trade-alert/">Trade Alert</a></li>
     </ul>
   </nav>
 </div>
@@ -64,12 +66,11 @@
   const header = document.querySelector('.site-header');
   if (!toggle || !overlay) return;
 
-  // Highlight the current page in both the desktop and mobile navigation
-  const path = window.location.pathname.split('/').pop();
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
   document
     .querySelectorAll('#primary-nav a, #mobile-nav a')
     .forEach((link) => {
-      const linkPath = link.getAttribute('href');
+      const linkPath = link.getAttribute('href').replace(/\/$/, '') || '/';
       if (linkPath === path) {
         link.classList.add('active');
       }
