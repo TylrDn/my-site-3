@@ -17,287 +17,145 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
     <meta name="theme-color" content="#0b0b10" />
     <style>
-      .ta-hero {
-        padding: 3rem 0 2rem;
-        text-align: center;
+      :root {
+        --ta-green:  #2dd4bf;
+        --ta-red:    #c45c5c;
+        --ta-amber:  #d4a853;
+        --ta-blue:   #00d4ff;
+        --ta-muted:  var(--color-muted, #7a7a7a);
+        --ta-border: var(--color-border, rgba(255,255,255,0.08));
+        --ta-card:   var(--color-card,  #161616);
+        --ta-fg:     var(--color-fg,    #e8e4dc);
       }
+      .ta-hero { padding: 3rem 0 2rem; text-align: center; }
       .ta-hero h1 {
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        font-weight: 300;
+        font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300;
         background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         margin-bottom: 0.5rem;
       }
-      .ta-hero .ta-subtitle {
-        color: var(--color-muted);
-        font-size: 1.1rem;
-        font-weight: 400;
-        margin-bottom: 1.5rem;
-      }
+      .ta-subtitle { color: var(--ta-muted); font-size: 1.1rem; font-weight: 400; margin-bottom: 1.5rem; }
       .ta-status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        background: rgba(0, 212, 255, 0.08);
-        border: 1px solid rgba(0, 212, 255, 0.2);
-        border-radius: 99px;
-        padding: 0.3rem 0.85rem;
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
-        color: var(--color-accent);
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+        border-radius: 99px; padding: 0.3rem 0.85rem;
+        font-family: var(--font-mono, monospace); font-size: 0.8rem; color: var(--ta-blue);
         margin-bottom: 2rem;
       }
-      .ta-status-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--color-accent);
-        animation: pulse-dot 2s ease-in-out infinite;
+      .ta-status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ta-green); animation: pulse-dot 2s ease-in-out infinite; }
+      .ta-status-dot.offline  { background: var(--ta-red);   animation: none; }
+      .ta-status-dot.degraded { background: var(--ta-amber); }
+      @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+      .ta-sys-chip {
+        display: inline-block; padding: 0.2rem 0.65rem; border-radius: 99px;
+        font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
       }
-      .ta-status-dot.offline {
-        background: var(--color-warning);
-        animation: none;
-      }
-      @keyframes pulse-dot {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
-      }
+      .ta-sys-chip.live     { background: rgba(45,212,191,0.15); color: var(--ta-green); }
+      .ta-sys-chip.degraded { background: rgba(212,168,83,0.15);  color: var(--ta-amber); }
+      .ta-sys-chip.offline  { background: rgba(196,92,92,0.15);   color: var(--ta-red); }
       .ta-auth-gate {
-        max-width: 420px;
-        margin: 0 auto 3rem;
-        background: var(--color-card);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
-        padding: 2rem;
+        max-width: 420px; margin: 0 auto 3rem;
+        background: var(--ta-card); border: 1px solid var(--ta-border);
+        border-radius: var(--radius-lg, 12px); padding: 2rem;
       }
-      .ta-auth-gate h2 {
-        font-size: 1.2rem;
-        font-weight: 500;
-        color: var(--color-fg);
-        margin-bottom: 0.5rem;
-      }
-      .ta-auth-gate p {
-        font-size: 0.9rem;
-        color: var(--color-muted);
-        margin-bottom: 1.25rem;
-      }
-      .ta-input-row {
-        display: flex;
-        gap: 0.5rem;
-      }
+      .ta-auth-gate h2 { font-size: 1.2rem; font-weight: 500; color: var(--ta-fg); margin-bottom: 0.5rem; }
+      .ta-auth-gate p  { font-size: 0.9rem; color: var(--ta-muted); margin-bottom: 1.25rem; }
+      .ta-input-row { display: flex; gap: 0.5rem; }
       .ta-input-row input {
-        flex: 1;
-        background: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius);
-        padding: 0.6rem 0.9rem;
-        font-family: var(--font-mono);
-        font-size: 0.875rem;
-        color: var(--color-fg);
-        outline: none;
-        transition: border-color 0.2s;
+        flex: 1; background: var(--color-surface, #111); border: 1px solid var(--ta-border);
+        border-radius: var(--radius, 8px); padding: 0.6rem 0.9rem;
+        font-family: var(--font-mono, monospace); font-size: 0.875rem; color: var(--ta-fg);
+        outline: none; transition: border-color 0.2s;
       }
-      .ta-input-row input:focus { border-color: var(--color-accent); }
+      .ta-input-row input:focus { border-color: var(--ta-blue); }
       .ta-input-row button {
         background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-        color: #000;
-        border: none;
-        border-radius: var(--radius);
-        padding: 0.6rem 1.1rem;
-        font-size: 0.875rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: opacity 0.2s;
-        white-space: nowrap;
-        min-height: 44px;
+        color: #000; border: none; border-radius: var(--radius, 8px);
+        padding: 0.6rem 1.1rem; font-size: 0.875rem; font-weight: 600;
+        cursor: pointer; transition: opacity 0.2s; white-space: nowrap; min-height: 44px;
       }
       .ta-input-row button:hover { opacity: 0.85; }
-      .ta-auth-error {
-        margin-top: 0.6rem;
-        font-size: 0.82rem;
-        color: #ff6b6b;
-        display: none;
-      }
+      .ta-auth-error { margin-top: 0.6rem; font-size: 0.82rem; color: var(--ta-red); display: none; }
       .ta-kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem; margin-bottom: 2rem;
       }
       .ta-kpi-card {
-        background: var(--color-card);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius);
-        padding: 1.1rem 1.25rem;
+        background: var(--ta-card); border: 1px solid var(--ta-border);
+        border-radius: var(--radius, 8px); padding: 1.1rem 1.25rem;
       }
-      .ta-kpi-card .kpi-label {
-        font-size: 0.75rem;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--color-muted);
-        margin-bottom: 0.35rem;
+      .kpi-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ta-muted); margin-bottom: 0.4rem; }
+      .kpi-value { font-family: var(--font-mono, monospace); font-size: 1.65rem; font-weight: 500; color: var(--ta-fg); font-variant-numeric: tabular-nums; line-height: 1.1; }
+      .kpi-sub { font-size: 0.72rem; color: var(--ta-muted); margin-top: 0.2rem; }
+      .kpi-value.positive { color: var(--ta-green); }
+      .kpi-value.negative { color: var(--ta-red); }
+      .kpi-value.neutral  { color: var(--ta-blue); }
+      @keyframes kpi-flash { 0%,100%{opacity:1} 50%{opacity:0.55} }
+      .kpi-flash .kpi-value { animation: kpi-flash 0.6s ease; }
+      .ta-charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+      .ta-chart-card {
+        background: var(--ta-card); border: 1px solid var(--ta-border);
+        border-radius: var(--radius, 8px); padding: 1.25rem;
       }
-      .ta-kpi-card .kpi-value {
-        font-family: var(--font-mono);
-        font-size: 1.6rem;
-        font-weight: 500;
-        color: var(--color-fg);
-        font-variant-numeric: tabular-nums;
+      .ta-chart-card h3 { font-size: 0.82rem; font-weight: 600; color: var(--ta-muted); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.06em; }
+      .ta-chart-card canvas { max-height: 220px; }
+      .ta-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+      .ta-section-header h2 { font-size: 1.05rem; font-weight: 500; color: var(--ta-fg); margin: 0; }
+      .ta-last-updated { font-size: 0.75rem; color: var(--ta-muted); }
+      .ta-btn-ghost {
+        display: inline-flex; align-items: center; gap: 0.35rem;
+        background: transparent; border: 1px solid var(--ta-border);
+        border-radius: var(--radius, 8px); padding: 0.35rem 0.75rem;
+        font-size: 0.8rem; color: var(--ta-muted); cursor: pointer;
+        transition: border-color 0.2s, color 0.2s; min-height: 44px;
       }
-      .ta-kpi-card .kpi-value.positive { color: var(--color-success); }
-      .ta-kpi-card .kpi-value.negative { color: #ff6b6b; }
-      .ta-section-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-      }
-      .ta-section-header h2 {
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: var(--color-fg);
-        margin: 0;
-      }
-      .ta-refresh-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-        background: transparent;
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius);
-        padding: 0.35rem 0.75rem;
-        font-size: 0.8rem;
-        color: var(--color-muted);
-        cursor: pointer;
-        transition: border-color 0.2s, color 0.2s;
-        min-height: 44px;
-      }
-      .ta-refresh-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
-      .ta-refresh-btn svg { width: 14px; height: 14px; }
-      .ta-table-wrap {
-        background: var(--color-card);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        margin-bottom: 2rem;
-      }
-      .ta-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.875rem;
-      }
-      .ta-table thead th {
-        padding: 0.75rem 1rem;
-        text-align: left;
-        font-size: 0.72rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: var(--color-muted);
-        border-bottom: 1px solid var(--color-border);
-        white-space: nowrap;
-      }
-      .ta-table tbody tr {
-        border-bottom: 1px solid rgba(255,255,255,0.04);
-        transition: background 0.15s;
-      }
-      .ta-table tbody tr:last-child { border-bottom: none; }
-      .ta-table tbody tr:hover { background: rgba(0, 212, 255, 0.03); }
-      .ta-table tbody td {
-        padding: 0.75rem 1rem;
-        color: var(--color-fg);
-        font-variant-numeric: tabular-nums;
-      }
-      .ta-table tbody td.mono { font-family: var(--font-mono); }
-      .ta-badge {
-        display: inline-block;
-        padding: 0.2rem 0.55rem;
-        border-radius: 99px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-      .ta-badge.buy  { background: rgba(0,255,136,0.12); color: var(--color-success); }
-      .ta-badge.sell { background: rgba(255,107,107,0.12); color: #ff6b6b; }
-      .ta-badge.hold { background: rgba(255,170,0,0.12);  color: var(--color-warning); }
-      .ta-empty {
-        padding: 3.5rem 1rem;
-        text-align: center;
-        color: var(--color-muted);
-      }
-      .ta-empty svg { width: 40px; height: 40px; margin: 0 auto 1rem; opacity: 0.3; }
-      .ta-empty p { font-size: 0.9rem; margin: 0; }
-      @keyframes shimmer {
-        0%   { background-position: -200% 0; }
-        100% { background-position:  200% 0; }
-      }
-      .skeleton {
-        display: inline-block;
-        background: linear-gradient(90deg, #161616 25%, #1e1e1e 50%, #161616 75%);
-        background-size: 200% 100%;
-        animation: shimmer 1.5s ease-in-out infinite;
-        border-radius: 4px;
-        height: 1em;
-      }
+      .ta-btn-ghost:hover { border-color: var(--ta-blue); color: var(--ta-blue); }
+      .ta-btn-ghost svg { width: 14px; height: 14px; }
       .ta-config-bar {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        background: rgba(255,255,255,0.02);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius);
-        padding: 0.6rem 1rem;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
+        display: flex; align-items: center; gap: 0.75rem;
+        background: rgba(255,255,255,0.02); border: 1px solid var(--ta-border);
+        border-radius: var(--radius, 8px); padding: 0.6rem 1rem; margin-bottom: 2rem; flex-wrap: wrap;
       }
-      .ta-config-bar label { font-size: 0.78rem; color: var(--color-muted); white-space: nowrap; }
-      .ta-config-bar input {
-        flex: 1;
-        min-width: 200px;
-        background: transparent;
-        border: none;
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
-        color: var(--color-accent);
-        outline: none;
+      .ta-config-bar label { font-size: 0.78rem; color: var(--ta-muted); white-space: nowrap; }
+      .ta-config-bar input { flex: 1; min-width: 200px; background: transparent; border: none; font-family: var(--font-mono, monospace); font-size: 0.8rem; color: var(--ta-blue); outline: none; }
+      .ta-table-wrap {
+        background: var(--ta-card); border: 1px solid var(--ta-border);
+        border-radius: var(--radius-lg, 12px); overflow: hidden; margin-bottom: 2rem;
       }
-      .ta-config-bar button {
-        background: transparent;
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius);
-        padding: 0.3rem 0.7rem;
-        font-size: 0.78rem;
-        color: var(--color-muted);
-        cursor: pointer;
-        transition: border-color 0.2s, color 0.2s;
-      }
-      .ta-config-bar button:hover { border-color: var(--color-accent); color: var(--color-accent); }
+      .ta-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+      .ta-table thead th { padding: 0.75rem 1rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ta-muted); border-bottom: 1px solid var(--ta-border); white-space: nowrap; }
+      .ta-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+      .ta-table tbody tr:last-child { border-bottom: none; }
+      .ta-table tbody tr:hover { background: rgba(0,212,255,0.03); }
+      .ta-table tbody td { padding: 0.75rem 1rem; color: var(--ta-fg); font-variant-numeric: tabular-nums; }
+      .ta-table tbody td.mono { font-family: var(--font-mono, monospace); }
+      .ta-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 99px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+      .ta-badge.long    { background: rgba(45,212,191,0.12);  color: var(--ta-green); }
+      .ta-badge.short   { background: rgba(196,92,92,0.12);   color: var(--ta-red); }
+      .ta-badge.watch   { background: rgba(0,212,255,0.12);   color: var(--ta-blue); }
+      .ta-badge.win     { background: rgba(45,212,191,0.12);  color: var(--ta-green); }
+      .ta-badge.loss    { background: rgba(196,92,92,0.12);   color: var(--ta-red); }
+      .ta-badge.scratch { background: rgba(122,122,122,0.12); color: var(--ta-muted); }
+      .ta-badge.open    { background: rgba(212,168,83,0.12);  color: var(--ta-amber); }
+      @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+      .skeleton { display: inline-block; background: linear-gradient(90deg, #161616 25%, #1e1e1e 50%, #161616 75%); background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; border-radius: 4px; height: 1em; }
+      .ta-empty { padding: 3rem 1rem; text-align: center; color: var(--ta-muted); }
+      .ta-empty svg { width: 38px; height: 38px; margin: 0 auto 0.75rem; opacity: 0.3; }
+      .ta-empty p { font-size: 0.88rem; margin: 0; }
+      .ta-error-inline { padding: 1rem; text-align: center; font-size: 0.82rem; color: var(--ta-red); }
       #ta-dashboard { display: none; }
+      @media (max-width: 900px) { .ta-charts-grid { grid-template-columns: 1fr; } }
       @media (max-width: 600px) {
+        .ta-kpi-grid { grid-template-columns: repeat(2,1fr); }
         .ta-table thead { display: none; }
-        .ta-table tbody tr {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          padding: 0.75rem 1rem;
-          gap: 0.25rem 0.5rem;
-        }
+        .ta-table tbody tr { display: grid; grid-template-columns: 1fr 1fr; padding: 0.75rem 1rem; gap: 0.25rem 0.5rem; }
         .ta-table tbody td { padding: 0; font-size: 0.82rem; }
-        .ta-table tbody td::before {
-          content: attr(data-label);
-          display: block;
-          font-size: 0.68rem;
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          color: var(--color-muted);
-          margin-bottom: 0.1rem;
-        }
+        .ta-table tbody td::before { content: attr(data-label); display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ta-muted); margin-bottom: 0.1rem; }
       }
+      @media (max-width: 420px) { .ta-kpi-grid { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
@@ -310,76 +168,67 @@
           <div class="ta-status-badge">
             <span class="ta-status-dot" id="ta-conn-dot"></span>
             <span id="ta-conn-label">Connecting…</span>
+            <span class="ta-sys-chip offline" id="ta-sys-chip" style="margin-left:0.35rem">—</span>
           </div>
         </div>
 
         <div class="ta-auth-gate" id="ta-auth-gate">
           <h2>API Key Required</h2>
-          <p>Enter your <code>DASHBOARD_API_KEY</code> to access live data. Stored in memory for this session only.</p>
+          <p>Enter your <code>DASHBOARD_API_KEY</code> to access live data. Key is kept in memory only — never persisted.</p>
           <div class="ta-input-row">
             <input type="password" id="ta-key-input" placeholder="sk-…" autocomplete="off" aria-label="API key" />
             <button id="ta-key-submit">Connect</button>
           </div>
-          <p class="ta-auth-error" id="ta-auth-error">Invalid key or API unreachable.</p>
+          <p class="ta-auth-error" id="ta-auth-error">Invalid key or API unreachable. Check the key and try again.</p>
         </div>
 
         <div id="ta-dashboard">
           <div class="ta-config-bar">
             <label for="ta-api-input">API Base</label>
             <input type="text" id="ta-api-input" aria-label="API base URL" />
-            <button id="ta-api-save">Update</button>
+            <button class="ta-btn-ghost" id="ta-api-save" style="min-height:36px;padding:0.25rem 0.65rem">Update</button>
+            <button class="ta-btn-ghost" id="ta-logout" style="min-height:36px;padding:0.25rem 0.65rem;color:var(--ta-red);border-color:rgba(196,92,92,0.3)">Log out</button>
           </div>
 
           <div class="ta-kpi-grid">
-            <div class="ta-kpi-card">
-              <div class="kpi-label">Total Alerts</div>
-              <div class="kpi-value" id="kpi-total"><span class="skeleton" style="width:3rem"></span></div>
-            </div>
-            <div class="ta-kpi-card">
-              <div class="kpi-label">Active Positions</div>
-              <div class="kpi-value" id="kpi-active"><span class="skeleton" style="width:2.5rem"></span></div>
-            </div>
-            <div class="ta-kpi-card">
-              <div class="kpi-label">Win Rate</div>
-              <div class="kpi-value" id="kpi-win"><span class="skeleton" style="width:3.5rem"></span></div>
-            </div>
-            <div class="ta-kpi-card">
-              <div class="kpi-label">P&amp;L Today</div>
-              <div class="kpi-value" id="kpi-pnl"><span class="skeleton" style="width:4rem"></span></div>
-            </div>
+            <div class="ta-kpi-card"><div class="kpi-label">Alerts Today</div><div class="kpi-value neutral" id="kpi-today"><span class="skeleton" style="width:2.5rem"></span></div><div class="kpi-sub" id="kpi-total-sub"></div></div>
+            <div class="ta-kpi-card"><div class="kpi-label">Win Rate (30d)</div><div class="kpi-value" id="kpi-winrate"><span class="skeleton" style="width:3.5rem"></span></div><div class="kpi-sub" id="kpi-wl-sub"></div></div>
+            <div class="ta-kpi-card"><div class="kpi-label">Gate Rejection</div><div class="kpi-value" id="kpi-gate"><span class="skeleton" style="width:3rem"></span></div></div>
+            <div class="ta-kpi-card"><div class="kpi-label">Redis</div><div class="kpi-value" id="kpi-redis"><span class="skeleton" style="width:2rem"></span></div><div class="kpi-sub" id="kpi-redis-sub"></div></div>
+          </div>
+
+          <div class="ta-charts-grid">
+            <div class="ta-chart-card"><h3>Gate Rejections (session)</h3><canvas id="ta-gate-chart"></canvas></div>
+            <div class="ta-chart-card"><h3>Winrate by Edge Probability</h3><canvas id="ta-winrate-chart"></canvas></div>
+            <div class="ta-chart-card"><h3>Alert Frequency (30 days)</h3><canvas id="ta-freq-chart"></canvas></div>
+            <div class="ta-chart-card"><h3>Top Symbols by Volume</h3><canvas id="ta-symbols-chart"></canvas></div>
           </div>
 
           <div class="ta-section-header">
             <h2>Recent Alerts</h2>
-            <button class="ta-refresh-btn" id="ta-refresh" aria-label="Refresh alerts">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <polyline points="23 4 23 10 17 10"/>
-                <polyline points="1 20 1 14 7 14"/>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-              </svg>
-              Refresh
-            </button>
+            <div style="display:flex;align-items:center;gap:0.75rem">
+              <span class="ta-last-updated" id="ta-last-updated"></span>
+              <button class="ta-btn-ghost" id="ta-refresh" aria-label="Refresh">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Refresh
+              </button>
+            </div>
           </div>
 
           <div class="ta-table-wrap">
             <table class="ta-table" aria-label="Trade alerts">
               <thead>
                 <tr>
-                  <th>Time</th>
-                  <th>Symbol</th>
-                  <th>Signal</th>
-                  <th>Price</th>
-                  <th>Confidence</th>
-                  <th>Status</th>
+                  <th>Time</th><th>Symbol</th><th>Direction</th><th>Edge</th><th>Conf</th>
+                  <th>Entry</th><th>Stop</th><th>Target</th><th>R:R</th>
+                  <th>Sources</th><th>Outcome</th><th>PnL</th>
                 </tr>
               </thead>
               <tbody id="ta-tbody">
-                <tr><td colspan="6">
-                  <div class="ta-empty">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                    <p>Loading alerts…</p>
-                  </div>
-                </td></tr>
+                <tr><td colspan="12"><div class="ta-empty">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <p>Loading alerts…</p>
+                </div></td></tr>
               </tbody>
             </table>
           </div>
@@ -390,122 +239,315 @@
     <script src="../nav.js" defer></script>
     <script>
     (function () {
-      const params = new URLSearchParams(window.location.search);
-      const metaBase = document.querySelector('meta[name="trade-alert-api-base"]');
-      const DEFAULT_API = 'https://trade-alert-api.macrosight.net';
-      let API_BASE = (params.get('api') || (metaBase && metaBase.content) || DEFAULT_API).replace(/\/$/, '');
-      let API_KEY = '';
+      'use strict';
+
+      const API_KEY_STORAGE  = 'trade_alert_dashboard_api_key';
+      const API_BASE_STORAGE = 'trade_alert_api_base';
+      const DEFAULT_API      = 'https://trade-alert-api.macrosight.net';
+      const POLL_MS          = 30_000;
+
+      function resolveApiBase() {
+        const q = new URLSearchParams(location.search).get('api');
+        if (q) { const b = q.replace(/\/$/,''); localStorage.setItem(API_BASE_STORAGE, b); return b; }
+        return (
+          localStorage.getItem(API_BASE_STORAGE) ||
+          document.querySelector('meta[name="trade-alert-api-base"]')?.content?.trim() ||
+          DEFAULT_API
+        ).replace(/\/$/, '');
+      }
+
+      let API_BASE = resolveApiBase();
+      let API      = API_BASE + '/api';
+      let API_ROOT = API_BASE;
+      let API_KEY  = '';
+      let pollTimer = null;
+      let gateChartInst = null;
 
       const connDot   = document.getElementById('ta-conn-dot');
       const connLabel = document.getElementById('ta-conn-label');
+      const sysChip   = document.getElementById('ta-sys-chip');
       const authGate  = document.getElementById('ta-auth-gate');
       const dashboard = document.getElementById('ta-dashboard');
       const apiInput  = document.getElementById('ta-api-input');
       apiInput.value  = API_BASE;
 
-      function setConnStatus(ok) {
-        connDot.classList.toggle('offline', !ok);
-        connLabel.textContent = ok ? 'API Connected' : 'API Offline';
+      function setConnStatus(online, status) {
+        connDot.className = 'ta-status-dot' + (online ? (status === 'degraded' ? ' degraded' : '') : ' offline');
+        connLabel.textContent = online ? 'API Connected' : 'API Offline';
+        if (online && status) {
+          sysChip.textContent = status.toUpperCase();
+          sysChip.className = 'ta-sys-chip ' + (status === 'live' ? 'live' : status === 'degraded' ? 'degraded' : 'offline');
+        } else if (!online) {
+          sysChip.textContent = 'OFFLINE';
+          sysChip.className = 'ta-sys-chip offline';
+        }
       }
 
-      async function probeAPI() {
+      async function probeOnline() {
         try {
-          const r = await fetch(API_BASE + '/health', { signal: AbortSignal.timeout(4000) });
-          setConnStatus(r.ok); return r.ok;
-        } catch { setConnStatus(false); return false; }
+          const r = await fetch(API_ROOT + '/health', { signal: AbortSignal.timeout(5000) });
+          return r.ok;
+        } catch { return false; }
       }
+
+      async function validateKey(key) {
+        try {
+          const r = await fetch(API + '/auth/test', {
+            headers: { 'X-API-Key': key },
+            signal: AbortSignal.timeout(5000)
+          });
+          return r.ok;
+        } catch { return false; }
+      }
+
+      async function fetchJSON(path) {
+        const r = await fetch(API + path, {
+          headers: API_KEY ? { 'X-API-Key': API_KEY } : {},
+          signal: AbortSignal.timeout(8000)
+        });
+        if (r.status === 401) {
+          API_KEY = ''; localStorage.removeItem(API_KEY_STORAGE); showAuthGate();
+          throw new Error('Invalid API key — please reconnect');
+        }
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      }
+
+      function showAuthGate() { authGate.style.display = ''; dashboard.style.display = 'none'; clearInterval(pollTimer); }
+      function showDashboard() { authGate.style.display = 'none'; dashboard.style.display = 'block'; }
 
       document.getElementById('ta-key-submit').addEventListener('click', async () => {
         const val = document.getElementById('ta-key-input').value.trim();
         if (!val) return;
-        try {
-          const r = await fetch(API_BASE + '/health', {
-            headers: { 'X-API-Key': val },
-            signal: AbortSignal.timeout(5000)
-          });
-          if (r.ok || r.status === 200) {
-            API_KEY = val;
-            authGate.style.display = 'none';
-            dashboard.style.display = 'block';
-            document.getElementById('ta-auth-error').style.display = 'none';
-            loadAll();
-          } else {
-            document.getElementById('ta-auth-error').style.display = 'block';
-          }
-        } catch {
-          API_KEY = val;
-          authGate.style.display = 'none';
-          dashboard.style.display = 'block';
-          setConnStatus(false);
-          renderEmpty('API unreachable. Start the trade-alert stack and refresh.');
+        const errEl = document.getElementById('ta-auth-error');
+        errEl.style.display = 'none';
+        const online = await probeOnline();
+        if (!online) {
+          API_KEY = val; localStorage.setItem(API_KEY_STORAGE, val);
+          showDashboard(); setConnStatus(false, null); renderOfflineKPIs(); return;
         }
+        const valid = await validateKey(val);
+        if (!valid) { errEl.style.display = 'block'; return; }
+        API_KEY = val; localStorage.setItem(API_KEY_STORAGE, val);
+        showDashboard(); loadAll();
+        pollTimer = setInterval(loadAll, POLL_MS);
       });
 
       document.getElementById('ta-key-input').addEventListener('keydown', e => {
         if (e.key === 'Enter') document.getElementById('ta-key-submit').click();
       });
 
-      document.getElementById('ta-api-save').addEventListener('click', () => {
-        const v = apiInput.value.trim().replace(/\/$/, '');
-        if (v) { API_BASE = v; probeAPI(); loadAll(); }
+      document.getElementById('ta-logout').addEventListener('click', () => {
+        API_KEY = ''; localStorage.removeItem(API_KEY_STORAGE);
+        document.getElementById('ta-key-input').value = '';
+        clearInterval(pollTimer); showAuthGate(); setConnStatus(false, null);
       });
 
-      async function apiFetch(path) {
-        const r = await fetch(API_BASE + path, {
-          headers: { 'X-API-Key': API_KEY },
-          signal: AbortSignal.timeout(8000)
-        });
-        if (!r.ok) throw new Error(r.status);
-        return r.json();
+      document.getElementById('ta-api-save').addEventListener('click', () => {
+        const v = apiInput.value.trim().replace(/\/$/, '');
+        if (!v) return;
+        API_BASE = v; API = v + '/api'; API_ROOT = v;
+        localStorage.setItem(API_BASE_STORAGE, v);
+        if (API_KEY) loadAll();
+      });
+
+      document.getElementById('ta-refresh').addEventListener('click', loadAll);
+
+      function pct(v)        { return v != null ? (v * 100).toFixed(1) + '%' : '—'; }
+      function num(v, d = 2) { return v != null ? Number(v).toFixed(d) : '—'; }
+      function rr(entry) {
+        if (!entry?.level || !entry?.stop || !entry?.target) return '—';
+        const risk = Math.abs(entry.level - entry.stop);
+        if (risk === 0) return '—';
+        return (Math.abs(entry.target - entry.level) / risk).toFixed(1) + ':1';
+      }
+      function shortTime(iso) {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        return d.toLocaleDateString('en-US', { month:'short', day:'numeric' }) + ' '
+             + d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:false });
+      }
+      function setKPI(id, val, cls) {
+        const el = document.getElementById(id); if (!el) return;
+        el.textContent = val;
+        if (cls) el.className = 'kpi-value ' + cls;
+        el.closest('.ta-kpi-card')?.classList.add('kpi-flash');
+        setTimeout(() => el.closest('.ta-kpi-card')?.classList.remove('kpi-flash'), 700);
+      }
+      function setSub(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+
+      function renderOfflineKPIs() {
+        setKPI('kpi-today', '—', 'neutral'); setKPI('kpi-winrate', '—', '');
+        setKPI('kpi-gate', '—', ''); setKPI('kpi-redis', '—', '');
+        document.getElementById('ta-tbody').innerHTML =
+          '<tr><td colspan="12"><div class="ta-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><p>API offline — data will appear when the Hetzner stack is live.</p></div></td></tr>';
       }
 
       async function loadKPIs() {
         try {
-          const d = await apiFetch('/api/summary');
-          setText('kpi-total',  d.total_alerts       ?? '--');
-          setText('kpi-active', d.active_positions   ?? '--');
-          setText('kpi-win',    d.win_rate != null ? (d.win_rate * 100).toFixed(1) + '%' : '--');
-          const pnlEl = document.getElementById('kpi-pnl');
-          if (d.pnl_today != null) {
-            pnlEl.textContent = (d.pnl_today >= 0 ? '+' : '') + '$' + d.pnl_today.toLocaleString();
-            pnlEl.className = 'kpi-value ' + (d.pnl_today >= 0 ? 'positive' : 'negative');
-          } else { pnlEl.textContent = '--'; }
-        } catch { ['kpi-total','kpi-active','kpi-win','kpi-pnl'].forEach(id => setText(id, '--')); }
+          const [summary, health, kpis] = await Promise.all([
+            fetchJSON('/summary'), fetchJSON('/health'), fetchJSON('/kpis')
+          ]);
+          setConnStatus(true, health.status || 'unknown');
+          setKPI('kpi-today', summary.alerts_today ?? 0, 'neutral');
+          setSub('kpi-total-sub', (summary.total_alerts ?? 0) + ' total');
+          const wr = summary.overall_winrate;
+          setKPI('kpi-winrate', pct(wr), wr != null ? (wr >= 0.65 ? 'positive' : 'negative') : '');
+          setSub('kpi-wl-sub', (summary.wins ?? '?') + 'W / ' + (summary.losses ?? '?') + 'L');
+          setKPI('kpi-gate', kpis.gate_rejection_rate != null ? (kpis.gate_rejection_rate * 100).toFixed(1) + '%' : '—', '');
+          const redisOk = health.redis_ok;
+          setKPI('kpi-redis', redisOk ? 'OK' : 'DOWN', redisOk ? 'positive' : 'negative');
+          setSub('kpi-redis-sub', health.redis_latency_ms != null ? health.redis_latency_ms + 'ms' : '');
+        } catch (err) { setConnStatus(false, null); console.error('KPI load failed:', err.message); }
+      }
+
+      async function loadGateChart() {
+        try {
+          const data = await fetchJSON('/session-stats?timeframe=15m&date=today');
+          const stats = data.stats || {};
+          const gates = Object.entries(stats)
+            .filter(([k]) => k.startsWith('gate_') && !k.includes('gate_dir') && !k.includes('gate_watch'))
+            .sort((a, b) => b[1] - a[1]).slice(0, 12);
+          if (!gates.length) return;
+          if (gateChartInst) gateChartInst.destroy();
+          gateChartInst = new Chart(document.getElementById('ta-gate-chart'), {
+            type: 'bar',
+            data: {
+              labels: gates.map(([k]) => k.replace('gate_', '')),
+              datasets: [{ label: 'Rejections', data: gates.map(([, v]) => v), backgroundColor: 'rgba(196,92,92,0.7)', borderRadius: 4 }]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+          });
+        } catch (err) { console.error('Gate chart:', err.message); }
+      }
+
+      async function loadWinrateChart() {
+        try {
+          const data = await fetchJSON('/winrate');
+          if (!data.length) return;
+          new Chart(document.getElementById('ta-winrate-chart'), {
+            type: 'bar',
+            data: {
+              labels: data.map(d => pct(d.bucket)),
+              datasets: [
+                { label: 'Winrate %', data: data.map(d => d.total > 0 ? (d.wins / d.total * 100) : 0),
+                  backgroundColor: data.map(d => d.total > 0 && (d.wins/d.total) >= 0.65 ? 'rgba(45,212,191,0.7)' : 'rgba(196,92,92,0.7)'),
+                  borderRadius: 5, yAxisID: 'y' },
+                { label: 'Sample Size', data: data.map(d => d.total),
+                  type: 'line', borderColor: 'rgba(0,212,255,0.7)', backgroundColor: 'rgba(0,212,255,0.1)',
+                  pointRadius: 3, tension: 0.3, yAxisID: 'y1' }
+              ]
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y:  { beginAtZero: true, max: 100, title: { display: true, text: 'Winrate %' }},
+                y1: { position: 'right', beginAtZero: true, grid: { drawOnChartArea: false }, title: { display: true, text: 'Count' }}
+              }
+            }
+          });
+        } catch (err) { console.error('Winrate chart:', err.message); }
+      }
+
+      async function loadFreqChart() {
+        try {
+          const data = await fetchJSON('/frequency?days=30');
+          if (!data.length) return;
+          new Chart(document.getElementById('ta-freq-chart'), {
+            type: 'bar',
+            data: {
+              labels: data.map(d => { const dt = new Date(d.date); return dt.toLocaleDateString('en-US', { month:'short', day:'numeric' }); }),
+              datasets: [
+                { label: 'Long',  data: data.map(d => d.longs),   backgroundColor: 'rgba(45,212,191,0.7)',  borderRadius: 3 },
+                { label: 'Short', data: data.map(d => d.shorts),  backgroundColor: 'rgba(196,92,92,0.7)',   borderRadius: 3 },
+                { label: 'Watch', data: data.map(d => d.watches), backgroundColor: 'rgba(0,212,255,0.35)',  borderRadius: 3 }
+              ]
+            },
+            options: { responsive: true, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true }}}
+          });
+        } catch (err) { console.error('Freq chart:', err.message); }
+      }
+
+      async function loadSymbolsChart() {
+        try {
+          const data = await fetchJSON('/symbols?limit=12');
+          if (!data.length) return;
+          new Chart(document.getElementById('ta-symbols-chart'), {
+            type: 'bar',
+            data: {
+              labels: data.map(d => d.symbol),
+              datasets: [{ label: 'Total Alerts', data: data.map(d => d.total), backgroundColor: 'rgba(168,85,247,0.6)', borderRadius: 5 }]
+            },
+            options: { responsive: true, indexAxis: 'y', scales: { x: { beginAtZero: true }}}
+          });
+        } catch (err) { console.error('Symbols chart:', err.message); }
       }
 
       async function loadAlerts() {
+        const tbody = document.getElementById('ta-tbody');
         try {
-          const data = await apiFetch('/api/alerts?limit=50');
+          const data = await fetchJSON('/alerts?limit=50');
           const alerts = Array.isArray(data) ? data : (data.alerts || []);
-          if (!alerts.length) { renderEmpty('No alerts yet. Signals will appear here as they fire.'); return; }
-          document.getElementById('ta-tbody').innerHTML = alerts.map(a => {
-            const sig   = (a.signal || '').toLowerCase();
-            const badge = ['buy','sell','hold'].includes(sig) ? sig : 'hold';
-            const ts    = a.timestamp ? new Date(a.timestamp).toLocaleTimeString() : '--';
-            const price = a.price != null ? '$' + Number(a.price).toLocaleString(undefined, {minimumFractionDigits:2}) : '--';
-            const conf  = a.confidence != null ? (a.confidence * 100).toFixed(0) + '%' : '--';
+          if (!alerts.length) {
+            tbody.innerHTML = '<tr><td colspan="12"><div class="ta-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><p>No alerts yet — signals appear here as they fire.</p></div></td></tr>';
+            return;
+          }
+          tbody.innerHTML = alerts.map(a => {
+            const dir = (a.direction || '').toUpperCase();
+            const dirCls = dir === 'LONG' ? 'long' : dir === 'SHORT' ? 'short' : 'watch';
+            const entry = typeof a.entry === 'string' ? JSON.parse(a.entry) : (a.entry || {});
+            const out = a.outcome;
+            const outCls = out === 'WIN' ? 'win' : out === 'LOSS' ? 'loss' : out === 'SCRATCH' ? 'scratch' : 'open';
             return `<tr>
-              <td class="mono" data-label="Time">${ts}</td>
-              <td data-label="Symbol"><strong>${a.symbol || '--'}</strong></td>
-              <td data-label="Signal"><span class="ta-badge ${badge}">${a.signal || badge}</span></td>
-              <td class="mono" data-label="Price">${price}</td>
-              <td class="mono" data-label="Confidence">${conf}</td>
-              <td data-label="Status">${a.status || 'open'}</td>
+              <td class="mono" data-label="Time">${shortTime(a.created_at)}</td>
+              <td data-label="Symbol"><strong>${a.symbol || '\u2014'}</strong></td>
+              <td data-label="Direction"><span class="ta-badge ${dirCls}">${dir || '\u2014'}</span></td>
+              <td class="mono" data-label="Edge">${pct(a.edge_probability)}</td>
+              <td class="mono" data-label="Conf">${pct(a.confidence)}</td>
+              <td class="mono" data-label="Entry">${entry.level ? '$' + num(entry.level) : '\u2014'}</td>
+              <td class="mono" data-label="Stop">${entry.stop   ? '$' + num(entry.stop)  : '\u2014'}</td>
+              <td class="mono" data-label="Target">${entry.target ? '$' + num(entry.target) : '\u2014'}</td>
+              <td class="mono" data-label="R:R">${rr(entry)}</td>
+              <td class="mono" data-label="Sources">${a.sources_agree != null ? a.sources_agree + '/7' : '\u2014'}</td>
+              <td data-label="Outcome"><span class="ta-badge ${outCls}">${out || 'OPEN'}</span></td>
+              <td class="mono" data-label="PnL">${a.outcome_pnl != null ? num(a.outcome_pnl, 4) : '\u2014'}</td>
             </tr>`;
           }).join('');
-        } catch { renderEmpty('Could not load alerts — check API connection.'); }
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="12"><div class="ta-error-inline">Failed to load: ${err.message}</div></td></tr>`;
+        }
       }
 
-      function renderEmpty(msg) {
-        document.getElementById('ta-tbody').innerHTML =
-          `<tr><td colspan="6"><div class="ta-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><p>${msg}</p></div></td></tr>`;
+      Chart.defaults.color       = '#7a7a7a';
+      Chart.defaults.borderColor = 'rgba(255,255,255,0.07)';
+      Chart.defaults.font.size   = 11;
+
+      async function loadAll() {
+        await Promise.all([loadKPIs(), loadGateChart(), loadWinrateChart(), loadFreqChart(), loadSymbolsChart(), loadAlerts()]);
+        const lu = document.getElementById('ta-last-updated');
+        if (lu) lu.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
       }
 
-      function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
-      function loadAll() { probeAPI(); loadKPIs(); loadAlerts(); }
+      async function init() {
+        const storedKey = localStorage.getItem(API_KEY_STORAGE);
+        const online = await probeOnline();
+        if (!online) {
+          setConnStatus(false, null);
+          if (storedKey) { API_KEY = storedKey; showDashboard(); renderOfflineKPIs(); apiInput.value = API_BASE; }
+          return;
+        }
+        if (storedKey) {
+          const valid = await validateKey(storedKey);
+          if (valid) {
+            API_KEY = storedKey; showDashboard(); apiInput.value = API_BASE;
+            await loadAll(); pollTimer = setInterval(loadAll, POLL_MS); return;
+          }
+          localStorage.removeItem(API_KEY_STORAGE);
+        }
+        setConnStatus(online, null);
+      }
 
-      document.getElementById('ta-refresh').addEventListener('click', loadAll);
-      probeAPI();
+      init();
     })();
     </script>
   </body>

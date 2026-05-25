@@ -19,48 +19,43 @@
 # Primary domain redirect (force canonical domain)
 [[redirects]]
   from = "https://macrosight.netlify.app/*"
-  to = "https://macrosight.net/:splat"
+  to   = "https://macrosight.net/:splat"
   status = 301
-  force = true
+  force  = true
 
 # Clean URL redirects
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to   = "/index.html"
   status = 200
 
-# Security headers for HTML pages
+# Trade Alert page — scoped CSP (must be before the /*.html wildcard)
+[[headers]]
+  for = "/trade-alert/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection       = "1; mode=block"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+    Cache-Control          = "public, max-age=0, must-revalidate"
+    Permissions-Policy     = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' https://trade-alert-api.macrosight.net; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+
+# All other HTML pages
 [[headers]]
   for = "/*.html"
   [headers.values]
-    # Prevent clickjacking
-    X-Frame-Options = "DENY"
-    
-    # Prevent MIME sniffing
+    X-Frame-Options        = "DENY"
     X-Content-Type-Options = "nosniff"
-    
-    # Enable XSS protection
-    X-XSS-Protection = "1; mode=block"
-    
-    # Referrer policy
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    
-    # Restrict browser features
-    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()"
-    
-    # Content Security Policy
+    X-XSS-Protection       = "1; mode=block"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+    Permissions-Policy     = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
-    
-    # Don't cache HTML
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control          = "public, max-age=0, must-revalidate"
 
-# Security headers for all files
+# All files — HSTS
 [[headers]]
   for = "/*"
   [headers.values]
-    # Force HTTPS for 2 years (required for preload)
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
-    
-    # Prevent MIME sniffing
-    X-Content-Type-Options = "nosniff"
-
+    X-Content-Type-Options    = "nosniff"
