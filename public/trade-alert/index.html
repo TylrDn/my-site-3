@@ -243,8 +243,28 @@
 
       async function fetchJSON(path) {
         const r = await fetch(API + path, { signal: AbortSignal.timeout(12000) });
+        if (r.status === 503) {
+          let detail = 'Dashboard proxy not configured';
+          try {
+            const body = await r.json();
+            if (body.detail) detail = body.detail;
+          } catch { /* ignore */ }
+          throw new Error(detail);
+        }
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
+      }
+
+      function showSetupError(msg) {
+        setConnStatus(false, null);
+        connLabel.textContent = 'Setup required';
+        sysChip.textContent = '503';
+        sysChip.className = 'ta-sys-chip offline';
+        document.getElementById('ta-tbody').innerHTML =
+          '<tr><td colspan="12"><div class="ta-error-inline">' + msg
+          + '<br><small style="color:var(--ta-muted);margin-top:0.5rem;display:block">Add <code>DASHBOARD_API_KEY</code> in Netlify → Site configuration → Environment variables, then redeploy.</small></div></td></tr>';
+        setKPI('kpi-today', '—', 'neutral'); setKPI('kpi-winrate', '—', '');
+        setKPI('kpi-gate', '—', ''); setKPI('kpi-redis', '—', '');
       }
 
       document.getElementById('ta-refresh').addEventListener('click', loadAll);
@@ -294,7 +314,14 @@
           const redisOk = health.redis_ok;
           setKPI('kpi-redis', redisOk ? 'OK' : 'DOWN', redisOk ? 'positive' : 'negative');
           setSub('kpi-redis-sub', health.redis_latency_ms != null ? health.redis_latency_ms + 'ms' : '');
-        } catch (err) { setConnStatus(false, null); console.error('KPI load failed:', err.message); }
+        } catch (err) {
+          console.error('KPI load failed:', err.message);
+          if (/proxy not configured|DASHBOARD_API_KEY/i.test(err.message)) {
+            showSetupError(err.message);
+          } else {
+            setConnStatus(false, null);
+          }
+        }
       }
 
       async function loadGateChart() {
@@ -425,6 +452,7 @@
       }
 
       async function init() {
+        connLabel.textContent = 'Loading…';
         const online = await probeOnline();
         if (!online) {
           setConnStatus(false, null);
@@ -434,8 +462,14 @@
           }, POLL_MS);
           return;
         }
-        await loadAll();
-        pollTimer = setInterval(loadAll, POLL_MS);
+        try {
+          await loadAll();
+          pollTimer = setInterval(loadAll, POLL_MS);
+        } catch (err) {
+          if (/proxy not configured|DASHBOARD_API_KEY/i.test(err.message)) {
+            showSetupError(err.message);
+          }
+        }
       }
 
       init();
