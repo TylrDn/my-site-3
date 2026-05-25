@@ -54,6 +54,9 @@ function parseRoute(event) {
   const qIdx = rest.indexOf('?');
   const pathPart = qIdx >= 0 ? rest.slice(0, qIdx) : rest;
   const query = qIdx >= 0 ? rest.slice(qIdx) : '';
+  if (pathPart === 'legacy/summary' || pathPart === 'legacy/alerts') {
+    return { pathPart, query };
+  }
   const segment = pathPart.split('/')[0];
   if (!ALLOWED.has(segment)) {
     return null;

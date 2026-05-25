@@ -79,6 +79,24 @@
       .ta-chart-card canvas { max-height: 220px; }
       .ta-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
       .ta-section-header h2 { font-size: 1.05rem; font-weight: 500; color: var(--ta-fg); margin: 0; }
+      .ta-legacy-panel {
+        margin-top: 3rem; padding-top: 2rem;
+        border-top: 1px dashed var(--ta-border);
+      }
+      .ta-legacy-panel .ta-legacy-badge {
+        display: inline-block; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.06em;
+        text-transform: uppercase; color: var(--ta-amber); background: rgba(212,168,83,0.12);
+        border: 1px solid rgba(212,168,83,0.35); border-radius: 4px; padding: 0.15rem 0.45rem;
+        margin-left: 0.5rem; vertical-align: middle;
+      }
+      .ta-legacy-note { font-size: 0.72rem; color: var(--ta-muted); max-width: 14rem; }
+      .ta-legacy-kpi-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem; margin-bottom: 1.25rem;
+      }
+      .ta-legacy-kpi { background: var(--ta-card); border: 1px solid var(--ta-border); border-radius: 8px; padding: 0.75rem 1rem; }
+      .ta-legacy-kpi .kpi-label { font-size: 0.7rem; color: var(--ta-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+      .ta-legacy-kpi .kpi-value { font-size: 1.25rem; font-weight: 500; font-family: 'JetBrains Mono', monospace; margin-top: 0.25rem; }
       .ta-last-updated { font-size: 0.75rem; color: var(--ta-muted); }
       .ta-btn-ghost {
         display: inline-flex; align-items: center; gap: 0.35rem;
@@ -179,6 +197,36 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                   <p>Loading alerts…</p>
                 </div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="ta-legacy-panel" id="ta-legacy-panel" hidden>
+          <div class="ta-section-header">
+            <h2>Development / Trial <span class="ta-legacy-badge">Legacy</span></h2>
+            <span class="ta-last-updated" id="ta-legacy-updated"></span>
+          </div>
+          <p style="color:var(--ta-muted);font-size:0.85rem;margin:0 0 1rem;max-width:42rem">
+            Cherry-picked signals from local dev runs (Apr 2026). Shown for reference only — not included in live KPIs above.
+          </p>
+          <div class="ta-legacy-kpi-grid">
+            <div class="ta-legacy-kpi"><div class="kpi-label">Curated alerts</div><div class="kpi-value" id="leg-total">—</div></div>
+            <div class="ta-legacy-kpi"><div class="kpi-label">Win rate</div><div class="kpi-value" id="leg-winrate">—</div></div>
+            <div class="ta-legacy-kpi"><div class="kpi-label">Avg edge</div><div class="kpi-value" id="leg-edge">—</div></div>
+            <div class="ta-legacy-kpi"><div class="kpi-label">Date range</div><div class="kpi-value" id="leg-range" style="font-size:0.85rem">—</div></div>
+          </div>
+          <div class="ta-table-wrap">
+            <table class="ta-table" aria-label="Legacy trial alerts">
+              <thead>
+                <tr>
+                  <th>Time</th><th>Symbol</th><th>Direction</th><th>Edge</th><th>Conf</th>
+                  <th>Entry</th><th>Stop</th><th>Target</th><th>R:R</th>
+                  <th>Sources</th><th>Outcome</th><th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="ta-legacy-tbody">
+                <tr><td colspan="12"><div class="ta-empty"><p>Loading legacy alerts…</p></div></td></tr>
               </tbody>
             </table>
           </div>
@@ -284,6 +332,10 @@
         const d = new Date(iso);
         return d.toLocaleDateString('en-US', { month:'short', day:'numeric' }) + ' '
              + d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:false });
+      }
+      function shortDate(iso) {
+        if (!iso) return '—';
+        return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'2-digit' });
       }
       function setKPI(id, val, cls) {
         const el = document.getElementById(id); if (!el) return;
@@ -420,29 +472,67 @@
             tbody.innerHTML = '<tr><td colspan="12"><div class="ta-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><p>No alerts yet — signals appear here as they fire.</p></div></td></tr>';
             return;
           }
-          tbody.innerHTML = alerts.map(a => {
-            const dir = (a.direction || '').toUpperCase();
-            const dirCls = dir === 'LONG' ? 'long' : dir === 'SHORT' ? 'short' : 'watch';
-            const entry = typeof a.entry === 'string' ? JSON.parse(a.entry) : (a.entry || {});
-            const out = a.outcome;
-            const outCls = out === 'WIN' ? 'win' : out === 'LOSS' ? 'loss' : out === 'SCRATCH' ? 'scratch' : 'open';
-            return `<tr>
-              <td class="mono" data-label="Time">${shortTime(a.created_at)}</td>
-              <td data-label="Symbol"><strong>${a.symbol || '\u2014'}</strong></td>
-              <td data-label="Direction"><span class="ta-badge ${dirCls}">${dir || '\u2014'}</span></td>
-              <td class="mono" data-label="Edge">${pct(a.edge_probability)}</td>
-              <td class="mono" data-label="Conf">${pct(a.confidence)}</td>
-              <td class="mono" data-label="Entry">${entry.level ? '$' + num(entry.level) : '\u2014'}</td>
-              <td class="mono" data-label="Stop">${entry.stop   ? '$' + num(entry.stop)  : '\u2014'}</td>
-              <td class="mono" data-label="Target">${entry.target ? '$' + num(entry.target) : '\u2014'}</td>
-              <td class="mono" data-label="R:R">${rr(entry)}</td>
-              <td class="mono" data-label="Sources">${a.sources_agree != null ? a.sources_agree + '/7' : '\u2014'}</td>
-              <td data-label="Outcome"><span class="ta-badge ${outCls}">${out || 'OPEN'}</span></td>
-              <td class="mono" data-label="PnL">${a.outcome_pnl != null ? num(a.outcome_pnl, 4) : '\u2014'}</td>
-            </tr>`;
-          }).join('');
+          tbody.innerHTML = alerts.map(a => renderAlertRow(a, false)).join('');
         } catch (err) {
           tbody.innerHTML = `<tr><td colspan="12"><div class="ta-error-inline">Failed to load: ${err.message}</div></td></tr>`;
+        }
+      }
+
+      function renderAlertRow(a, noteCol) {
+        const dir = (a.direction || '').toUpperCase();
+        const dirCls = dir === 'LONG' ? 'long' : dir === 'SHORT' ? 'short' : 'watch';
+        const entry = typeof a.entry === 'string' ? JSON.parse(a.entry) : (a.entry || {});
+        const out = a.outcome;
+        const outCls = out === 'WIN' ? 'win' : out === 'LOSS' ? 'loss' : out === 'SCRATCH' ? 'scratch' : 'open';
+        const noteCell = noteCol
+          ? `<td class="ta-legacy-note" data-label="Note">${a.legacy_note || '\u2014'}</td>`
+          : `<td class="mono" data-label="PnL">${a.outcome_pnl != null ? num(a.outcome_pnl, 4) : '\u2014'}</td>`;
+        return `<tr>
+          <td class="mono" data-label="Time">${shortTime(a.created_at)}</td>
+          <td data-label="Symbol"><strong>${a.symbol || '\u2014'}</strong></td>
+          <td data-label="Direction"><span class="ta-badge ${dirCls}">${dir || '\u2014'}</span></td>
+          <td class="mono" data-label="Edge">${pct(a.edge_probability)}</td>
+          <td class="mono" data-label="Conf">${pct(a.confidence)}</td>
+          <td class="mono" data-label="Entry">${entry.level ? '$' + num(entry.level) : '\u2014'}</td>
+          <td class="mono" data-label="Stop">${entry.stop   ? '$' + num(entry.stop)  : '\u2014'}</td>
+          <td class="mono" data-label="Target">${entry.target ? '$' + num(entry.target) : '\u2014'}</td>
+          <td class="mono" data-label="R:R">${rr(entry)}</td>
+          <td class="mono" data-label="Sources">${a.sources_agree != null ? a.sources_agree + '/7' : '\u2014'}</td>
+          <td data-label="Outcome"><span class="ta-badge ${outCls}">${out || 'OPEN'}</span></td>
+          ${noteCell}
+        </tr>`;
+      }
+
+      async function loadLegacy() {
+        const panel = document.getElementById('ta-legacy-panel');
+        const tbody = document.getElementById('ta-legacy-tbody');
+        try {
+          const [summary, alerts] = await Promise.all([
+            fetchJSON('/legacy/summary'),
+            fetchJSON('/legacy/alerts?limit=50')
+          ]);
+          if (!summary.total_alerts) {
+            panel.hidden = true;
+            return;
+          }
+          panel.hidden = false;
+          document.getElementById('leg-total').textContent = summary.total_alerts ?? 0;
+          document.getElementById('leg-winrate').textContent = pct(summary.overall_winrate);
+          document.getElementById('leg-edge').textContent = pct(summary.avg_edge);
+          const er = summary.earliest, lr = summary.latest;
+          document.getElementById('leg-range').textContent =
+            (er && lr) ? (shortDate(er) + ' \u2013 ' + shortDate(lr)) : '\u2014';
+          const rows = Array.isArray(alerts) ? alerts : (alerts.alerts || []);
+          if (!rows.length) {
+            tbody.innerHTML = '<tr><td colspan="12"><div class="ta-empty"><p>No legacy alerts imported yet.</p></div></td></tr>';
+          } else {
+            tbody.innerHTML = rows.map(a => renderAlertRow(a, true)).join('');
+          }
+          const lu = document.getElementById('ta-legacy-updated');
+          if (lu) lu.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+        } catch (err) {
+          panel.hidden = true;
+          console.debug('Legacy section skipped:', err.message);
         }
       }
 
@@ -454,7 +544,7 @@
       }
 
       async function loadAll() {
-        await Promise.all([loadKPIs(), loadGateChart(), loadWinrateChart(), loadFreqChart(), loadSymbolsChart(), loadAlerts()]);
+        await Promise.all([loadKPIs(), loadGateChart(), loadWinrateChart(), loadFreqChart(), loadSymbolsChart(), loadAlerts(), loadLegacy()]);
         const lu = document.getElementById('ta-last-updated');
         if (lu) lu.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
       }
