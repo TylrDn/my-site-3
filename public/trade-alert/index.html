@@ -10,8 +10,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.macrosight.net/trade-alert/" />
     <meta name="twitter:card" content="summary_large_image" />
-    <!-- API base: override via ?api=https://... or set this meta tag -->
-    <meta name="trade-alert-api-base" content="https://trade-alert-api.macrosight.net" />
+    <!-- Live data via same-origin Netlify proxy (/trade-alert/api/*) — no browser API key -->
     <link rel="canonical" href="https://www.macrosight.net/trade-alert/" />
     <link rel="stylesheet" href="../styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -56,29 +55,6 @@
       .ta-sys-chip.live     { background: rgba(45,212,191,0.15); color: var(--ta-green); }
       .ta-sys-chip.degraded { background: rgba(212,168,83,0.15);  color: var(--ta-amber); }
       .ta-sys-chip.offline  { background: rgba(196,92,92,0.15);   color: var(--ta-red); }
-      .ta-auth-gate {
-        max-width: 420px; margin: 0 auto 3rem;
-        background: var(--ta-card); border: 1px solid var(--ta-border);
-        border-radius: var(--radius-lg, 12px); padding: 2rem;
-      }
-      .ta-auth-gate h2 { font-size: 1.2rem; font-weight: 500; color: var(--ta-fg); margin-bottom: 0.5rem; }
-      .ta-auth-gate p  { font-size: 0.9rem; color: var(--ta-muted); margin-bottom: 1.25rem; }
-      .ta-input-row { display: flex; gap: 0.5rem; }
-      .ta-input-row input {
-        flex: 1; background: var(--color-surface, #111); border: 1px solid var(--ta-border);
-        border-radius: var(--radius, 8px); padding: 0.6rem 0.9rem;
-        font-family: var(--font-mono, monospace); font-size: 0.875rem; color: var(--ta-fg);
-        outline: none; transition: border-color 0.2s;
-      }
-      .ta-input-row input:focus { border-color: var(--ta-blue); }
-      .ta-input-row button {
-        background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-        color: #000; border: none; border-radius: var(--radius, 8px);
-        padding: 0.6rem 1.1rem; font-size: 0.875rem; font-weight: 600;
-        cursor: pointer; transition: opacity 0.2s; white-space: nowrap; min-height: 44px;
-      }
-      .ta-input-row button:hover { opacity: 0.85; }
-      .ta-auth-error { margin-top: 0.6rem; font-size: 0.82rem; color: var(--ta-red); display: none; }
       .ta-kpi-grid {
         display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 1rem; margin-bottom: 2rem;
@@ -114,13 +90,6 @@
       }
       .ta-btn-ghost:hover { border-color: var(--ta-blue); color: var(--ta-blue); }
       .ta-btn-ghost svg { width: 14px; height: 14px; }
-      .ta-config-bar {
-        display: flex; align-items: center; gap: 0.75rem;
-        background: rgba(255,255,255,0.02); border: 1px solid var(--ta-border);
-        border-radius: var(--radius, 8px); padding: 0.6rem 1rem; margin-bottom: 2rem; flex-wrap: wrap;
-      }
-      .ta-config-bar label { font-size: 0.78rem; color: var(--ta-muted); white-space: nowrap; }
-      .ta-config-bar input { flex: 1; min-width: 200px; background: transparent; border: none; font-family: var(--font-mono, monospace); font-size: 0.8rem; color: var(--ta-blue); outline: none; }
       .ta-table-wrap {
         background: var(--ta-card); border: 1px solid var(--ta-border);
         border-radius: var(--radius-lg, 12px); overflow: hidden; margin-bottom: 2rem;
@@ -146,7 +115,6 @@
       .ta-empty svg { width: 38px; height: 38px; margin: 0 auto 0.75rem; opacity: 0.3; }
       .ta-empty p { font-size: 0.88rem; margin: 0; }
       .ta-error-inline { padding: 1rem; text-align: center; font-size: 0.82rem; color: var(--ta-red); }
-      #ta-dashboard { display: none; }
       @media (max-width: 900px) { .ta-charts-grid { grid-template-columns: 1fr; } }
       @media (max-width: 600px) {
         .ta-kpi-grid { grid-template-columns: repeat(2,1fr); }
@@ -172,24 +140,7 @@
           </div>
         </div>
 
-        <div class="ta-auth-gate" id="ta-auth-gate">
-          <h2>API Key Required</h2>
-          <p>Enter your <code>DASHBOARD_API_KEY</code> to access live data. Key is kept in memory only — never persisted.</p>
-          <div class="ta-input-row">
-            <input type="password" id="ta-key-input" placeholder="sk-…" autocomplete="off" aria-label="API key" />
-            <button id="ta-key-submit">Connect</button>
-          </div>
-          <p class="ta-auth-error" id="ta-auth-error">Invalid key or API unreachable. Check the key and try again.</p>
-        </div>
-
         <div id="ta-dashboard">
-          <div class="ta-config-bar">
-            <label for="ta-api-input">API Base</label>
-            <input type="text" id="ta-api-input" aria-label="API base URL" />
-            <button class="ta-btn-ghost" id="ta-api-save" style="min-height:36px;padding:0.25rem 0.65rem">Update</button>
-            <button class="ta-btn-ghost" id="ta-logout" style="min-height:36px;padding:0.25rem 0.65rem;color:var(--ta-red);border-color:rgba(196,92,92,0.3)">Log out</button>
-          </div>
-
           <div class="ta-kpi-grid">
             <div class="ta-kpi-card"><div class="kpi-label">Alerts Today</div><div class="kpi-value neutral" id="kpi-today"><span class="skeleton" style="width:2.5rem"></span></div><div class="kpi-sub" id="kpi-total-sub"></div></div>
             <div class="ta-kpi-card"><div class="kpi-label">Win Rate (30d)</div><div class="kpi-value" id="kpi-winrate"><span class="skeleton" style="width:3.5rem"></span></div><div class="kpi-sub" id="kpi-wl-sub"></div></div>
@@ -241,39 +192,38 @@
     (function () {
       'use strict';
 
-      const API_KEY_STORAGE  = 'trade_alert_dashboard_api_key';
-      const API_BASE_STORAGE = 'trade_alert_api_base';
-      const DEFAULT_API      = 'https://trade-alert-api.macrosight.net';
-      const POLL_MS          = 30_000;
+      /** Same-origin Netlify proxy — API key stays server-side. Dev override: ?api=https://host:8080 */
+      const PROXY_API   = '/trade-alert/api';
+      const PROXY_HEALTH = '/trade-alert/health';
+      const POLL_MS     = 30_000;
 
-      function resolveApiBase() {
-        const q = new URLSearchParams(location.search).get('api');
-        if (q) { const b = q.replace(/\/$/,''); localStorage.setItem(API_BASE_STORAGE, b); return b; }
-        return (
-          localStorage.getItem(API_BASE_STORAGE) ||
-          document.querySelector('meta[name="trade-alert-api-base"]')?.content?.trim() ||
-          DEFAULT_API
-        ).replace(/\/$/, '');
+      function useDirectApi() {
+        return !!new URLSearchParams(location.search).get('api');
       }
 
-      let API_BASE = resolveApiBase();
-      let API      = API_BASE + '/api';
-      let API_ROOT = API_BASE;
-      let API_KEY  = '';
+      function resolveDirectBase() {
+        const q = new URLSearchParams(location.search).get('api');
+        return q ? q.replace(/\/$/, '') : '';
+      }
+
+      let API      = PROXY_API;
+      let API_ROOT = PROXY_HEALTH;
       let pollTimer = null;
       let gateChartInst = null;
+
+      if (useDirectApi()) {
+        const base = resolveDirectBase();
+        API = base + '/api';
+        API_ROOT = base + '/health';
+      }
 
       const connDot   = document.getElementById('ta-conn-dot');
       const connLabel = document.getElementById('ta-conn-label');
       const sysChip   = document.getElementById('ta-sys-chip');
-      const authGate  = document.getElementById('ta-auth-gate');
-      const dashboard = document.getElementById('ta-dashboard');
-      const apiInput  = document.getElementById('ta-api-input');
-      apiInput.value  = API_BASE;
 
       function setConnStatus(online, status) {
         connDot.className = 'ta-status-dot' + (online ? (status === 'degraded' ? ' degraded' : '') : ' offline');
-        connLabel.textContent = online ? 'API Connected' : 'API Offline';
+        connLabel.textContent = online ? 'Live' : 'Offline';
         if (online && status) {
           sysChip.textContent = status.toUpperCase();
           sysChip.className = 'ta-sys-chip ' + (status === 'live' ? 'live' : status === 'degraded' ? 'degraded' : 'offline');
@@ -285,71 +235,17 @@
 
       async function probeOnline() {
         try {
-          const r = await fetch(API_ROOT + '/health', { signal: AbortSignal.timeout(5000) });
-          return r.ok;
-        } catch { return false; }
-      }
-
-      async function validateKey(key) {
-        try {
-          const r = await fetch(API + '/auth/test', {
-            headers: { 'X-API-Key': key },
-            signal: AbortSignal.timeout(5000)
-          });
+          const url = useDirectApi() ? API_ROOT : PROXY_HEALTH;
+          const r = await fetch(url, { signal: AbortSignal.timeout(8000) });
           return r.ok;
         } catch { return false; }
       }
 
       async function fetchJSON(path) {
-        const r = await fetch(API + path, {
-          headers: API_KEY ? { 'X-API-Key': API_KEY } : {},
-          signal: AbortSignal.timeout(8000)
-        });
-        if (r.status === 401) {
-          API_KEY = ''; localStorage.removeItem(API_KEY_STORAGE); showAuthGate();
-          throw new Error('Invalid API key — please reconnect');
-        }
+        const r = await fetch(API + path, { signal: AbortSignal.timeout(12000) });
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       }
-
-      function showAuthGate() { authGate.style.display = ''; dashboard.style.display = 'none'; clearInterval(pollTimer); }
-      function showDashboard() { authGate.style.display = 'none'; dashboard.style.display = 'block'; }
-
-      document.getElementById('ta-key-submit').addEventListener('click', async () => {
-        const val = document.getElementById('ta-key-input').value.trim();
-        if (!val) return;
-        const errEl = document.getElementById('ta-auth-error');
-        errEl.style.display = 'none';
-        const online = await probeOnline();
-        if (!online) {
-          API_KEY = val; localStorage.setItem(API_KEY_STORAGE, val);
-          showDashboard(); setConnStatus(false, null); renderOfflineKPIs(); return;
-        }
-        const valid = await validateKey(val);
-        if (!valid) { errEl.style.display = 'block'; return; }
-        API_KEY = val; localStorage.setItem(API_KEY_STORAGE, val);
-        showDashboard(); loadAll();
-        pollTimer = setInterval(loadAll, POLL_MS);
-      });
-
-      document.getElementById('ta-key-input').addEventListener('keydown', e => {
-        if (e.key === 'Enter') document.getElementById('ta-key-submit').click();
-      });
-
-      document.getElementById('ta-logout').addEventListener('click', () => {
-        API_KEY = ''; localStorage.removeItem(API_KEY_STORAGE);
-        document.getElementById('ta-key-input').value = '';
-        clearInterval(pollTimer); showAuthGate(); setConnStatus(false, null);
-      });
-
-      document.getElementById('ta-api-save').addEventListener('click', () => {
-        const v = apiInput.value.trim().replace(/\/$/, '');
-        if (!v) return;
-        API_BASE = v; API = v + '/api'; API_ROOT = v;
-        localStorage.setItem(API_BASE_STORAGE, v);
-        if (API_KEY) loadAll();
-      });
 
       document.getElementById('ta-refresh').addEventListener('click', loadAll);
 
@@ -380,7 +276,7 @@
         setKPI('kpi-today', '—', 'neutral'); setKPI('kpi-winrate', '—', '');
         setKPI('kpi-gate', '—', ''); setKPI('kpi-redis', '—', '');
         document.getElementById('ta-tbody').innerHTML =
-          '<tr><td colspan="12"><div class="ta-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><p>API offline — data will appear when the Hetzner stack is live.</p></div></td></tr>';
+          '<tr><td colspan="12"><div class="ta-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><p>Dashboard temporarily unavailable — retrying…</p></div></td></tr>';
       }
 
       async function loadKPIs() {
@@ -529,22 +425,17 @@
       }
 
       async function init() {
-        const storedKey = localStorage.getItem(API_KEY_STORAGE);
         const online = await probeOnline();
         if (!online) {
           setConnStatus(false, null);
-          if (storedKey) { API_KEY = storedKey; showDashboard(); renderOfflineKPIs(); apiInput.value = API_BASE; }
+          renderOfflineKPIs();
+          pollTimer = setInterval(async () => {
+            if (await probeOnline()) { clearInterval(pollTimer); init(); }
+          }, POLL_MS);
           return;
         }
-        if (storedKey) {
-          const valid = await validateKey(storedKey);
-          if (valid) {
-            API_KEY = storedKey; showDashboard(); apiInput.value = API_BASE;
-            await loadAll(); pollTimer = setInterval(loadAll, POLL_MS); return;
-          }
-          localStorage.removeItem(API_KEY_STORAGE);
-        }
-        setConnStatus(online, null);
+        await loadAll();
+        pollTimer = setInterval(loadAll, POLL_MS);
       }
 
       init();

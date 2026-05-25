@@ -23,6 +23,19 @@
   status = 301
   force  = true
 
+# Trade Alert — server-side API proxy (key in Netlify env, not browser)
+[[redirects]]
+  from = "/trade-alert/api/*"
+  to   = "/.netlify/functions/trade-alert/:splat"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from = "/trade-alert/health"
+  to   = "/.netlify/functions/trade-alert-health"
+  status = 200
+  force  = true
+
 # Clean URL redirects
 [[redirects]]
   from = "/*"
@@ -39,7 +52,7 @@
     Referrer-Policy        = "strict-origin-when-cross-origin"
     Cache-Control          = "public, max-age=0, must-revalidate"
     Permissions-Policy     = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' https://trade-alert-api.macrosight.net; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
 
 # All other HTML pages
 [[headers]]
