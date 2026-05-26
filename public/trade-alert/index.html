@@ -38,10 +38,15 @@
       .ta-subtitle { color: var(--ta-muted); font-size: 1.1rem; font-weight: 400; margin-bottom: 1.5rem; }
       .ta-status-badge {
         display: inline-flex; align-items: center; gap: 0.4rem;
+        flex-wrap: wrap; justify-content: center;
         background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
         border-radius: 99px; padding: 0.3rem 0.85rem;
         font-family: var(--font-mono, monospace); font-size: 0.8rem; color: var(--ta-blue);
-        margin-bottom: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      .ta-pipeline-sub {
+        width: 100%; text-align: center; font-size: 0.75rem;
+        color: var(--ta-muted); margin-bottom: 2rem;
       }
       .ta-status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ta-green); animation: pulse-dot 2s ease-in-out infinite; }
       .ta-status-dot.offline  { background: var(--ta-red);   animation: none; }
@@ -155,6 +160,7 @@
             <span id="ta-conn-label">Loading…</span>
             <span class="ta-sys-chip offline" id="ta-sys-chip" style="margin-left:0.35rem">—</span>
           </div>
+          <p class="ta-pipeline-sub" id="ta-pipeline-sub">Checking pipeline…</p>
         </div>
 
         <div id="ta-dashboard">
@@ -258,6 +264,9 @@
       let API_ROOT = PROXY_HEALTH;
       let pollTimer = null;
       let gateChartInst = null;
+      let winrateChartInst = null;
+      let freqChartInst = null;
+      let symbolsChartInst = null;
 
       if (useDirectApi()) {
         const base = resolveDirectBase();
@@ -371,6 +380,18 @@
           if (kpis.poll_interval_ms && Number(kpis.poll_interval_ms) > 0) {
             POLL_MS = Number(kpis.poll_interval_ms);
           }
+          const pipeSub = document.getElementById('ta-pipeline-sub');
+          if (pipeSub) {
+            const ts = health.last_pipeline_run_ts;
+            if (ts != null && Number(ts) > 0) {
+              const d = new Date(Number(ts) * 1000);
+              pipeSub.textContent = 'Last pipeline run ' + d.toLocaleString('en-US', {
+                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short'
+              });
+            } else {
+              pipeSub.textContent = 'Pipeline runs on US market hours (ET) — no run recorded yet today';
+            }
+          }
         } catch (err) {
           console.error('KPI load failed:', err.message);
           if (/proxy not configured|DASHBOARD_API_KEY/i.test(err.message)) {
@@ -405,7 +426,8 @@
         try {
           const data = await fetchJSON('/winrate');
           if (!data.length) return;
-          new Chart(document.getElementById('ta-winrate-chart'), {
+          if (winrateChartInst) winrateChartInst.destroy();
+          winrateChartInst = new Chart(document.getElementById('ta-winrate-chart'), {
             type: 'bar',
             data: {
               labels: data.map(d => pct(d.bucket)),
@@ -433,7 +455,8 @@
         try {
           const data = await fetchJSON('/frequency?days=30');
           if (!data.length) return;
-          new Chart(document.getElementById('ta-freq-chart'), {
+          if (freqChartInst) freqChartInst.destroy();
+          freqChartInst = new Chart(document.getElementById('ta-freq-chart'), {
             type: 'bar',
             data: {
               labels: data.map(d => { const dt = new Date(d.date); return dt.toLocaleDateString('en-US', { month:'short', day:'numeric' }); }),
@@ -452,7 +475,8 @@
         try {
           const data = await fetchJSON('/symbols?limit=12');
           if (!data.length) return;
-          new Chart(document.getElementById('ta-symbols-chart'), {
+          if (symbolsChartInst) symbolsChartInst.destroy();
+          symbolsChartInst = new Chart(document.getElementById('ta-symbols-chart'), {
             type: 'bar',
             data: {
               labels: data.map(d => d.symbol),
